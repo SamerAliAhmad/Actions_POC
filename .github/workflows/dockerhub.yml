@@ -28,5 +28,5 @@ jobs:
         with:
           push: true
           tags: samerahmad01/ui:ui-build-v-8
-          context: .
-          dockerfile: DistrictNex_UI/Dockerfile
+          context: DistrictNex_UI
+          dockerfile: Dockerfile
