@@ -1,0 +1,204 @@
+<div class="absolute inset-0 flex flex-col flex-auto h-full w-full overflow-y-auto">
+    <div class="bg-card pb-4 border-b space-y-2">
+        <div class="flex flex-row gap-2 pt-4 px-4">
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic"
+                [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    Start Date & Time
+                </div>
+                <input matInput [ngxMatDatetimePicker]="startDatePicker"
+                    (click)="startDatePicker._selected=startDate;startDatePicker.open()" [(ngModel)]="startDate"
+                    [max]="maxDate" [placeholder]="'Start Date'" (ngModelChange)="searchScenes()" (keydown)="false"
+                    autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(startDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #startDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-row gap-2 px-4">
+            <mat-form-field appearance="fill" class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic"
+                [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    End Date & Time
+                </div>
+                <input matInput [ngxMatDatetimePicker]="endDatePicker"
+                    (click)="endDatePicker._selected=endDate;endDatePicker.open()" [(ngModel)]="endDate" [max]="maxDate"
+                    [placeholder]="'End Date'" (ngModelChange)="searchScenes()" (keydown)="false" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(endDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #endDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oEntity" class="flex flex-row flex-auto gap-2 px-4">
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:layers"></mat-icon>
+                </div>
+                <mat-chip-grid #floorChipList>
+                    <mat-chip *ngFor="let floor of oList_Selected_Floor" (removed)="removeFloorChoice(floor)">
+                        {{floor.NAME}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Floor'" #addCategorySearch [(ngModel)]="floorSearchInput"
+                        [matChipInputFor]="floorChipList" [matAutocomplete]="FloorAutoComplete">
+                    <mat-autocomplete #FloorAutoComplete="matAutocomplete"
+                        (optionSelected)="addFloorChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Floors()" [value]="option">
+                            <label>{{option.NAME}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:space_dashboard"></mat-icon>
+                </div>
+                <mat-chip-grid #spaceChipList>
+                    <mat-chip *ngFor="let space of oList_Selected_Space" (removed)="removeSpaceChoice(space)">
+                        {{space.NAME}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Space'" #addCategorySearch [(ngModel)]="spaceSearchInput"
+                        [matChipInputFor]="spaceChipList" [matAutocomplete]="SpaceAutoComplete">
+                    <mat-autocomplete #SpaceAutoComplete="matAutocomplete"
+                        (optionSelected)="addSpaceChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Spaces()" [value]="option">
+                            <label>{{option.NAME}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-row flex-auto gap-2 px-4">
+            <mat-form-field class="flex-auto smartr-mat-emphasized-prefix" subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="heroicons_outline:video-camera"></mat-icon>
+                </div>
+                <mat-progress-spinner *ngIf="numberOfRequests.length>0" matSuffix [diameter]="24"
+                    [mode]="'indeterminate'">
+                </mat-progress-spinner>
+                <mat-chip-grid #chipList01>
+                    <mat-chip *ngFor="let chosenCamera of oList_Selected_Video_ai_asset"
+                        (removed)="removeCameraChoice(chosenCamera)">
+                        {{chosenCamera.FRIENDLY_NAME}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Camera'" #addCategorySearch [(ngModel)]="cameraSearchInput"
+                        [matChipInputFor]="chipList01" [matAutocomplete]="CameraAutoComplete">
+                    <mat-autocomplete #CameraAutoComplete="matAutocomplete"
+                        (optionSelected)="addCameraChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Cameras()" [value]="option">
+                            <label>{{option.FRIENDLY_NAME}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-row gap-2 px-4">
+            <mat-form-field *ngIf="!isAdvancedSearch" class="flex-auto smartr-mat-emphasized-prefix"
+                subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:category"></mat-icon>
+                </div>
+                <mat-progress-spinner *ngIf="isSearching" matSuffix [diameter]="24" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+                <mat-chip-grid #chipList02>
+                    <mat-chip *ngFor="let chosenObjectType of oList_Selected_Search_Categories"
+                        (removed)="removeObjectTypeChoice(chosenObjectType)">
+                        {{chosenObjectType.name | titlecase}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Category'" #addCategorySearch [(ngModel)]="categorySearchInput"
+                        [matChipInputFor]="chipList02" [matAutocomplete]="CategoryAutoComplete">
+                    <mat-autocomplete #CategoryAutoComplete="matAutocomplete"
+                        (optionSelected)="addObjectTypeChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Categories()" [value]="option">
+                            <label>{{option.name | titlecase}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+            <mat-form-field *ngIf="isAdvancedSearch" class="flex-auto smartr-mat-emphasized-prefix"
+                subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:category"></mat-icon>
+                </div>
+                <button mat-icon-button matSuffix class="mr-1" (click)="searchScenes()" *ngIf="!isSearching">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                </button>
+                <mat-progress-spinner *ngIf="isSearching" matSuffix [diameter]="24" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+                <input matInput [formControl]="searchBox" [autocomplete]="'off'" (keydown)="searchScenesOnEnter($event)"
+                    [placeholder]="'Advanced Search'" [matAutocomplete]="TableAutoComplete">
+                <mat-autocomplete #TableAutoComplete="matAutocomplete">
+                    <mat-option *ngFor="let option of Get_Autocomplete_List()" [value]="option">
+                        <label>{{option}}</label>
+                    </mat-option>
+                </mat-autocomplete>
+                <button mat-icon-button matSuffix (click)="OpenInstructionModal()">
+                    <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:info'"></mat-icon>
+                </button>
+                <mat-hint *ngIf="isError" style="color: red !important;">Query is invalid</mat-hint>
+            </mat-form-field>
+            <div class="flex flex-col justify-center rounded"
+                style="background-color: #f1f5f9; border-width: 1px; border-color: #cbd5e1;">
+                <mat-checkbox class="flex flex-row" style="width: max-content;" [color]="'primary'"
+                    [labelPosition]="'before'" [checked]="isAdvancedSearch" [(ngModel)]="isAdvancedSearch">
+                    <div class="text-secondary mr-4">Advanced Search</div>
+                </mat-checkbox>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-auto">
+        <div *ngIf="!isNoImages && oList_Scene.length!=0" class="p-4 w-full" style="height: fit-content;">
+            <div class="grid grid-cols-5 gap-2 w-full">
+                <ng-container *ngFor="let scene of oList_Scene">
+                    <div class="relative flex image-container cursor-pointer" style="background-color: #f1f5f9;"
+                        (click)="scene.Thumbnail?SceneClicked(scene):''">
+                        <img *ngIf="scene.Thumbnail" [src]="Sanitize(scene.Thumbnail)" (error)="scene.Thumbnail=null">
+                        <ng-container *ngIf="!scene.Thumbnail">
+                            <div class="flex flex-col flex-auto items-center justify-center" *ngIf="scene.isVpn">
+                                <mat-icon svgIcon="mat_outline:warning_amber"></mat-icon>
+                                <div>Authorized IP Required</div>
+                            </div>
+                            <div class="flex flex-col flex-auto items-center justify-center" *ngIf="!scene.isVpn">
+                                <mat-icon svgIcon="mat_outline:broken_image"></mat-icon>
+                                <div>Image Unavailable</div>
+                            </div>
+                        </ng-container>
+                        <div class="absolute bottom-0 w-full image-thumbnail">
+                            <div>{{scene.Datetime | date : "medium" : TimezoneService.oCurrent_Timezone_Offset}}</div>
+                            <div class="bottom-text">{{scene.CameraName}}</div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div *ngIf="isSearching && oList_Scene.length==0" class="loader-container">
+            <div class="loader"></div>
+        </div>
+        <div *ngIf="!isSearching && oList_Scene.length==0"
+            class="flex flex-auto items-center justify-center p-6 sm:p-10">
+            <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                No Scenes Were Found</div>
+        </div>
+    </div>
+    <div class="relative flex bg-card px-4">
+        <mat-paginator class="w-full" style="justify-content: space-between; z-index: 1;" [length]="imageCount"
+            [pageSize]="pageSize * getNumberOfInstances()" [pageIndex]="pageIndex" [showFirstLastButtons]="true"
+            (page)="setPage($event)" aria-label="Select page">
+        </mat-paginator>
+    </div>
+</div>

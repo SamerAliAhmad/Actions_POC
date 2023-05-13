@@ -1,0 +1,36 @@
+<div class="flex flex-col flex-auto w-full h-full overflow-hidden bg-transparent">
+    <div class="flex flex-auto relative w-full p-2 bg-transparent">
+        <div class="flex flex-row absolute top-0 left-0" *ngIf="oSpace_asset_hovered">
+            <mat-icon class="icon-size-5 mr-2" [svgIcon]="oSpace_asset_hovered.ASSET_ICON"></mat-icon>
+            <div class="flex flex-col">
+                <div>{{oSpace_asset_hovered.CUSTOM_NAME}}</div>
+                <div *ngIf="oWifi_signal_hovered">{{oWifi_signal_hovered.RECORD_DATE | date : 'medium' :
+                    TimezoneService.oCurrent_Timezone_Offset}}</div>
+            </div>
+        </div>
+        <div class="flex flex-row items-center absolute top-0 right-0 gap-2"
+            *ngIf="(isChangingFloor || isShowExpansion) && !isShareView">
+            <mat-progress-spinner *ngIf="isChangingFloor" matSuffix [diameter]="16" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+            <button *ngIf="isShowExpansion" mat-icon-button (click)="expandFloorRenderer()" matTooltip="Expand Floor">
+                <mat-icon svgIcon="mat_outline:pin_invoke" class="text-iconColor">
+                </mat-icon>
+            </button>
+        </div>
+        <div class="w-full flex-auto" [ngClass]="isShowExpansion?'h-[300px]':'h-full'" [id]="container_id">
+        </div>
+    </div>
+    <div *ngIf="!isShareView" class="w-full pb-2" style="height: 50px;">
+        <smartr-card class="flex flex-row bg-chartBackgroundColor w-full h-full p-2"
+            style="align-items: center; justify-content: center;">
+            <div class="slick-bubble"></div>
+            <ngx-slick-carousel class="carousel" style="width: 85%;" #slickModal="slick-carousel" id="slickModal"
+                [config]="slideConfig" (beforeChange)="beforeChange($event)">
+                <div ngxSlickItem *ngFor="let floor of oEntity.List_Floor" class="flex slide"
+                    style="justify-content: center;">
+                    <div style="margin-left: -4px; cursor: pointer;">{{floor.FLOOR_NUMBER}}</div>
+                </div>
+            </ngx-slick-carousel>
+        </smartr-card>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+:host ::ng-deep .mat-paginator-container {
+    justify-content: space-between;
+    padding: 0;
+}
+
+:host ::ng-deep mat-form-field {
+    .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+}
+
+.image-container .image-thumbnail {
+    padding: 2px 7px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+:host ::ng-deep .mat-progress-spinner circle {
+    stroke: #94A3B8 !important;
+}
+
+.button-color {
+    background-color: #f1f5f9;
+}
+
+.custom-border {
+    border: 1px solid rgba(203, 213, 225)
+}

@@ -1,0 +1,38 @@
+:host ::ng-deep mat-form-field {
+    .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+}
+
+:host ::ng-deep .mat-checkbox .mat-checkbox-layout .mat-checkbox-inner-container {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+:host ::ng-deep .mat-paginator-container {
+    justify-content: space-between;
+    padding: 0;
+}
+
+.image-container .image-thumbnail {
+    padding: 2px 7px;
+    color: white;
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 12px;
+
+    .bottom-text {
+        display: none;
+    }
+}
+
+.image-container:hover .image-thumbnail {
+    background: rgba(0, 0, 0, 0.6);
+
+    .bottom-text {
+        display: block;
+    }
+}
+
+:host ::ng-deep .mat-progress-spinner circle {
+    stroke: #94A3B8 !important;
+}

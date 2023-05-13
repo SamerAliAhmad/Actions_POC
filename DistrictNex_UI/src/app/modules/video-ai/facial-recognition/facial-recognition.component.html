@@ -1,0 +1,18 @@
+<div class="flex flex-col flex-auto absolute inset-0 h-full">
+    <div class="w-full">
+        <mat-button-toggle-group class="w-full flex flex-row">
+            <mat-button-toggle *ngFor="let panel of panels" [checked]="selectedPanel==panel.id"
+                (click)="goToPanel(panel.id)" class="w-full">{{panel.title}}</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <ng-container *ngIf="selectedPanel=='facial-recognition'">
+        <facial-recognition-search [oEntity]="oEntity" class="flex flex-col flex-auto overflow-auto">
+        </facial-recognition-search>
+    </ng-container>
+    <ng-container *ngIf="selectedPanel=='face-list'">
+        <face-list class="flex flex-col flex-auto overflow-auto"></face-list>
+    </ng-container>
+    <ng-container *ngIf="selectedPanel=='face-search'">
+        <face-search [oEntity]="oEntity" class="flex flex-col flex-auto overflow-auto"></face-search>
+    </ng-container>
+</div>

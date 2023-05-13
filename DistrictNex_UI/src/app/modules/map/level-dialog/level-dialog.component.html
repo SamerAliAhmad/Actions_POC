@@ -1,0 +1,21 @@
+<div cdkDrag cdkDragRootElement=".cdk-overlay-pane"
+    class="flex flex-col flex-auto p-0 w-full h-full no-scrollbar select-none overflow-hidden">
+    <div class="flex flex-row w-full items-center">
+        <label class="text-2xl font-semibold">{{oDialog_input.properties.oClicked_Level_Location.NAME}}</label>
+        <div class="flex flex-row ml-auto gap-4">
+            <button [bdcWalkTriggerFor]="dialogPopup1" mat-icon-button [disabled]="!isChartsLoaded"
+                (click)="Toggle_Modal_Pin()" matTooltip="Pin Panel">
+                <mat-icon svgIcon="mat_outline:pin_invoke" class="text-iconColor">
+                </mat-icon>
+            </button>
+            <button mat-icon-button [mat-dialog-close]="'cancel'" matTooltip="Close Modal">
+                <mat-icon svgIcon="heroicons_outline:x" class="text-iconColor"></mat-icon>
+            </button>
+        </div>
+    </div>
+    <level-kpi-charts class="flex flex-col flex-auto overflow-hidden"
+        (isChartsLoadedChange)="onChartsLoadedChange($event)" [oDialog_input]="oDialog_input"></level-kpi-charts>
+</div>
+
+<bdc-walk-popup #dialogPopup1 name="dialogPopup1" [showCloseButton]="false">The popup can be pinned for access to more
+    details.</bdc-walk-popup>

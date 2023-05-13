@@ -1,0 +1,109 @@
+<div [style.background-color]="'rgba(255, 255, 255, 0.95)'"
+    class="flex flex-col flex-auto w-full no-scrollbar select-none overflow-hidden">
+    <div class="flex flex-row items-center bg-white p-2">
+        <label class="text-2xl font-semibold">&nbsp;Building Detailed Information</label>
+        <div *ngIf="!isShareView" class="flex flex-row ml-auto gap-4">
+            <button mat-icon-button (click)="Unpin_Modal()" matTooltip="Unpin Panel">
+                <mat-icon style="transform: rotate(180deg) scaleX(-1);" svgIcon="mat_outline:pin_end"
+                    class="text-iconColor">
+                </mat-icon>
+            </button>
+            <button mat-icon-button (click)="Close_Drawer()" matTooltip="Close Panel">
+                <mat-icon svgIcon="heroicons_outline:x" class="text-iconColor"></mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto overflow-hidden">
+        <div class="flex flex-row h-full overflow-hidden divide-x border-t border-gray-300 divide-gray-300">
+            <div *ngIf="!isShareView" [@closeOpenBuildingSelector]="isShowBuildingSelector"
+                class="flex flex-col h-full divide-y divide-gray-300"
+                [ngStyle]="isShowBuildingSelector?{'width':'14%'}:{'width':'fit-content'}">
+                <div [bdcWalkTriggerFor]="drawerExtraPopup1" class="flex flex-row items-center gap-2 justify-between"
+                    [ngClass]="isShowBuildingSelector?'px-2':''">
+                    <div class="font-semibold text-lg" *ngIf="isShowBuildingSelector">Objects</div>
+                    <button mat-icon-button (click)="toggleBuildingSelector()"
+                        [matTooltip]="isShowBuildingSelector?'Collapse':'Expand'">
+                        <mat-icon
+                            [svgIcon]="isShowBuildingSelector?'mat_outline:chevron_left':'mat_outline:chevron_right'"
+                            class="icon-size-5"></mat-icon>
+                    </button>
+                </div>
+                <building-selector [bdcWalkTriggerFor]="drawerPopup1" class="flex-auto overflow-hidden"
+                    [oEntity]="oEntity_Dialog_input.ENTITY" [isSmallSelector]="!isShowBuildingSelector"
+                    (entityClickedEventEmitter)="changeEntity($event)">
+                </building-selector>
+            </div>
+            <div [bdcWalkTriggerFor]="drawerPopup2" class="flex h-full divide-y divide-gray-300"
+                style="transition: width 400ms ease-in" [style.width.%]="isShowBuildingSelector?'28':'35'">
+                <building-renderer
+                    *ngIf=" isFloorChartDataLoaded && isFloorDimensionIndexFetched && isEntityDimensionIndexFetched"
+                    [bdcWalkTriggerFor]="drawerPopup3" class="flex w-full flex-auto overflow-hidden"
+                    [oEntity]="oEntity_Dialog_input.ENTITY" [oFloor]="oFloor" [oList_Floor]="oList_Floor"
+                    [isShowHeatmap]="isShowHeatmap" [oDimension]="oDimension" [isChangingFloor]="isChangingFloor"
+                    [oList_Dimension_index_for_floors]="oList_Dimension_index_for_floors"
+                    [oDimension_index_for_entity]="oDimension_index_for_entity" [isShareView]="isShareView"
+                    (buildingViewChangeEventEmitter)="isShowHeatmap=false">
+                </building-renderer>
+            </div>
+
+            <div class="flex flex-col flex-auto h-full divide-y divide-gray-300" style="transition: width 400ms ease-in"
+                [style.width.%]="isShowBuildingSelector?'30':'35'">
+                <floor-summary *ngIf="isFloorChartDataLoaded" class="flex-auto overflow-hidden"
+                    [oEntity]="oEntity_Dialog_input.ENTITY" [oSpace_asset]="oSpace_asset"
+                    [isLoading]="isAssetDataLoading" [isShowHeatmap]="isShowHeatmap"
+                    [isShowSliderAndIcon]="oBuildingRendererComponent?.oChosen_Render_Type_Setup?.VALUE=='Floor Stack'"
+                    [oList_Original_Wifi_signal_alert]="oList_Wifi_signal_alert"
+                    [oList_Original_wifi_signal]="oList_Wifi_signal" [isShareView]="isShareView"
+                    (Update_Size_Event_Emitter)="updateFloorSpaces($event)"
+                    (Toggle_Show_Heatmap_Event_Emitter)="isShowHeatmap=!isShowHeatmap"
+                    (Toggle_Slider_Event_Emitter)="showOrHideAlerts($event)"
+                    (Gather_Share_data_Event_Emitter)="gatherShareData()">
+                </floor-summary>
+                <floor-renderer [bdcWalkTriggerFor]="drawerPopup4"
+                    *ngIf="isFloorChartDataLoaded && isFloorDimensionIndexFetched && isEntityDimensionIndexFetched"
+                    class="flex w-full p-2" [oFloor]="oFloor" [oEntity]="oEntity_Dialog_input.ENTITY"
+                    [isChangingFloor]="isChangingFloor" [isShowExpansion]="true" [oList_Wifi_signal]="oList_Wifi_signal"
+                    [isShareView]="isShareView" (oOpenExpandedViewEventEmitter)="Open_Expanded_View()">
+                </floor-renderer>
+            </div>
+            <building-summary [bdcWalkTriggerFor]="drawerPopup5" style="transition: width 400ms ease-in"
+                [style.width.%]="isShowBuildingSelector?'28':'30'"
+                *ngIf="isFloorChartDataLoaded && isFloorDimensionIndexFetched && isEntityDimensionIndexFetched else chartsDimensionSkeleton"
+                [oFloor]="oFloor" [oDimension_index_for_entity]="oDimension_index_for_entity"
+                [oList_Dimension_index_for_floors]="oList_Dimension_index_for_floors"
+                [oSite]="oEntity_Dialog_input.SITE" [oEntity]="oEntity_Dialog_input.ENTITY"
+                [oList_Wifi_signal]="oList_Wifi_signal" [oList_Space_asset]="oList_Wifi_signal_Space_asset"
+                [oList_Floor_Kpi_Data]="oList_Floor_Kpi_Data" [isShareView]="isShareView"
+                (dimensionChangedEventEmitter)="changeDimension($event)"
+                (FloorKpiDataChangedEventEmitter)="updateWifiSignals($event)"
+                class="flex flex-col flex-auto overflow-hidden bg-white pt-2">
+            </building-summary>
+            <ng-template #chartsDimensionSkeleton>
+                <building-summary-skeleton class="flex-auto overflow-hidden bg-white pt-2"
+                    style="transition: width 400ms ease-in" [style.width.%]="isShowBuildingSelector?'28':'30'">
+                </building-summary-skeleton>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+<bdc-walk-popup #drawerPopup1 name="drawerPopup1" [mustCompleted]="{introModal:true, dialogPopup1:true}"
+    [showCloseButton]="false" [showButton]="true" [buttonText]="'Next'" xPosition="after" [horizontal]="true">
+    This tab allows to easily navigate between objects</bdc-walk-popup>
+<bdc-walk-popup #drawerExtraPopup1 name="drawerExtraPopup1" [mustCompleted]="{drawerPopup1:true}"
+    [showCloseButton]="false" [showButton]="true" [buttonText]="'Next'" xPosition="after" [horizontal]="true">
+    It can also be shown/hidden</bdc-walk-popup>
+<bdc-walk-popup #drawerPopup2 name="drawerPopup2" [mustCompleted]="{drawerExtraPopup1:true}" [showCloseButton]="false"
+    [showButton]="true" [buttonText]="'Next'" xPosition="after" [horizontal]="true">This is the building digital twin
+    with high-level dimension KPIs.
+</bdc-walk-popup>
+<bdc-walk-popup #drawerPopup3 name="drawerPopup3" [mustCompleted]="{drawerExtraPopup3:true}" [showCloseButton]="false"
+    xPosition="after" [horizontal]="true">The floor stack view allows you to select a floor and view its details. Try
+    clicking on any floor</bdc-walk-popup>
+<bdc-walk-popup #drawerPopup4 name="drawerPopup4" [mustCompleted]="{drawerPopup3:true}" [showCloseButton]="false"
+    [showButton]="true" buttonText="Next" [offsetX]="-40">Here you can see the floor with
+    its assets.<br>By clicking on an asset, you will see its details in the floor summary space above.</bdc-walk-popup>
+<bdc-walk-popup #drawerPopup5 name="drawerPopup5" [mustCompleted]="{drawerPopup4:true}" [showButton]="true"
+    [buttonText]="'Next'" [showCloseButton]="false" [horizontal]="true" xPosition="before">These are data comparisons
+    between your site, selected entity, and selected floor.<br>You can switch between dimensions by clicking on a tile.
+</bdc-walk-popup>

@@ -1,0 +1,62 @@
+<div class="flex flex-row w-full mb-2 items-center" mat-dialog-title>
+    <mat-icon svgIcon="heroicons_outline:filter"></mat-icon>
+    <label class="text-2xl font-semibold">&nbsp;Filters</label>
+
+    <button class="ml-auto" mat-icon-button [mat-dialog-close]="'cancel'">
+        <mat-icon svgIcon="heroicons_outline:x" class="text-iconColor"></mat-icon>
+    </button>
+</div>
+<div mat-dialog-content>
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+        <mat-label>Target Name</mat-label>
+        <input type="text" matInput placeholder="Target Name" autocomplete="off"
+            [(ngModel)]="oFacial_Recognition_Filters.Target_Name">
+    </mat-form-field>
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+        <mat-label>List</mat-label>
+        <mat-chip-grid #chipList01>
+            <mat-chip *ngFor="let category of oFacial_Recognition_Filters.List_Selected_Category"
+                (removed)="removeCategoryChoice(category)">
+                {{category}}
+                <button matChipRemove>
+                    <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                    </mat-icon>
+                </button>
+            </mat-chip>
+            <input [placeholder]="'Add a List'" #addCategorySearch [(ngModel)]="categorySearchInput"
+                [matChipInputFor]="chipList01" [matAutocomplete]="CategoryAutoComplete">
+            <mat-autocomplete #CategoryAutoComplete="matAutocomplete"
+                (optionSelected)="addCategoryChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                <mat-option *ngFor="let category of filter_Categories()" [value]="category">
+                    <label>{{category}}</label>
+                </mat-option>
+            </mat-autocomplete>
+        </mat-chip-grid>
+    </mat-form-field>
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+        <mat-label>Gender</mat-label>
+        <mat-select placeholder="Gender" [value]="oFacial_Recognition_Filters.Selected_Gender"
+            (selectionChange)="genderSelection($event)">
+            <mat-option [value]="">Both</mat-option>
+            <mat-option *ngFor="let gender of oList_Genders" [value]="gender">
+                {{gender}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+        <mat-label>Age</mat-label>
+        <mat-select placeholder="Age" [value]="oFacial_Recognition_Filters.Selected_Age_Group"
+            (selectionChange)="ageSelection($event)">
+            <mat-option [value]="">None</mat-option>
+            <mat-option *ngFor="let age_group of oList_Age_Groups" [value]="age_group">
+                {{age_group}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<!-- Save Button -->
+<div class="w-full pt-2 text-center justify-end" mat-dialog-actions>
+    <button style="width: 150px;" mat-flat-button [color]="'primary'" (click)="applyFilter()">
+        Apply Filter
+    </button>
+</div>

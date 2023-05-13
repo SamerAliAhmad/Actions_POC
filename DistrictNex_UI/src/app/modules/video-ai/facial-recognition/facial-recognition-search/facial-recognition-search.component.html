@@ -1,0 +1,283 @@
+<div class="flex flex-col flex-auto h-full w-full">
+    <div class="bg-card pb-4 border-b space-y-2">
+        <div class="flex flex-row pt-4 px-4">
+            <mat-form-field class="w-full mr-1 smartr-mat-emphasized-affix" subscriptSizing="dynamic"
+                [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    Start Date & Time
+                </div>
+                <input matInput [ngxMatDatetimePicker]="startDatePicker"
+                    (click)="startDatePicker._selected=oFacial_Recognition_Filters.startDate;startDatePicker.open()"
+                    [(ngModel)]="oFacial_Recognition_Filters.startDate" [placeholder]="'Start Date'"
+                    (ngModelChange)="searchFacialRecognition()" (keydown)="false" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(startDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #startDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-full ml-1 smartr-mat-emphasized-affix" subscriptSizing="dynamic"
+                [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    End Date & Time
+                </div>
+                <input matInput [ngxMatDatetimePicker]="endDatePicker"
+                    (click)="endDatePicker._selected=oFacial_Recognition_Filters.endDate;endDatePicker.open()"
+                    [(ngModel)]="oFacial_Recognition_Filters.endDate" [placeholder]="'End Date'"
+                    (ngModelChange)="searchFacialRecognition()" (keydown)="false" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(endDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #endDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oEntity" class="flex flex-row flex-auto gap-2 px-4">
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:layers"></mat-icon>
+                </div>
+                <mat-chip-grid #floorChipList>
+                    <mat-chip *ngFor="let floor of oList_Selected_Floor" (removed)="removeFloorChoice(floor)">
+                        {{floor.NAME}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Floor'" #addCategorySearch [(ngModel)]="floorSearchInput"
+                        [matChipInputFor]="floorChipList" [matAutocomplete]="FloorAutoComplete">
+                    <mat-autocomplete #FloorAutoComplete="matAutocomplete"
+                        (optionSelected)="addFloorChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Floors()" [value]="option">
+                            <label>{{option.NAME}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:space_dashboard"></mat-icon>
+                </div>
+                <mat-chip-grid #spaceChipList>
+                    <mat-chip *ngFor="let space of oList_Selected_Space" (removed)="removeSpaceChoice(space)">
+                        {{space.NAME}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Space'" #addCategorySearch [(ngModel)]="spaceSearchInput"
+                        [matChipInputFor]="spaceChipList" [matAutocomplete]="SpaceAutoComplete">
+                    <mat-autocomplete #SpaceAutoComplete="matAutocomplete"
+                        (optionSelected)="addSpaceChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Spaces()" [value]="option">
+                            <label>{{option.NAME}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col justify-between px-4">
+            <div class="flex items-center">
+                <div class="flex-auto flex flex-col">
+                    <mat-form-field class="flex-auto smartr-mat-emphasized-prefix" subscriptSizing="dynamic">
+                        <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                            <mat-icon *ngIf="!isSearching" svgIcon="heroicons_outline:video-camera"></mat-icon>
+                            <mat-progress-spinner *ngIf="isSearching" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </div>
+                        <mat-progress-spinner *ngIf="numberOfRequests.length>0" matSuffix [diameter]="24"
+                            [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                        <mat-chip-grid #chipList01>
+                            <mat-chip *ngFor="let chosenCamera of oList_Selected_Video_ai_asset"
+                                (removed)="removeCameraChoice(chosenCamera)">
+                                {{chosenCamera.FRIENDLY_NAME}}
+                                <button matChipRemove>
+                                    <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                                    </mat-icon>
+                                </button>
+                            </mat-chip>
+                            <input [placeholder]="'Add a Camera'" #addCategorySearch [(ngModel)]="cameraSearchInput"
+                                [matChipInputFor]="chipList01" [matAutocomplete]="CameraAutoComplete">
+                            <mat-autocomplete #CameraAutoComplete="matAutocomplete"
+                                (optionSelected)="addCameraChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                                <mat-option *ngFor="let option of filter_Cameras()" [value]="option">
+                                    <label>{{option.FRIENDLY_NAME}}</label>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-chip-grid>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col justify-between px-4">
+            <div class="flex items-center">
+                <div class="flex-auto flex flex-col">
+                    <mat-form-field class="flex-auto smartr-mat-emphasized-prefix" subscriptSizing="dynamic">
+                        <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                            <span *ngIf="!isSearching">Similarity</span>
+                            <mat-progress-spinner *ngIf="isSearching" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </div>
+                        <div class="w-full h-full flex items-center justify-center text-secondary" matSuffix>
+                            %
+                        </div>
+                        <input matInput type="number" placeholder="Similarity"
+                            [(ngModel)]="oFacial_Recognition_Filters.Recognition_Score">
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-row justify-between items-center ml-2 py-2 px-8 cursor-pointer custom-border rounded-md button-color hover:bg-hover"
+                    (click)="openFiltersModal()">
+                    <div class="flex font-medium leading-7 text-primary dark:text-primary-500">
+                        <mat-icon [svgIcon]="'heroicons_outline:filter'"></mat-icon>
+                        <span class="ml-3 mr-1">Filter</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-row px-4 mt-6">
+            <ng-container *ngIf="oFacial_Recognition_Filters.Selected_Gender">
+                <div
+                    class="flex items-center justify-center px-3 m-1 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                    <span
+                        class="text-md font-medium whitespace-nowrap">{{oFacial_Recognition_Filters.Selected_Gender}}</span>
+                    <mat-icon class="ml-2 icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'"
+                        (click)="removeGenderChoice()"></mat-icon>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="oFacial_Recognition_Filters.Selected_Emotion">
+                <div
+                    class="flex items-center justify-center px-3 m-1 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                    <span
+                        class="text-md font-medium whitespace-nowrap">{{oFacial_Recognition_Filters.Selected_Emotion}}</span>
+                    <mat-icon class="ml-2 icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'"
+                        (click)="removeEmotionChoice()"></mat-icon>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="oFacial_Recognition_Filters.Selected_Age_Group">
+                <div
+                    class="flex items-center justify-center px-3 m-1 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                    <span class="text-md font-medium whitespace-nowrap">Age Group:
+                        {{oFacial_Recognition_Filters.Selected_Age_Group}}</span>
+                    <mat-icon class="ml-2 icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'"
+                        (click)="removeAgeGroupChoice()"></mat-icon>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="oFacial_Recognition_Filters.HasMask">
+                <div
+                    class="flex items-center justify-center px-3 m-1 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                    <span class="text-md font-medium whitespace-nowrap">Has Mask:
+                        {{oFacial_Recognition_Filters.HasMask?'Yes':'No'}}</span>
+                    <mat-icon class="ml-2 icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'"
+                        (click)="removeHasMaskChoice()"></mat-icon>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="oFacial_Recognition_Filters.Target_Name">
+                <div
+                    class="flex items-center justify-center px-3 m-1 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                    <span class="text-md font-medium whitespace-nowrap">Target Name:
+                        {{oFacial_Recognition_Filters.Target_Name}}</span>
+                    <mat-icon class="ml-2 icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'"
+                        (click)="removeNameChoice()"></mat-icon>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="oFacial_Recognition_Filters.List_Selected_Category">
+                <ng-container *ngFor="let category of oFacial_Recognition_Filters.List_Selected_Category">
+                    <div
+                        class="flex items-center justify-center px-3 m-1 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                        <span class="text-md font-medium whitespace-nowrap">{{category}}</span>
+                        <mat-icon class="ml-2 icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'"
+                            (click)="removeCategoryChoice(category)"></mat-icon>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+    <div class="flex flex-auto">
+        <div *ngIf="!isNoFacesDetected && facialRecognitionDataCount!=0" class="w-full" style="height: fit-content;">
+            <table mat-table matSort matTableResponsive [dataSource]="dataSource" class="border-t w-full">
+                <ng-container matColumnDef="Detected Face">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white w-60"> Detected Face </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="relative flex image-container">
+                            <img *ngIf="element.FaceKey.File" [src]="Sanitize(element.FaceKey.File)"
+                                style="width: 150px !important;">
+                            <ng-container *ngIf="!element.FaceKey.File">
+                                <div class="flex flex-col flex-auto items-center justify-center" *ngIf="element.isVpn">
+                                    <mat-icon svgIcon="mat_outline:warning_amber"></mat-icon>
+                                    <div>Authorized IP Required</div>
+                                </div>
+                                <div class="flex flex-col flex-auto items-center justify-center" *ngIf="!element.isVpn">
+                                    <mat-icon svgIcon="mat_outline:broken_image"></mat-icon>
+                                    <div>Image Unavailable</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Face Image">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white w-60"> Face Image </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="relative flex image-container">
+                            <img *ngIf="element.FaceTargetKey.File" [src]="Sanitize(element.FaceTargetKey.File)"
+                                style="width: 150px !important;">
+                            <ng-container *ngIf="!element.FaceTargetKey.File">
+                                <div class="flex flex-col flex-auto items-center justify-center" *ngIf="element.isVpn">
+                                    <mat-icon svgIcon="mat_outline:warning_amber"></mat-icon>
+                                    <div>Authorized IP Required</div>
+                                </div>
+                                <div class="flex flex-col flex-auto items-center justify-center" *ngIf="!element.isVpn">
+                                    <mat-icon svgIcon="mat_outline:broken_image"></mat-icon>
+                                    <div>Image Unavailable</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Target Details">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white w-50">Target Details</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="flex flex-col">
+                            <div class="flex-row">
+                                Name: {{element.FaceTarget.Name?element.FaceTarget.Name:'N/A'}}
+                            </div>
+                            <div class="flex-row">
+                                Gender: {{element.FaceTarget.Gender?element.FaceTarget.Gender:'N/A'}}
+                            </div>
+                            <div class="flex-row">
+                                Age: {{element.FaceKey.Age?element.FaceKey.Age:'N/A'}}
+                            </div>
+                            <div class="flex-row">
+                                List: {{element.FaceTarget.Category.Name?element.FaceTarget.Category.Name:'N/A'}}
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Time">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white w-50"> Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Datetime | date : 'longDate' :
+                        TimezoneService.oCurrent_Timezone_Offset}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+            </table>
+        </div>
+        <div *ngIf="isSearching && facialRecognitionDataCount==0" class="loader-container">
+            <div class="loader"></div>
+        </div>
+        <div *ngIf="!isSearching && facialRecognitionDataCount==0"
+            class="flex flex-auto items-center justify-center p-6 sm:p-10">
+            <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                No Faces Were Detected</div>
+        </div>
+    </div>
+    <div class="relative flex bg-card px-4">
+        <mat-paginator class="w-full" style="justify-content: space-between; z-index: 1;"
+            [length]="facialRecognitionDataCount" [pageSize]="pageSize * getNumberOfInstances()" [pageIndex]="pageIndex"
+            [showFirstLastButtons]="true" (page)="setPage($event)" aria-label="Select page">
+        </mat-paginator>
+    </div>
+</div>

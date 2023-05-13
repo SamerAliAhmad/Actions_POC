@@ -1,0 +1,18 @@
+<div class="flex flex-col flex-auto p-4">
+    <div class="flex flex-row items-center">
+        <label class="text-2xl font-semibold">Select Top Level</label>
+        <button class="ml-auto" (click)="closeTopLevelEventEmitter.emit()" mat-icon-button>
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="text-iconColor"></mat-icon>
+        </button>
+    </div>
+    <div class="flex flex-row flex-auto items-center justify-center flex-wrap gap-4">
+        <div *ngFor="let top_level of oList_Top_level_Data" (click)="selectTopLevel(top_level)"
+            class="flex flex-col rounded-xl shadow-xl border overflow-hidden cursor-pointer bg-white">
+            <img [src]="top_level.IMAGE_URL">
+            <div class="flex flex-row justify-between items-center p-4">
+                <div>{{top_level.TOP_LEVEL_NAME}}</div>
+                <img class="w-10 h-10" [src]="top_level.LOGO_URL">
+            </div>
+        </div>
+    </div>
+</div>

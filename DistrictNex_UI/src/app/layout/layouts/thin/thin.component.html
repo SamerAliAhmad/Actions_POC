@@ -1,0 +1,30 @@
+<smartr-vertical-navigation class="bg-primary print:hidden" [appearance]="'thin'" [ngClass]="[isDark()?'isDark':'']"
+    mode="side" [name]="'mainNavigation'" [navigation]="navigation?.default" [opened]="true">
+    <ng-container smartrVerticalNavigationContentHeader>
+        <div class="flex items-center justify-center h-10 my-2">
+            <img class="w-10" [src]="isDark()?light_logo:dark_logo" (error)="changeImage($event)" [alt]="companyName">
+        </div>
+    </ng-container>
+    <ng-container smartrVerticalNavigationFooter>
+        <div class="flex flex-col w-full justify-center items-center mb-2 gap-4">
+            <button *ngIf="isShowAlerts" mat-icon-button (click)="toggleAlertsDrawer()" class="custom-background"
+                matTooltip="Alerts" title="Alerts" #notificationsOrigin>
+                <ng-container *ngIf="unreadCount > 0">
+                    <span class="absolute top-0 right-0 left-0 flex items-center justify-center h-3 z-10">
+                        <span
+                            class="flex items-center justify-center flex-shrink-0 min-w-4 h-4 px-1 ml-4 mt-2.5 rounded-full bg-red-500 text-white text-xs font-medium">
+                            {{unreadCount>99?'99+':unreadCount}}
+                        </span>
+                    </span>
+                </ng-container>
+                <mat-icon [svgIcon]="'heroicons_outline:bell'" class="custom-color"></mat-icon>
+            </button>
+            <smartr-fullscreen class="hidden md:block"></smartr-fullscreen>
+            <user></user>
+        </div>
+    </ng-container>
+</smartr-vertical-navigation>
+
+<div class="flex flex-col flex-auto">
+    <router-outlet *ngIf="true"></router-outlet>
+</div>

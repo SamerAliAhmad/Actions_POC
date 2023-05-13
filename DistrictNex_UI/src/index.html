@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>DistrictNex | Home</title>
+    <meta charset="utf-8">
+    <meta name="description" content="DistrictNex">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+
+    <base href="/">
+
+    <!-- Favicon -->
+    <link rel="icon" id="appIcon" type="image/png" href="favicon.ico">
+    <!-- Fonts -->
+    <link href="assets/fonts/inter/inter.css" rel="stylesheet">
+    <link href="assets/fonts/Helvetica Now, Monotype/helveticanow.css" rel="stylesheet">
+    <link href="assets/fonts/Neue Helvetica, Linotype/helveticaneuelpro.css" rel="stylesheet">
+    <link href="assets/fonts/Arial, Monotype/arial.css" rel="stylesheet">
+
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Splash screen styles -->
+    <link href="assets/styles/splash-screen.css" rel="stylesheet">
+</head>
+
+<body style="overflow: hidden;">
+
+    <!-- Splash screen -->
+    <smartr-splash-screen id="splashBckgd">
+        <img id="appLogo" src="assets/images/logo/picacity/logo-white-square.png" alt="organization logo"
+            onerror="changeImg()" draggable="false">
+        <div class="spinner">
+            <div class="bounce1 bg-white"></div>
+            <div class="bounce2 bg-white"></div>
+            <div class="bounce3 bg-white"></div>
+        </div>
+    </smartr-splash-screen>
+
+    <!-- App root -->
+    <app-root></app-root>
+    <script>
+        if (localStorage.getItem('dnex_favi_ico_url')) {
+            document.getElementById('appIcon').href = localStorage.getItem('dnex_favi_ico_url');
+        }
+        if (localStorage.getItem('dnexPrimaryColor')) {
+            document.body.style.setProperty('--smartr-primary', localStorage.getItem('dnexPrimaryColor'));
+            document.body.style.setProperty('--smartr-primary-rgb', this.hexToRgb(localStorage.getItem('dnexPrimaryColor')).r + ', ' + this.hexToRgb(localStorage.getItem('dnexPrimaryColor')).g + ', ' + this.hexToRgb(localStorage.getItem('dnexPrimaryColor')).b);
+
+            if (isDark(document.body.style.getPropertyValue('--smartr-primary')) &&
+                localStorage.getItem('dnex_light_logo_square_url')) {
+                document.getElementById('appLogo').src = localStorage.getItem('dnex_light_logo_square_url');
+            }
+            else if (!isDark(document.body.style.getPropertyValue('--smartr-primary')) &&
+                localStorage.getItem('dnex_dark_logo_square_url')) {
+                document.getElementById('appLogo').src = localStorage.getItem('dnex_dark_logo_square_url');
+            }
+        }
+
+        function hexToRgb(hex) {
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function isDark(color) {
+            var c = color.substring(1);      // strip #
+            var rgb = parseInt(c, 16);   // convert rrggbb to decimal
+            var r = (rgb >> 16) & 0xff;  // extract red
+            var g = (rgb >> 8) & 0xff;  // extract green
+            var b = (rgb >> 0) & 0xff;  // extract blue
+
+            var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+            if (luma < 138) {
+                return true;
+            }
+        }
+
+        function changeImg() {
+            document.getElementById('appLogo').src = "assets/images/logo/picacity/logo-white-square.png"
+        }
+    </script>
+</body>
+
+</html>

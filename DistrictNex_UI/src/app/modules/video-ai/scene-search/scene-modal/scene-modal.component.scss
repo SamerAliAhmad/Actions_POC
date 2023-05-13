@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+
+.img-magnifier-container:hover {
+    .img-magnifier-glass {
+        display: block;
+    }
+}
+
+.img-magnifier-container {
+    position: relative;
+    max-width: 600px;
+
+    .img-magnifier-glass {
+        position: absolute;
+        border: 3px solid #000;
+        border-radius: 50%;
+        cursor: none;
+        display: none;
+        /*Set the size of the magnifier glass:*/
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.magnifying-glass-button {
+    border-width: 1px;
+    border-color: #cbd5e1;
+    width: fit-content;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.email-btn {
+    min-height: 160px;
+    max-height: 160px;
+    height: 160px;
+    width: 170px;
+    border-radius: 10% !important;
+}

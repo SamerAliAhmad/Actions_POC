@@ -1,0 +1,205 @@
+<div class="flex flex-col flex-auto overflow-hidden p-4">
+    <form #correlationParamsForm="ngForm" class="flex flex-col flex-auto overflow-y-auto pr-1"
+        *ngIf="!isShowGeneratedData && !isDataLoading">
+        <div class="flex flex-row gap-4 items-center mb-4">
+            <mat-form-field class="w-full" [floatLabel]="'always'" (click)="$event.stopPropagation()">
+                <mat-label>First Data Level</mat-label>
+                <mat-select matInput placeholder="Data Level" autocomplete="off"
+                    [(ngModel)]="oFirst_Access_Control_Object.DATA_LEVEL_SETUP_ID" name="FIRSDT_DATA_LEVEL_SETUP_ID"
+                    (selectionChange)="oFirst_Access_Control_Object.LEVEL_ID = null;" required>
+                    <mat-option *ngFor="let data_access_level_setup of oList_Data_access_level_setup"
+                        [value]="data_access_level_setup.SETUP_ID">
+                        {{data_access_level_setup.VALUE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-full" [floatLabel]="'always'" (click)="$event.stopPropagation()">
+                <mat-label>First Object</mat-label>
+                <mat-select matInput [placeholder]="getSetupValue(oFirst_Access_Control_Object.DATA_LEVEL_SETUP_ID)"
+                    [(ngModel)]="oFirst_Access_Control_Object.LEVEL_ID" name="FIRST_LEVEL_ID"
+                    (selectionChange)="oFirst_Access_Control_Object.Selected_Organization_data_source_kpi=null" required
+                    [disabled]="!getObjects(oFirst_Access_Control_Object)?.length" autocomplete="off">
+                    <mat-option>
+                        <ngx-mat-select-search #firstSelectObjectSearch
+                            [placeholderLabel]="'Search for '+getSetupValue(oFirst_Access_Control_Object.DATA_LEVEL_SETUP_ID)"
+                            noEntriesFoundLabel="No Matching Sites">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                        *ngFor="let object of getObjects(oFirst_Access_Control_Object) | filter: firstSelectObjectSearch.value"
+                        [value]="getObjectId(oFirst_Access_Control_Object.DATA_LEVEL_SETUP_ID, object)">
+                        {{getObjectName(oFirst_Access_Control_Object.DATA_LEVEL_SETUP_ID,
+                        getObjectId(oFirst_Access_Control_Object.DATA_LEVEL_SETUP_ID, object))}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>First Variable</mat-label>
+                <mat-select matInput placeholder="First Variable"
+                    [(ngModel)]="oFirst_Access_Control_Object.Selected_Organization_data_source_kpi"
+                    name="XOrganization_data_souce_KPI_ID" required autocomplete="off"
+                    [disabled]="!oFirst_Access_Control_Object.LEVEL_ID">
+                    <mat-option>
+                        <ngx-mat-select-search #firstSelectKpiSearch placeholderLabel="Search for specific data"
+                            noEntriesFoundLabel="No Matching Data">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                        *ngFor="let organization_data_source_kpi of getXAssignableKpis() | filter: firstSelectKpiSearch.value"
+                        [value]="organization_data_source_kpi">
+                        {{organization_data_source_kpi.Kpi.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-row gap-4 mb-4">
+            <mat-form-field class="w-full" [floatLabel]="'always'" (click)="$event.stopPropagation()">
+                <mat-label>Second Data Level</mat-label>
+                <mat-select matInput placeholder="Data Level" autocomplete="off"
+                    [(ngModel)]="oSecond_Access_Control_Object.DATA_LEVEL_SETUP_ID" name="SECOND_DATA_LEVEL_SETUP_ID"
+                    (selectionChange)="oSecond_Access_Control_Object.LEVEL_ID = null;" required>
+                    <mat-option *ngFor="let data_access_level_setup of oList_Data_access_level_setup"
+                        [value]="data_access_level_setup.SETUP_ID">
+                        {{data_access_level_setup.VALUE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-full" [floatLabel]="'always'" (click)="$event.stopPropagation()">
+                <mat-label>Second Object</mat-label>
+                <mat-select matInput [placeholder]="getSetupValue(oSecond_Access_Control_Object.DATA_LEVEL_SETUP_ID)"
+                    [(ngModel)]="oSecond_Access_Control_Object.LEVEL_ID" name="SECOND_LEVEL_ID"
+                    (selectionChange)="oSecond_Access_Control_Object.Selected_Organization_data_source_kpi=null"
+                    required [disabled]="!getObjects(oSecond_Access_Control_Object)?.length" autocomplete="off">
+                    <mat-option>
+                        <ngx-mat-select-search #secondSelectObjectSearch
+                            [placeholderLabel]="'Search for '+getSetupValue(oSecond_Access_Control_Object.DATA_LEVEL_SETUP_ID)"
+                            noEntriesFoundLabel="No Matching Sites">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                        *ngFor="let object of getObjects(oSecond_Access_Control_Object) | filter: secondSelectObjectSearch.value"
+                        [value]="getObjectId(oSecond_Access_Control_Object.DATA_LEVEL_SETUP_ID, object)">
+                        {{getObjectName(oSecond_Access_Control_Object.DATA_LEVEL_SETUP_ID,
+                        getObjectId(oSecond_Access_Control_Object.DATA_LEVEL_SETUP_ID, object))}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Second Variable</mat-label>
+                <mat-select matInput placeholder="Second Variable"
+                    [(ngModel)]="oSecond_Access_Control_Object.Selected_Organization_data_source_kpi"
+                    name="YOrganization_data_souce_KPI_ID" required autocomplete="off"
+                    [disabled]="!oSecond_Access_Control_Object.LEVEL_ID">
+                    <mat-option>
+                        <ngx-mat-select-search #secondSelectKpiSearch placeholderLabel="Search for specific data"
+                            noEntriesFoundLabel="No Matching Data">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                        *ngFor="let organization_data_source_kpi of getYAssignableKpis() | filter: secondSelectKpiSearch.value"
+                        [value]="organization_data_source_kpi">
+                        {{organization_data_source_kpi.Kpi.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="font-semibold mb-1 text-md">Aggregate By</div>
+        <div class="flex flex-row items-center mb-8">
+            <mat-button-toggle-group class="grid grid-cols-3 bottom-button-toggle gap-1" [(ngModel)]="oEnum_Timespan"
+                name="oEnum_Timespan" required>
+                <mat-button-toggle *ngFor="let enum of getEnumsToDisplay() | keyvalue" [value]="enum.value"
+                    [ngClass]="[oEnum_Timespan==enum.value ? 'bg-secondaryColor' : '',oEnum_Timespan==enum.value && isDark?'text-white': '']">
+                    {{getEnumCollectionValue(enum.value)}}
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <ng-container *ngIf="oEnum_Timespan">
+            <div *ngIf="getMinimumNumberOfDays()!=1" class="text-lg"
+                [ngClass]="areDatesValid()?'text-green-500':'text-red-500'">
+                The period between start and end dates must be a multiple of
+                {{getMinimumNumberOfDays()}} days.</div>
+            <div class="flex flex-row gap-4 mb-4">
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [(ngModel)]="START_DATE" name="START_DATE" name="START_DATE" required
+                        [matDatepicker]="startDatePicker" (click)="startDatePicker.open()" placeholder="Start Date"
+                        (keydown)="false" autocomplete="off" [max]="getMaxStartDate()">
+                    <mat-datepicker-toggle matSuffix [for]="startDatePicker">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #startDatePicker></mat-datepicker>
+                    <mat-error>Start Date is required</mat-error>
+                </mat-form-field>
+                <mat-form-field [floatLabel]="'always'" class="w-full">
+                    <mat-label>End Date</mat-label>
+                    <input matInput [(ngModel)]="END_DATE" name="END_DATE" name="END_DATE" required
+                        [matDatepicker]="endDatePicker" [matDatepickerFilter]="endDateFilter"
+                        (click)="endDatePicker.open()" placeholder="End Date" (keydown)="false" autocomplete="off"
+                        [min]="START_DATE" [max]="today" [disabled]="!START_DATE">
+                    <mat-datepicker-toggle matSuffix [for]="endDatePicker">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #endDatePicker></mat-datepicker>
+                    <mat-error>End Date is required</mat-error>
+                </mat-form-field>
+            </div>
+        </ng-container>
+        <div class="flex flex-row gap-4 mb-4">
+            <div *ngIf="START_DATE && END_DATE" class="flex flex-row gap-2 w-full">
+                <mat-form-field class="w-full smartr-mat-emphasized-suffix" [floatLabel]="'always'">
+                    <mat-label>Resolution</mat-label>
+                    <div matSuffix>{{getResolutionWord()}}{{Resolution==1?'':'s'}}</div>
+                    <input matInput [(ngModel)]="Resolution" name="Resolution" placeholder="Resolution" numbersOnly
+                        autocomplete="off" required>
+                    <mat-hint style="color: red !important;" *ngIf="!isResolutionValid()">Resolution must be greater
+                        than 1 and less than or equal to the difference between end date and start date</mat-hint>
+                </mat-form-field>
+                <button mat-flat-button (click)="setMaxResolution()" class="mt-7">MAX</button>
+            </div>
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Correlation Type</mat-label>
+                <button matPrefix *ngIf="oCorrelation_method_ID" mat-icon-button type="button"
+                    (click)="$event.stopPropagation();Open_Correlation_Method_Details()">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:information-circle'"></mat-icon>
+                </button>
+                <mat-progress-spinner *ngIf="!oList_Correlation_method" matSuffix [diameter]="24"
+                    [mode]="'indeterminate'" class="ml-2">
+                </mat-progress-spinner>
+                <mat-select matInput placeholder="Correlation Type" autocomplete="off"
+                    [(ngModel)]="oCorrelation_method_ID" name="oCorrelation_method_ID"
+                    [disabled]="!oList_Correlation_method" required>
+                    <mat-option *ngFor="let correlation_method of oList_Correlation_method"
+                        [value]="correlation_method.CORRELATION_METHOD_ID">
+                        {{correlation_method.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <button class="ml-auto min-w-26" mat-flat-button (click)="generateCharts(correlationParamsForm)"
+            [disabled]="correlationParamsForm.invalid || !areDatesValid() || !isResolutionValid() || !oList_Correlation_method">Generate</button>
+    </form>
+    <div *ngIf="isDataLoading" class="loader-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div class="loader"></div>
+    </div>
+    <div *ngIf="isShowGeneratedData && !isDataLoading" class="flex flex-col flex-auto overflow-y-auto">
+        <div class="flex flex-row mb-4 gap-4 items-center">
+            <button mat-icon-button matTooltip="Go Back" class="remove-on-pdf" (click)="goBack()">
+                <mat-icon [svgIcon]="'heroicons_outline:arrow-left'" class="text-iconColor"></mat-icon>
+            </button>
+            <div class="text-lg">
+                Correlation between {{oFirst_Access_Control_Object.Selected_Organization_data_source_kpi.Kpi.NAME}}
+                and {{oSecond_Access_Control_Object.Selected_Organization_data_source_kpi.Kpi.NAME}} on
+                {{getObjectName(oFirst_Access_Control_Object.DATA_LEVEL_SETUP_ID,oFirst_Access_Control_Object.LEVEL_ID)}}
+                between {{START_DATE | date : null : TimezoneService.oCurrent_Timezone_Offset}} and {{END_DATE | date :
+                null : TimezoneService.oCurrent_Timezone_Offset}} aggregated
+                {{getEnumCollectionValue(oEnum_Timespan)}} with a resolution of {{Resolution}}
+                {{getResolutionWord()}}{{Resolution==1?'':'s'}}.
+            </div>
+        </div>
+        <div class="w-full h-100 min-h-100">
+            <canvas class="w-full h-full" baseChart [options]="oLineChart.options" [data]="oLineChart.data"
+                [type]="oLineChart.type" [plugins]="oLineChart.plugins"
+                (dblclick)="openChartModal(oLineChart, null)"></canvas>
+        </div>
+        <div *ngIf="isSomeDataNull" class="text-lg mt-4">* One of the subarrays has no variation in data, resulting in
+            the missing correlation coefficients.</div>
+    </div>
+</div>

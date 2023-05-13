@@ -1,0 +1,313 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto">
+    <div class="flex flex-col bg-card pb-4 border-b space-y-2">
+        <div class="flex flex-row pt-4 px-4 gap-2">
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic"
+                [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    Start Date & Time
+                </div>
+                <input matInput [ngxMatDatetimePicker]="startDatePicker"
+                    (click)="startDatePicker._selected=startDate;startDatePicker.open()" [(ngModel)]="startDate"
+                    [max]="maxDate" [placeholder]="'Start Date'" (ngModelChange)="getCountings()" (keydown)="false"
+                    autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(startDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #startDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-button-toggle-group [(ngModel)]="isTableView" (ngModelChange)="updateTable()"
+                class="top-button-toggle">
+                <mat-button-toggle [value]="false">
+                    <mat-icon svgIcon="mat_outline:insert_chart"></mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle [value]="true">
+                    <mat-icon svgIcon="mat_outline:table_view"></mat-icon>
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div class="flex flex-row px-4 gap-2">
+            <mat-form-field appearance="fill" class="flex-auto smartr-mat-emphasized-affix w-full"
+                subscriptSizing="dynamic" [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    End Date & Time
+                </div>
+                <input matInput [ngxMatDatetimePicker]="endDatePicker"
+                    (click)="endDatePicker._selected=endDate;endDatePicker.open()" [(ngModel)]="endDate" [max]="maxDate"
+                    [placeholder]="'End Date'" (ngModelChange)="getCountings()" (keydown)="false" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(endDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #endDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-form-field class="flex-auto" subscriptSizing="dynamic">
+                <mat-select [(ngModel)]="oMeasure" (ngModelChange)="getCountings()">
+                    <mat-option *ngFor="let measure of oListMeasure" [value]="measure">{{measure}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oEntity" class="flex flex-row flex-auto gap-2 px-4">
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:layers"></mat-icon>
+                </div>
+                <mat-chip-grid #floorChipList>
+                    <mat-chip *ngFor="let floor of oList_Selected_Floor" (removed)="removeFloorChoice(floor)">
+                        {{floor.NAME}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Floor'" #addCategorySearch [(ngModel)]="floorSearchInput"
+                        [matChipInputFor]="floorChipList" [matAutocomplete]="FloorAutoComplete">
+                    <mat-autocomplete #FloorAutoComplete="matAutocomplete"
+                        (optionSelected)="addFloorChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Floors()" [value]="option">
+                            <label>{{option.NAME}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+            <mat-form-field class="flex-auto smartr-mat-emphasized-affix" subscriptSizing="dynamic">
+                <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                    <mat-icon svgIcon="mat_outline:space_dashboard"></mat-icon>
+                </div>
+                <mat-chip-grid #spaceChipList>
+                    <mat-chip *ngFor="let space of oList_Selected_Space" (removed)="removeSpaceChoice(space)">
+                        {{space.NAME}}
+                        <button matChipRemove>
+                            <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                            </mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input [placeholder]="'Add a Space'" #addCategorySearch [(ngModel)]="spaceSearchInput"
+                        [matChipInputFor]="spaceChipList" [matAutocomplete]="SpaceAutoComplete">
+                    <mat-autocomplete #SpaceAutoComplete="matAutocomplete"
+                        (optionSelected)="addSpaceChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                        <mat-option *ngFor="let option of filter_Spaces()" [value]="option">
+                            <label>{{option.NAME}}</label>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-chip-grid>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col justify-between px-4">
+            <div class="flex items-center">
+                <div class="flex-auto flex flex-col">
+                    <mat-form-field class="flex-auto smartr-mat-emphasized-prefix" subscriptSizing="dynamic">
+                        <div class="w-full h-full flex items-center justify-center text-secondary" matPrefix>
+                            <mat-icon svgIcon="mat_outline:stacked_line_chart"></mat-icon>
+                        </div>
+                        <mat-progress-spinner *ngIf="numberOfRequests.length>0" matSuffix [diameter]="24"
+                            [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                        <mat-chip-grid #chipList01>
+                            <mat-chip *ngFor="let chosenLine of oList_Selected_Camera_Vehicle_Lines"
+                                (removed)="removeLineChoice(chosenLine)">
+                                {{chosenLine.LineSets[0].Name}} - {{chosenLine.Camera.Name}}
+                                <button matChipRemove>
+                                    <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                                    </mat-icon>
+                                </button>
+                            </mat-chip>
+                            <input [placeholder]="'Add a Line'" #addCategorySearch [(ngModel)]="LineSearchInput"
+                                [matChipInputFor]="chipList01" [matAutocomplete]="LineAutoComplete">
+                            <mat-autocomplete #LineAutoComplete="matAutocomplete"
+                                (optionSelected)="addLineChoice($event.option.value); addCategorySearch.blur(); addCategorySearch.value=''">
+                                <mat-option *ngFor="let option of filter_Lines()" [value]="option">
+                                    <label>{{option.LineSets[0].Name}} - {{option.Camera.Name}}</label>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-chip-grid>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col justify-between px-4">
+            <div class="flex items-center">
+                <div class="flex-auto flex flex-row gap-2">
+                    <div class="flex flex-col w-full gap-1.5 mb-4">
+                        <div
+                            class="flex flex-row w-full items-center border border-gray-300 px-4 rounded-md overflow-hidden">
+                            <div
+                                class="flex items-center h-full mr-4 -ml-4 px-4 border-r border-gray-300 bg-slate-100 text-slate-400">
+                                <mat-icon svgIcon="mat_outline:category"></mat-icon>
+                            </div>
+                            <div class="flex flex-row flex-wrap gap-x-4 gap-y-1 p-1">
+                                <mat-checkbox *ngFor="let option of oList_Type" labelPosition="before"
+                                    class="custom-mat-checkbox rounded-full bg-gray-200 px-2"
+                                    (change)="toggleObjectTypeChoice($event, option)"
+                                    [checked]="isObjectTypeChecked(option)">
+                                    {{option | titlecase}}</mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto min-h-140">
+        <div *ngIf="!isTableView && !(dataSource.data && dataSource.data.length == 0)" class="w-full h-full p-1">
+            <canvas class="w-full h-full" baseChart [options]="oBarChart.options" [type]="oBarChart.type"
+                [data]="oBarChart.data" [plugins]="oBarChart.plugins">
+            </canvas>
+        </div>
+        <ng-container *ngIf="isTableView">
+            <div *ngIf="dataSource.data && dataSource.data.length > 0;" class="mat-elevation-z0 w-full">
+                <table mat-table matSort multiTemplateDataRows [dataSource]="dataSource" class="border-t">
+
+                    <ng-container matColumnDef="time">
+                        <th mat-header-cell *matHeaderCellDef class="bg-white"> Time </th>
+                        <td mat-cell *matCellDef="let element"> {{element.TIME | date : 'medium' :
+                            TimezoneService.oCurrent_Timezone_Offset}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ins">
+                        <th mat-header-cell *matHeaderCellDef class="bg-white"> Inbound </th>
+                        <td mat-cell *matCellDef="let element"> {{element.TOTAL_IN}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="outs">
+                        <th mat-header-cell *matHeaderCellDef class="bg-white"> Outbound </th>
+                        <td mat-cell *matCellDef="let element"> {{element.TOTAL_OUT}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="occupancies">
+                        <th mat-header-cell *matHeaderCellDef class="bg-white"> Occupancy </th>
+                        <td mat-cell *matCellDef="let element"> {{element.TOTAL_OCCUPANCY}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="expandedDetail1">
+                        <td mat-cell *matCellDef="let element">
+                            <div class="example-element-detail flex flex-col"
+                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                <div *ngIf="oList_Selected_Type.includes('car')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">Car
+                                </div>
+                                <div *ngIf="oList_Selected_Type.includes('truck')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">Truck
+                                </div>
+                                <div *ngIf="oList_Selected_Type.includes('bus')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">Bus
+                                </div>
+                                <div *ngIf="oList_Selected_Type.includes('motorcycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    Motorbike</div>
+                                <div *ngIf="oList_Selected_Type.includes('bicycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">Bicycle
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="expandedDetail2">
+                        <td mat-cell *matCellDef="let element">
+                            <div class="example-element-detail flex flex-col"
+                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                <div *ngIf="oList_Selected_Type.includes('car')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.CAR_IN}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('truck')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.TRUCK_IN}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('bus')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.BUS_IN}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('motorcycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.MOTORBIKE_IN}}
+                                </div>
+                                <div *ngIf="oList_Selected_Type.includes('bicycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.BICYCLE_IN}}</div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="expandedDetail3">
+                        <td mat-cell *matCellDef="let element">
+                            <div class="example-element-detail flex flex-col"
+                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                <div *ngIf="oList_Selected_Type.includes('car')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.CAR_OUT}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('truck')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.TRUCK_OUT}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('bus')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.BUS_OUT}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('motorcycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.MOTORBIKE_OUT}}
+                                </div>
+                                <div *ngIf="oList_Selected_Type.includes('bicycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.BICYCLE_OUT}}</div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="expandedDetail4">
+                        <td mat-cell *matCellDef="let element">
+                            <div class="example-element-detail flex flex-col"
+                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                <div *ngIf="oList_Selected_Type.includes('car')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.CAR_OCCUPANCY}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('truck')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.TRUCK_OCCUPANCY}}
+                                </div>
+                                <div *ngIf="oList_Selected_Type.includes('bus')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.BUS_OCCUPANCY}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('motorcycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.MOTORBIKE_OCCUPANCY}}</div>
+                                <div *ngIf="oList_Selected_Type.includes('bicycle')"
+                                    style="border-top-width: 1px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                    {{element.BICYCLE_OCCUPANCY}}</div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="example-element-row"
+                        [class.example-expanded-row]="expandedElement === row"
+                        (click)="expandedElement = expandedElement === row ? null : row"></tr>
+                    <tr mat-row
+                        *matRowDef="let row; columns: ['expandedDetail1','expandedDetail2','expandedDetail3','expandedDetail4']"
+                        class="example-detail-row" [class.example-detail-row-bottom-border]="expandedElement === row">
+                    </tr>
+                </table>
+                <mat-paginator [pageSize]="20" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements" class="mat-paginator-sticky border">
+                </mat-paginator>
+            </div>
+        </ng-container>
+        <div class="flex flex-auto items-center justify-center p-6 sm:p-10"
+            *ngIf="!isSearching && dataSource.data && dataSource.data.length == 0;">
+            <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                No Vehicles Were Found
+            </div>
+        </div>
+        <div *ngIf="isSearching && dataSource.data && dataSource.data.length == 0;" class="loader-container">
+            <div class="loader"></div>
+        </div>
+    </div>
+    <div *ngIf="!isTableView" class="relative flex flex-col bg-card">
+        <mat-button-toggle-group class="bottom-button-toggle" multiple>
+            <mat-button-toggle [checked]="isShowIn"
+                (change)="isShowIn = $event.source.checked;updateSeriesVisibile('in')">
+                Show Inbound
+            </mat-button-toggle>
+            <mat-button-toggle [checked]="isShowOut"
+                (change)="isShowOut = $event.source.checked;updateSeriesVisibile('out')">
+                Show Outbound
+            </mat-button-toggle>
+            <mat-button-toggle [checked]="isShowOccupency"
+                (change)="isShowOccupency = $event.source.checked;updateSeriesVisibile('occupancy')">
+                Show Occupancy
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+{
+    "Environment": "Development",
+    "APIUrl": "https://dev.api.picacity.ai",
+    "SignalR_Realtime_Server_Endpoint": "https://dev.websockets.picacity.ai",
+    "List_Preset_time": [
+        {
+            "NAME": "Past Week",
+            "DAYS_BEHIND": 7,
+            "ENUM_TIMESPAN_LIST": [
+                1
+            ]
+        },
+        {
+            "NAME": "Past Month",
+            "DAYS_BEHIND": 30,
+            "ENUM_TIMESPAN_LIST": [
+                1,
+                2
+            ]
+        },
+        {
+            "NAME": "Past 6 Months",
+            "DAYS_BEHIND": 180,
+            "ENUM_TIMESPAN_LIST": [
+                2,
+                3
+            ]
+        },
+        {
+            "NAME": "All Time",
+            "DAYS_BEHIND": 9999,
+            "ENUM_TIMESPAN_LIST": [
+                3
+            ]
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+<div mat-dialog-title class="flex flex-row items-center">
+    <label class="text-2xl font-semibold">Share By Email</label>
+    <button class="ml-auto" mat-icon-button mat-dialog-close>
+        <mat-icon [svgIcon]="'heroicons_outline:x'" class="text-iconColor"></mat-icon>
+    </button>
+</div>
+<div mat-dialog-content>
+    <mat-form-field class="w-full" [floatLabel]="'always'" hideRequiredMarker>
+        <mat-label>Write down the emails to send the link to
+        </mat-label>
+        <mat-chip-grid #emailsChipList class="m-0">
+            <mat-chip *ngFor="let email of oList_Selected_email; let i = index" (removed)="removeEmail(i)">
+                {{email}}
+                <button matChipRemove>
+                    <mat-icon class="icon-size-5 cursor-pointer" [svgIcon]="'heroicons_solid:x-circle'">
+                    </mat-icon>
+                </button>
+            </mat-chip>
+            <input placeholder="Add Email" #emailInput [matChipInputFor]="emailsChipList"
+                (keydown)="addEmailByEnter($event, emailInput);">
+        </mat-chip-grid>
+        <button mat-icon-button matSuffix (click)="addEmail(emailInput.value);emailInput.value = '';">
+            <mat-icon *ngIf="!isLoading" class="icon-size-7 text-primary" [svgIcon]="'heroicons_solid:plus-circle'">
+            </mat-icon>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions class="flex flex-row justify-end">
+    <button mat-flat-button (click)="sendEmail()">Send Email</button>
+</div>

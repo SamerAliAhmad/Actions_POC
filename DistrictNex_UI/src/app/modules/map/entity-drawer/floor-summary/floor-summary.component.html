@@ -1,0 +1,222 @@
+<div class="flex flex-row h-full overflow-hidden">
+    <div *ngIf="!isShareView"
+        class="flex flex-col h-full overflow-y-auto overflow-x-hidden border-r border-gray-300 gap-1"
+        style="min-width: 40px;">
+        <div style="width: 40px; height: 40px;" class="flex items-center justify-center mt-1">
+            <mat-icon [svgIcon]="'mat_outline:apps'"></mat-icon>
+        </div>
+        <button *ngIf="isShowCamera" mat-icon-button (click)="openVideoPanel()" matTooltip="Open Video Panel">
+            <mat-icon [svgIcon]="'mat_outline:video_camera_back'"></mat-icon>
+        </button>
+        <button mat-icon-button (click)="openPanel()" #shortcutsOrigin matTooltip="Share This View">
+            <mat-icon [svgIcon]="'mat_outline:share'"></mat-icon>
+        </button>
+        <button *ngIf="isShowInsights" mat-icon-button (click)="openInsights()" matTooltip="Open Energy Insights Panel">
+            <mat-icon [svgIcon]="'mat_outline:offline_bolt'"></mat-icon>
+        </button>
+        <button mat-icon-button (click)="Toggle_Show_Heatmap_Event_Emitter.emit()"
+            [matTooltip]="isShowHeatmap?'Hide Heatmap':'Show Heatmap'">
+            <mat-icon [svgIcon]="isShowHeatmap?'mat_outline:grid_off':'mat_outline:grid_on'"></mat-icon>
+        </button>
+        <ng-container *ngIf="isShowSliderAndIcon">
+            <button mat-icon-button class="mb-2" (click)="toggleSliderView()"
+                [matTooltip]="isShowSlider ? 'Hide Spacing Slider' : 'Show Spacing Slider'">
+                <mat-icon svgIcon="heroicons_outline:adjustments"></mat-icon>
+            </button>
+            <div class="custom-slider" *ngIf="isShowSlider">
+                <ngx-slider [(value)]="sliderValue" [options]="options"
+                    (valueChange)="onSliderValueChange()"></ngx-slider>
+            </div>
+        </ng-container>
+    </div>
+    <div class="flex flex-col flex-auto p-2 gap-2">
+        <div class="flex flex-row">
+            <div class="text-lg font-semibold">Asset Details</div>
+            <div *ngIf="isLoading" class="ml-auto text-md font-semibold">Asset Data Loading...</div>
+        </div>
+        <div *ngIf="!(oVaidioCameras && (isCamera1on || isCamera2on || isCamera3on)) && !(oList_Selected_Assets && oList_Selected_Assets.length>0) && !(oList_Wifi_signal_alert && oList_Wifi_signal_alert.length>0)"
+            class="flex flex-col flex-auto items-center justify-center text-center">
+            <span *ngIf="!isShareView">Click on an asset to<br>populate this window</span>
+            <span *ngIf="isShareView">No shared assets to display</span>
+        </div>
+        <div class="flex flex-col w-full overflow-y-auto no-scrollbar gap-2">
+            <div class="grid grid-cols-2 w-full gap-2 items-start"
+                *ngIf="oVaidioCameras && (isCamera1on || isCamera2on || isCamera3on)">
+                <div *ngIf="isCamera1on" class="flex flex-col justify-center place-self-center">
+                    <div class="flex flex-col relative">
+                        <div *ngIf="!isShareView" class="changePicture">
+                            <div class="absolute inset-0 w-full h-full rounded-xl bg-black bg-opacity-50 z-10"></div>
+                            <div
+                                class="absolute inset-0 w-full h-full rounded-xl flex items-center justify-center z-20">
+                                <button mat-icon-button (click)="removeCamera(1)">
+                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                    </mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <img class="w-full rounded-xl" src="assets/temp/LAS_VEGAS_STRIP_LIVE_CAM.gif">
+                    </div>
+                    <div class="px-2">{{oVaidioCameras[0]?.FRIENDLY_NAME}}</div>
+                </div>
+                <div *ngIf="isCamera2on" class="flex flex-col justify-center place-self-center">
+                    <div class="flex flex-col relative">
+                        <div *ngIf="!isShareView" class="changePicture">
+                            <div class="absolute inset-0 w-full h-full rounded-xl bg-black bg-opacity-50 z-10"></div>
+                            <div
+                                class="absolute inset-0 w-full h-full rounded-xl flex items-center justify-center z-20">
+                                <button mat-icon-button (click)="removeCamera(2)">
+                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                    </mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <img class="w-full rounded-xl" src="assets/temp/TRAFFIC_CAM_LOOP.gif">
+                    </div>
+                    <div class="px-2">{{oVaidioCameras[1]?.FRIENDLY_NAME}}</div>
+                </div>
+                <div *ngIf="isCamera3on" class="flex flex-col justify-center place-self-center">
+                    <div class="flex flex-col relative">
+                        <div *ngIf="!isShareView" class="changePicture">
+                            <div class="absolute inset-0 w-full h-full rounded-xl bg-black bg-opacity-50 z-10">
+                            </div>
+                            <div
+                                class="absolute inset-0 w-full h-full rounded-xl flex items-center justify-center z-20">
+                                <button mat-icon-button (click)="removeCamera(3)">
+                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                    </mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <img class="w-full rounded-xl" src="assets/temp/OFFICE_CAM_LOOP.gif">
+                    </div>
+                    <div class="px-2">{{oVaidioCameras[2]?.FRIENDLY_NAME}}</div>
+                </div>
+            </div>
+            <div class="flex flex-col flex-auto gap-2" *ngIf="oList_Selected_Assets && oList_Selected_Assets.length>0">
+                <div *ngFor="let floorAsset of oList_Selected_Assets"
+                    class="flex flex-row border-primary rounded-md border cursor-pointer"
+                    (click)="Open_Scene_Details(floorAsset)">
+                    <div class="flex flex-row divide-x divide-primary items-center">
+                        <mat-icon class="icon-size-5 mx-4" *ngIf="floorAsset.Asset.NAME=='Low Alert'"
+                            [svgIcon]="floorAsset.ASSET_ICON"></mat-icon>
+                        <mat-icon class="icon-size-5 mx-4" *ngIf="floorAsset.Asset.NAME=='Medium Alert'"
+                            [svgIcon]="'mat_outline:security'"></mat-icon>
+                        <mat-icon class="icon-size-5 mx-4" *ngIf="floorAsset.Asset.NAME=='High Alert'"
+                            [svgIcon]="'mat_outline:local_fire_department'"></mat-icon>
+                        <div class="flex flex-col p-2">
+                            <div *ngIf="floorAsset.Asset.NAME=='Low Alert'" class="text-md font-semibold">Access
+                                Control Alert on
+                                {{floorAsset.Space.NAME}}
+                            </div>
+                            <div *ngIf="floorAsset.Asset.NAME=='Medium Alert'" class="text-md font-semibold">
+                                Suspicious Activity on
+                                {{floorAsset.Space.NAME}}
+                            </div>
+                            <div *ngIf="floorAsset.Asset.NAME=='High Alert'" class="text-md font-semibold">Fire
+                                detected on
+                                {{floorAsset.Space.NAME}}
+                            </div>
+                            <div *ngIf="!isShareView">Click to View Additional Details</div>
+                        </div>
+                    </div>
+                    <button *ngIf="!isShareView" class="ml-auto" mat-icon-button (click)="removeAsset(floorAsset)">
+                        <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-5 text-iconColor"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="oList_Wifi_signal_alert.length>0" class="flex flex-col flex-auto gap-2">
+                <ng-container *ngFor="let wifi_signal_alert of oList_Wifi_signal_alert">
+                    <div class="flex flex-row border-primary rounded-md border">
+                        <div class="flex flex-row divide-x divide-primary items-center">
+                            <mat-icon class="icon-size-5 mx-4"
+                                [svgIcon]="wifi_signal_alert.IS_RESOLVED?'mat_outline:signal_wifi_4_bar':'mat_outline:signal_wifi_statusbar_connected_no_internet_4'"></mat-icon>
+                            <div class="flex flex-col p-2">
+                                <ng-container *ngIf="wifi_signal_alert.ALERT_VALUE!=null">
+                                    <div class="text-md font-semibold">
+                                        {{getSpaceAssetName(wifi_signal_alert)}} | {{wifi_signal_alert.ALERT_VALUE}}dbm
+                                        on {{wifi_signal_alert.START_DATE | date : 'medium' :
+                                        TimezoneService.oCurrent_Timezone_Offset}}.
+                                    </div>
+                                    <div *ngIf="wifi_signal_alert.IS_RESOLVED">
+                                        [RESOLVED] Signal reached {{wifi_signal_alert.RESOLVE_VALUE}}dbm on
+                                        {{wifi_signal_alert.END_DATE | date : 'medium' :
+                                        TimezoneService.oCurrent_Timezone_Offset}}.
+                                    </div>
+                                </ng-container>
+                                <div *ngIf="wifi_signal_alert.ALERT_VALUE==null" class="text-md font-semibold">
+                                    {{getSpaceAssetName(wifi_signal_alert)}} | No issues faced.
+                                </div>
+                                <div>The current value recorded {{getWifiSignalRecordDate(wifi_signal_alert)?
+                                    (getWifiSignalRecordDate(wifi_signal_alert) | date : 'medium' :
+                                    TimezoneService.oCurrent_Timezone_Offset) : '-'}} is:
+                                    {{getWifiSignalValue(wifi_signal_alert)?
+                                    getWifiSignalValue(wifi_signal_alert)+'dbm' : '-'}}
+                                </div>
+                            </div>
+                        </div>
+                        <button *ngIf="!isShareView" class="ml-auto" mat-icon-button
+                            (click)="removeWifiSignalAlert(wifi_signal_alert)">
+                            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-5 text-iconColor"></mat-icon>
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #shortcutsPanel>
+    <div
+        class="fixed inset-0 sm:static sm:inset-auto flex flex-col sm:min-w-90 sm:w-90 sm:rounded-2xl overflow-hidden shadow-lg">
+        <div class="flex shrink-0 items-center py-4 pr-4 pl-6 bg-primary text-on-primary">
+            <div class="-ml-1 mr-3">
+                <button mat-icon-button (click)="closePanel()">
+                    <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                </button>
+            </div>
+            <div class="flex items-center text-lg font-medium leading-10">
+                <span>Share</span>
+            </div>
+        </div>
+        <div class="relative flex flex-col flex-auto sm:max-h-120 -mb-px overflow-y-auto bg-card">
+            <div class="grid grid-cols-2 grid-flow-row">
+                <div (click)="generateQr()"
+                    class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+                    <div
+                        class="relative flex shrink-0 items-center justify-center w-12 h-12 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+                        <mat-icon class="z-10" [svgIcon]="'heroicons_outline:qrcode'"></mat-icon>
+                    </div>
+                    <div class="font-medium text-center mb-2">QR Code</div>
+                </div>
+                <div (click)="shareByEmail()"
+                    class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+                    <div
+                        class="relative flex shrink-0 items-center justify-center w-12 h-12 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+                        <mat-icon class="z-10" [svgIcon]="'heroicons_outline:mail'"></mat-icon>
+                    </div>
+                    <div class="font-medium text-center mb-2">Mail</div>
+                </div>
+                <div (click)="printPdf()"
+                    class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+                    <div
+                        class="relative flex shrink-0 items-center justify-center w-12 h-12 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+                        <mat-icon class="z-10" [svgIcon]="'mat_outline:picture_as_pdf'"></mat-icon>
+                    </div>
+                    <div class="font-medium text-center mb-2">Download PDF</div>
+                </div>
+                <div (click)="generateWebLink()"
+                    class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+                    <div
+                        class="relative flex shrink-0 items-center justify-center w-12 h-12 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+                        <mat-icon class="z-10" [svgIcon]="'heroicons_outline:link'"></mat-icon>
+                    </div>
+                    <div class="font-medium text-center mb-2">{{oLink?'Copy':'Generate'}} Web Link</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<progress-spinner-dialog class="remove-on-pdf" [color]="color" [mode]="mode" [value]="value" [backdropEnabled]="true"
+    [positionGloballyCenter]="true" [displayProgressSpinner]="displayProgressSpinner">
+</progress-spinner-dialog>

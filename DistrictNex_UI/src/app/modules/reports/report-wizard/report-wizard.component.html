@@ -1,0 +1,162 @@
+<div class="flex flex-auto w-full justify-center">
+    <div class="flex flex-col w-full">
+        <div class="flex flex-col gap-4 mb-4">
+            <mat-form-field class="w-full smartr-mat-emphasized-prefix" subscriptSizing="dynamic"
+                [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    Start Date & Time
+                </div>
+                <button mat-icon-button matSuffix class="mr-2">
+                    <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:clear_all'" class="cursor-pointer"
+                        (click)="this.oParams_Get_Report_Details.START_DATE=null"></mat-icon>
+                </button>
+                <input matInput [ngxMatDatetimePicker]="startDatePicker"
+                    (click)="startDatePicker._selected=this.oParams_Get_Report_Details.START_DATE;startDatePicker.open()"
+                    [(ngModel)]="this.oParams_Get_Report_Details.START_DATE" [max]="maxDate"
+                    [placeholder]="'Start Date'" (keydown)="false" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(startDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #startDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-full smartr-mat-emphasized-prefix" subscriptSizing="dynamic"
+                [floatLabel]="'always'">
+                <div class="text-secondary" matPrefix>
+                    End Date & Time
+                </div>
+                <button mat-icon-button matSuffix class="mr-2">
+                    <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:clear_all'" class="cursor-pointer"
+                        (click)="this.oParams_Get_Report_Details.END_DATE=null"></mat-icon>
+                </button>
+                <input matInput [ngxMatDatetimePicker]="endDatePicker"
+                    (click)="endDatePicker._selected=this.oParams_Get_Report_Details.END_DATE;endDatePicker.open()"
+                    [(ngModel)]="this.oParams_Get_Report_Details.END_DATE" [max]="maxDate" [placeholder]="'End Date'"
+                    (keydown)="false" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="$any(endDatePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #endDatePicker [showSeconds]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
+        </div>
+
+        <div class="mb-4" style="display:flex; justify-content: center;">
+            <div class="gt-xs:pr-3 general w-full">
+                <div class="flex mb-2">
+                    <span class="font-semibold text-smallTextColor">Timespan</span>
+                </div>
+                <mat-button-toggle-group class="flex flex-row gap-2 all-selection-flipper w-full justify-center"
+                    [(ngModel)]="oChosen_Enum_Timespan">
+                    <ng-container *ngFor="let enum_timespan of Enum_Timespan_Keys">
+                        <mat-button-toggle class="selection-flipper text-smallTextColor" [value]="enum_timespan">
+                            {{getEnumCollectionValue(enum_timespan)}}
+                        </mat-button-toggle>
+                    </ng-container>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2 sm:items-center mb-4">
+            <mat-form-field class="flex-auto" subscriptSizing="dynamic">
+                <input type="text" placeholder="Search Existing Sites" matInput #siteSearchInput autocomplete="off">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_outline:search'">
+                </mat-icon>
+                <button mat-icon-button matSuffix (click)="siteSearchInput.value=''" matTooltip="Clear Search">
+                    <mat-icon class="icon-size-7" [svgIcon]="'mat_solid:clear_all'">
+                    </mat-icon>
+                </button>
+            </mat-form-field>
+            <div class="flex flex-row flex-wrap gap-2 items-center">
+                <button *ngIf="(oList_Access_Control_Object | filter: siteSearchInput.value).length>0" class="flex-auto"
+                    mat-flat-button (click)="togglePanels()" [matTooltip]="isSomePanelClosed()?
+                        'Expand All':'Collapse All'">
+                    <mat-icon [svgIcon]="isSomePanelClosed()?'mat_outline:unfold_more':'mat_outline:unfold_less'">
+                    </mat-icon>
+                </button>
+                <button class="flex-auto min-w-26" mat-flat-button (click)="addAccessControlObject()">Add</button>
+            </div>
+        </div>
+        <div *ngIf="oList_Access_Control_Object.length == 0"
+            class="flex flex-auto flex-col items-center justify-center">
+            <div class="text-2xl font-semibold tracking-tight text-secondary">Nothing is selected yet</div>
+        </div>
+        <mat-accordion #mainAccordion="matAccordion" class="overflow-y-auto pb-8 no-scrollbar" multi>
+            <mat-expansion-panel #accessControlPanel
+                *ngFor="let access_control_object of oList_Access_Control_Object | filter: siteSearchInput.value; let first = first; let i = index;"
+                [expanded]="(first)">
+                <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'80px'">
+                    <mat-panel-title class="flex flex-row gap-4 items-center">
+                        <mat-form-field class="w-full" subscriptSizing="dynamic" [floatLabel]="'always'"
+                            (click)="$event.stopPropagation()">
+                            <mat-select matInput placeholder="Data Level" autocomplete="off"
+                                [(ngModel)]="access_control_object.DATA_LEVEL_SETUP_ID"
+                                (selectionChange)="dataLevelChanged(access_control_object);" required>
+                                <mat-option *ngFor="let data_access_level_setup of oList_Data_access_level_setup"
+                                    [value]="data_access_level_setup.SETUP_ID">
+                                    {{data_access_level_setup.VALUE}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="w-full" subscriptSizing="dynamic" [floatLabel]="'always'"
+                            (click)="$event.stopPropagation()">
+                            <mat-select matInput
+                                [placeholder]="getSetupValue(access_control_object.DATA_LEVEL_SETUP_ID)"
+                                [(ngModel)]="access_control_object.LEVEL_ID" required
+                                [disabled]="!getObjects(access_control_object)?.length" autocomplete="off">
+                                <mat-option>
+                                    <ngx-mat-select-search #selectObjectSearch
+                                        [placeholderLabel]="'Search for '+getSetupValue(access_control_object.DATA_LEVEL_SETUP_ID)"
+                                        noEntriesFoundLabel="No Matching Sites">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option
+                                    *ngFor="let object of getObjects(access_control_object) | filter: selectObjectSearch.value"
+                                    [value]="getObjectId(access_control_object.DATA_LEVEL_SETUP_ID, object)"
+                                    (click)="filterOrganizationDataSourceKpis(access_control_object)">
+                                    {{getObjectName(access_control_object.DATA_LEVEL_SETUP_ID,
+                                    getObjectId(access_control_object.DATA_LEVEL_SETUP_ID, object))}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-icon-button class="ml-auto"
+                            (click)="removeAccessControlObject(access_control_object); $event.stopPropagation()">
+                            <mat-icon class="text-red-500" svgIcon="heroicons_outline:trash"></mat-icon>
+                        </button>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                    <div *ngIf="access_control_object.LEVEL_ID" class="flex flex-col flex-auto gap-2 mb-4">
+                        <div class="flex flex-col ml-4">
+                            <mat-checkbox #AllCheckBox
+                                (click)="CheckAllOrganizationDataSourceKpi(AllCheckBox, access_control_object)"
+                                [checked]="isAllOrganizationDataSourceKpiChecked(access_control_object)"
+                                class="z-10 sticky top-0 py-1 border-t border-b font-medium uppercase text-secondary bg-gray-50 dark:bg-gray-900">
+                                Select All
+                            </mat-checkbox>
+                            <ng-container
+                                *ngFor="let organization_data_source_kpi of access_control_object.List_Filtered_Organization_data_source_kpi; let j = index">
+                                <ng-container
+                                    *ngIf="j === 0 || getDimensionName(organization_data_source_kpi.Kpi.DIMENSION_ID) !== getDimensionName(access_control_object.List_Filtered_Organization_data_source_kpi[j - 1].Kpi.DIMENSION_ID)">
+                                    <mat-checkbox #DimensionCheckBox
+                                        (click)="CheckDimension(DimensionCheckBox, access_control_object, organization_data_source_kpi.Kpi.DIMENSION_ID)"
+                                        [checked]="isDimensionChecked(access_control_object, organization_data_source_kpi.Kpi.DIMENSION_ID)"
+                                        class="z-10 sticky top-0 py-1 border-t border-b font-medium uppercase text-secondary bg-gray-50 dark:bg-gray-900">
+                                        {{getDimensionName(organization_data_source_kpi.Kpi.DIMENSION_ID)}}
+                                    </mat-checkbox>
+                                </ng-container>
+                                <mat-checkbox
+                                    (change)="CheckOrganizationDataSourceKpi($event, access_control_object, organization_data_source_kpi);"
+                                    [checked]="isOrganizationDataSourceKpiChecked(access_control_object, organization_data_source_kpi)">
+                                    {{organization_data_source_kpi.Kpi.NAME}}
+                                </mat-checkbox>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="!access_control_object.LEVEL_ID">Choose object first</div>
+                </ng-template>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
+<div class="flex flex-row w-full text-center mt-4 justify-end">
+    <button style="width: 150px;" mat-flat-button (click)="applyFilter()">
+        Generate Report
+    </button>
+</div>

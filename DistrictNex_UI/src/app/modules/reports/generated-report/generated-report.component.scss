@@ -1,0 +1,39 @@
+table,
+th,
+td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+table tr:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+
+table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.report-button {
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+    display: block;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    right: 20px;
+    z-index: 100;
+}
+
+.back-button {
+    bottom: 20px;
+}
+
+.print-button {
+    bottom: 80px;
+}
+
+.pdf-button {
+    bottom: 140px;
+}
