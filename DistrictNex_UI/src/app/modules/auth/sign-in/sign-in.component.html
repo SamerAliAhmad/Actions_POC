@@ -1,0 +1,167 @@
+<div class="flex flex-col sm:flex-row items-center md:items-start justify-center md:justify-start flex-auto min-w-0">
+    <div (click)="Go_To_Build_History()"
+        class="select-none cursor-pointer absolute bottom-3 left-3 inline-flex bg-gray-200 rounded-full px-3 py-1 text-secondary font-bold">
+        {{Build_Number}}</div>
+    <div
+        class="md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+            <div class="logo w-50 mx-auto">
+                <img class="block dark:hidden" [src]="dark_logo">
+                <img class="hidden dark:block" [src]="light_logo">
+            </div>
+            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">
+                {{isPrimaryAuthDone && !isOtpVerified? "Email Verification" : isOtpVerified? "Change Password" :
+                isForgottenPassword? "Forgot Password" : "Sign in"}}
+            </div>
+
+            <form *ngIf="!isPrimaryAuthDone" class="mt-8" #signInForm="ngForm">
+                <mat-form-field class="w-full">
+                    <mat-label>Username or Email</mat-label>
+                    <input id="email" matInput [(ngModel)]="username" name="username" required>
+                    <mat-error>
+                        Username or email is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="w-full" *ngIf="!isForgottenPassword">
+                    <mat-label>Password</mat-label>
+                    <input id="password" matInput type="password" [(ngModel)]="password" name="password" #passwordField
+                        required>
+                    <button mat-icon-button type="button"
+                        (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                        matSuffix>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                    </button>
+                    <mat-error>
+                        Password is required
+                    </mat-error>
+                </mat-form-field>
+
+                <div class="inline-flex items-end justify-between w-full mt-1.5">
+                    <mat-checkbox *ngIf="!isForgottenPassword" [color]="'primary'" [(ngModel)]="rememberMe"
+                        name="rememberMe">
+                        Remember me
+                    </mat-checkbox>
+                    <a *ngIf="!isForgottenPassword"
+                        class="text-md font-medium text-primary-500 hover:underline cursor-pointer"
+                        (click)="isForgottenPassword=true">Forgot password?
+                    </a>
+                    <a *ngIf="isForgottenPassword"
+                        class="text-md font-medium text-primary-500 hover:underline cursor-pointer"
+                        (click)="isForgottenPassword=false">Back to login
+                    </a>
+                </div>
+
+                <button class="smartr-mat-button-large w-full mt-4" mat-flat-button [disabled]="otpLoading"
+                    (click)="Primary_Authentication()">
+                    <span *ngIf="!otpLoading">
+                        Proceed
+                    </span>
+                    <mat-progress-spinner *ngIf="otpLoading" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+            </form>
+
+            <form *ngIf="isPrimaryAuthDone" class="mt-6" #signInForm="ngForm">
+                <div *ngIf="!isOtpVerified" class="text-lg font-semibold">An OTP code has been sent to the
+                    email:<br>{{otpEmail}}</div>
+
+                <mat-form-field *ngIf="!isOtpVerified" class="w-full mt-6" [floatLabel]="'always'">
+                    <mat-label>OTP</mat-label>
+                    <input matInput [(ngModel)]="otp" name="otp" autocomplete="off"
+                        [placeholder]="remainingOtpTime>0?('OTP Expires in ' + remainingOtpTimeMinutes + ':' + (remainingOtpTimeSeconds<10?'0':'') + remainingOtpTimeSeconds):'OTP Expired.'">
+                </mat-form-field>
+
+                <ng-container *ngIf="isOtpVerified">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>New Password</mat-label>
+                        <input matInput type="password" [(ngModel)]="newPassword" name="newPassword"
+                            placeholder="New Password" [ngModelOptions]="{standalone: true}" #newPasswordField
+                            #newPasswordNgModel="ngModel" required minlength="6">
+                        <button mat-icon-button type="button" (click)="autoGeneratePassword()"
+                            matTooltip="Generate Random Password">
+                            <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:password'"></mat-icon>
+                        </button>
+                        <button mat-icon-button type="button"
+                            (click)="newPasswordField.type === 'password' ? newPasswordField.type = 'text' : newPasswordField.type = 'password'"
+                            matSuffix>
+                            <mat-icon class="icon-size-5" *ngIf="newPasswordField.type === 'password'"
+                                [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                            <mat-icon class="icon-size-5" *ngIf="newPasswordField.type === 'text'"
+                                [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                        </button>
+                        <mat-error *ngIf="newPasswordNgModel?.errors?.required">
+                            New Password is required
+                        </mat-error>
+                        <mat-error *ngIf="newPasswordNgModel?.errors?.minlength">
+                            New Password must be at least 6 characters long
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Confirm Password</mat-label>
+                        <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword"
+                            placeholder="Confirm Password" [ngModelOptions]="{standalone: true}" #confirmPasswordField
+                            required minlength="6">
+                        <button mat-icon-button type="button"
+                            (click)="confirmPasswordField.type === 'password' ? confirmPasswordField.type = 'text' : confirmPasswordField.type = 'password'"
+                            matSuffix>
+                            <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'password'"
+                                [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                            <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'text'"
+                                [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                        </button>
+                        <mat-error>
+                            Confirm Password is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <password-strength-meter [password]="newPasswordField.value" [enableFeedback]="true"
+                        (strengthChange)="passwordStrength = $event">
+                    </password-strength-meter>
+                </ng-container>
+
+                <div class="flex flex-row justify-between">
+                    <div class="text-sm hover:underline text-primary-500 cursor-pointer flex flex-row items-center w-fit"
+                        (click)="loading?'':isPrimaryAuthDone=false;isOtpVerified=false;">
+                        <mat-icon class="icon-size-3" svgIcon="heroicons_outline:arrow-sm-left"></mat-icon>
+                        <div>Change Account</div>
+                    </div>
+                    <div *ngIf="isForgottenPassword && isOtpVerified" class="text-md font-medium text-primary-500">
+                        {{remainingOtpTime>0? 'Session Expires in ' + remainingOtpTimeMinutes
+                        + ':' + (remainingOtpTimeSeconds<10?'0':'') + remainingOtpTimeSeconds : 'Session Expired' }}
+                            </div>
+                    </div>
+                    <button class="smartr-mat-button-large w-full mt-4" mat-flat-button
+                        [disabled]="!otp || remainingOtpTime==0 || loading"
+                        (click)="isForgottenPassword? isOtpVerified? Change_Password() : Verify_Otp() : Login_OTP_Verification()">
+                        <span *ngIf="!loading">
+                            Proceed
+                        </span>
+                        <mat-progress-spinner *ngIf="loading" [diameter]="24" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                    </button>
+                    <ng-container *ngIf="!loading && !isOtpVerified">
+                        <button class="smartr-mat-button-large mt-2 w-full" mat-flat-button
+                            [disabled]="otpLoading || waitForCache>0" (click)="Primary_Authentication(); otp='';">
+                            <span *ngIf="!otpLoading">
+                                Resend OTP
+                            </span>
+                            <mat-progress-spinner *ngIf="otpLoading" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+                    </ng-container>
+            </form>
+        </div>
+    </div>
+    <div class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full overflow-hidden bg-gray-800">
+        <div class="absolute w-full h-full" style="z-index: 2; opacity: 70%; background-color: var(--smartr-primary);">
+        </div>
+        <div style="background-image: url('assets/images/backgrounds/bckgd.png'); background-repeat: no-repeat; background-size: cover;"
+            class="sign-in-cover relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full overflow-hidden bg-gray-800">
+        </div>
+    </div>
+</div>

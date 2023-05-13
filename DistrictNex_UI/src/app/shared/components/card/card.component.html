@@ -1,0 +1,30 @@
+<!-- Flippable card -->
+<ng-container *ngIf="flippable">
+
+    <!-- Front -->
+    <div class="smartr-card-front">
+        <ng-content select="[smartrCardFront]"></ng-content>
+    </div>
+
+    <!-- Back -->
+    <div class="smartr-card-back">
+        <ng-content select="[smartrCardBack]"></ng-content>
+    </div>
+
+</ng-container>
+
+<!-- Normal card -->
+<ng-container *ngIf="!flippable">
+
+    <!-- Content -->
+    <ng-content></ng-content>
+
+    <!-- Expansion -->
+    <div
+        class="smartr-card-expansion"
+        *ngIf="expanded"
+        [@expandCollapse]>
+        <ng-content select="[smartrCardExpansion]"></ng-content>
+    </div>
+
+</ng-container>

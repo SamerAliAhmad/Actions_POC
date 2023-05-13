@@ -1,0 +1,39 @@
+<div class="flex-auto h-full overflow-y-auto space-y-2 p-2 no-scrollbar" *ngIf="!isSmallSelector && oList_Entity">
+    <smartr-card *ngFor="let siteEntity of oList_Entity"
+        class="flex flex-col w-full bg-chartBackgroundColor p-2 cursor-pointer gap-1"
+        [ngClass]="siteEntity.ENTITY_ID==oEntity.ENTITY_ID?'border-2 border-primary':''"
+        (click)="entityClicked(siteEntity)">
+        <div class="w-full flex flex-row justify-center gap-3">
+            <div class="w-full flex flex-col gap-1">
+                <div class="text-lg font-semibold leading-tight text-smallTextColor">
+                    {{siteEntity.NAME}}
+                </div>
+                <div class="flex flex-row text-sm leading-none text-smallTextColor items-center gap-1">
+                    <mat-icon class="icon-size-5" svgIcon="mat_outline:foundation"></mat-icon>
+                    <div>{{siteEntity.GLA| number}} {{siteEntity.GLA_UNIT}}</div>
+                </div>
+                <div class="flex flex-row text-sm leading-none text-smallTextColor items-center gap-1">
+                    <mat-icon class="icon-size-5" svgIcon="mat_outline:layers"></mat-icon>
+                    <div>{{siteEntity.NUMBER_OF_FLOORS}}
+                        Floor{{siteEntity.NUMBER_OF_FLOORS==1?'':'s'}}</div>
+                </div>
+            </div>
+            <div class="flex flex-col w-3/4 h-16 gap-1">
+                <img class="object-cover w-full h-full mb-2" style="border-radius: 0.5rem;" [src]="siteEntity.IMAGE_URL"
+                    [alt]="siteEntity.NAME">
+            </div>
+        </div>
+        <div class="flex flex-row text-sm leading-none text-smallTextColor items-center gap-1">
+            <mat-icon class="icon-size-5" svgIcon="mat_outline:language"></mat-icon>
+            <div>{{siteEntity.GLTF_LATITUDE}}, {{siteEntity.GLTF_LONGITUDE}}</div>
+        </div>
+    </smartr-card>
+</div>
+<div class="flex-auto h-full overflow-y-auto space-y-2 pr-1 no-scrollbar pt-2" *ngIf="isSmallSelector && oList_Entity">
+    <div *ngFor="let siteEntity of oList_Entity"
+        class="flex flex-col w-full bg-chartBackgroundColor p-2 cursor-pointer gap-1 place-content-center rounded-r-md font-semibold"
+        [ngClass]="siteEntity.ENTITY_ID==oEntity.ENTITY_ID?'border-2 border-primary':''"
+        (click)="entityClicked(siteEntity)" style="writing-mode: vertical-rl; text-orientation: mixed;">
+        <div>{{siteEntity.NAME}}</div>
+    </div>
+</div>

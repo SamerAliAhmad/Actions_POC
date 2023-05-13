@@ -1,0 +1,9 @@
+<smartr-card class="w-full bg-chartBackgroundColor rounded-none" *ngIf="!isRefreshCameras">
+    <mat-icon (click)="takeSnapshot(camera?.CameraId)" [svgIcon]="'heroicons_solid:camera'"
+        class="screenshot ml-0.5 mt-0.5">
+    </mat-icon>
+    <mat-icon *ngIf="isShowX" [svgIcon]="'heroicons_outline:x'" (click)="removeCamera()"
+        class="absolute top-0.5 right-0.5 z-80 cursor-pointer" style="color: #C97E18 !important;"></mat-icon>
+    <video id="stream-{{camera?.CameraId??1}}" crossOrigin="anonymous" class="video-js vjs-default-skin"
+        [src]="isUrl?url:camera.StreamUrl"></video>
+</smartr-card>

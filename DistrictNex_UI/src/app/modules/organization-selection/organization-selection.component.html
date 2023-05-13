@@ -1,0 +1,45 @@
+<div class="absolute inset-0 flex flex-col w-full h-full disable-select">
+    <div *ngIf="!isSelectionComplete"
+        class="absolute right-0 flex flex-auto overflow-hidden z-[1000] w-full h-full bg-black bg-opacity-60"
+        style="transition: width 400ms">
+        <div class="flex flex-col flex-auto p-4">
+            <div class="flex flex-row items-center text-3xl font-semibold text-whiteColor">
+                <button [style.pointer-events]="isOrganizationVisible ? 'none' : 'auto'" (click)="goBack()" class="mr-2"
+                    mat-icon-button>
+                    <mat-icon svgIcon={{iconRef}} class="text-white icon-size-6"></mat-icon>
+                </button>
+                <span class="select-none">
+                    Select {{ isOrganizationVisible ? 'Organization': 'Top Level'}}
+                </span>
+            </div>
+            <div [@slideInLeft] *ngIf="isOrganizationVisible"
+                class="flex flex-row flex-auto items-center justify-center flex-wrap gap-4 overflow-y-auto -mx-4">
+                <div *ngFor="let Organization_Data of oList_Organization_Data"
+                    (click)="selectOrganization(Organization_Data.ORGANIZATION_ID)"
+                    class="flex flex-col items-center justify-center w-90 max-w-90 rounded-xl shadow-xl border overflow-hidden cursor-pointer bg-white p-8 max-h-40 min-h-40 h-40">
+                    <img class="w-full" [src]="Organization_Data.DARK_RECTANGLE_LOGO_URL">
+                </div>
+
+            </div>
+            <div [@slideInRight] *ngIf="!isOrganizationVisible"
+                class="flex flex-row flex-auto items-center justify-center flex-wrap gap-4 overflow-y-auto -mx-4">
+                <div *ngFor="let Top_level_Data of oList_Organization_Top_level_Data"
+                    (click)="Go_To_Initial_Top_Level(Top_level_Data.TOP_LEVEL_ID)"
+                    class="flex flex-col w-90 max-w-90 items-center justify-center rounded-xl shadow-xl border overflow-hidden cursor-pointer bg-white">
+                    <img class="max-h-44 h-44 w-full" [src]="Top_level_Data.IMAGE_URL">
+                    <div class="flex flex-row justify-between items-center p-4">
+                        <div>{{Top_level_Data.TOP_LEVEL_NAME}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isSelectionComplete && isSpinEnabled" class="organization-picker">
+        <div class="spinner">
+            <div class="bounce1 bg-white"></div>
+            <div class="bounce2 bg-white"></div>
+            <div class="bounce3 bg-white"></div>
+        </div>
+    </div>
+    <div id="loading-map"></div>
+</div>

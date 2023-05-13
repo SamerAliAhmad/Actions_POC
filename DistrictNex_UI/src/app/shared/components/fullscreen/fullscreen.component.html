@@ -1,0 +1,9 @@
+<button mat-icon-button [matTooltip]="tooltip || 'Toggle Fullscreen'" class="custom-background"
+    (click)="toggleFullscreen()" aria-label="Fullscreen">
+    <ng-container [ngTemplateOutlet]="iconTpl || defaultIconTpl"></ng-container>
+</button>
+
+<ng-template #defaultIconTpl>
+    <mat-icon *ngIf="!isFullscreen" svgIcon="fullscreen" class="custom-color"></mat-icon>
+    <mat-icon *ngIf="isFullscreen" svgIcon="fullscreen_exit" class="custom-color"></mat-icon>
+</ng-template>

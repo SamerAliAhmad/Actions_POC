@@ -1,0 +1,111 @@
+<div class="absolute inset-0 min-w-0 text-center overflow-auto print:overflow-visible" *ngIf="oReport_Details"
+    cdkScrollable>
+
+    <div class="flex justify-center items-center flex-col text-left p-10 print:p-0">
+        <div style="overflow: hidden; width:210mm; height:290mm"
+            class="rounded-2xl shadow bg-card print print:rounded-none print:shadow-none print:bg-transparent">
+
+            <div class="flex flex-col w-full h-full text-center items-center p-16 page-to-print">
+                <img class="mt-10" [src]="logoUrl" (error)="changeImage()" style="width: 300px;">
+                <div class="text-6xl font-semibold text-center mt-90">BI Report</div>
+                <div class="text-2xl mt-auto mb-4">
+                    {{currentDate.getDate()+' '+monthNames[currentDate.getMonth()]+' '+
+                    currentDate.getFullYear()}}</div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="flex justify-center items-center flex-col text-left p-10 print:p-0">
+        <div style="overflow: hidden; width:210mm; height:290mm;"
+            class="rounded-2xl shadow bg-card print print:rounded-none print:shadow-none print:bg-transparent">
+            <div class="flex flex-col w-full h-full p-16 page-to-print">
+                <div class="text-3xl font-semibold text-center mb-6">Report Contents</div>
+
+                <div class="flex w-full" style="justify-content: center;">
+                    <table class="w-full">
+                        <tr>
+                            <td>Date Range</td>
+                            <td>{{oParams_Get_Report_Details.START_DATE | date : "medium" :
+                                TimezoneService.oCurrent_Timezone_Offset}} -
+                                {{oParams_Get_Report_Details.END_DATE | date : "medium" :
+                                TimezoneService.oCurrent_Timezone_Offset}}</td>
+                        </tr>
+                        <tr>
+                            <td>Timespan</td>
+                            <td>{{getEnumCollectionValue(oChosen_Enum_Timespan)}}</td>
+                        </tr>
+
+                        <tr *ngIf="oList_District?.length>0">
+                            <td>Districts</td>
+                            <td>
+                                <ul>
+                                    <li *ngFor="let district of oList_District">{{district.NAME}}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr *ngIf="oList_Area?.length>0">
+                            <td>Areas</td>
+                            <td>
+                                <ul>
+                                    <li *ngFor="let area of oList_Area">{{area.NAME}}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr *ngIf="oList_Site?.length>0">
+                            <td>Sites</td>
+                            <td>
+                                <ul>
+                                    <li *ngFor="let site of oList_Site">{{site.NAME}}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr *ngIf="oList_Entity?.length>0">
+                            <td>Objects</td>
+                            <td>
+                                <ul>
+                                    <li *ngFor="let entity of oList_Entity">{{entity.NAME}}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngFor="let Kpi_data_per_page of oList_Kpi_data_Per_Page; let i = index"
+        class="flex justify-center items-center flex-col text-left p-10 print:p-0">
+        <div style="overflow: hidden; width:210mm; height:290mm"
+            class="flex flex-col rounded-2xl shadow bg-card print:rounded-none print:shadow-none print:bg-transparent">
+            <div class="flex flex-col w-full h-full p-16 page-to-print">
+                <div class="text-3xl font-semibold text-center mb-6">{{Kpi_data_per_page.Level.NAME}}</div>
+                <div *ngFor="let kpi_data of Kpi_data_per_page.List_Kpi_data; let j = index"
+                    class="flex flex-col w-full mb-10 overflow-hidden" style="height: 300px;">
+                    <div class="w-full bg-primaryColor text-2xl text-whiteColor pl-2">
+                        {{kpi_data.CHART_TITLE}}<ng-container
+                            *ngIf="kpi_data.CHART_SUBTITLE"><br>{{kpi_data.CHART_SUBTITLE}}</ng-container></div>
+                    <div class="flex flex-col flex-auto overflow-hidden">
+                        <canvas class="w-full h-full" baseChart [options]="kpi_data.ChartConfiguration.options"
+                            [type]="kpi_data.ChartConfiguration.type" [plugins]="kpi_data.ChartConfiguration.plugins"
+                            [data]="kpi_data.ChartConfiguration.data"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button mat-fab matTooltip="Go Back" class="report-button back-button print:hidden" color="white" (click)="goBack()">
+    <mat-icon svgIcon="heroicons_outline:arrow-left" class="text-iconColor"></mat-icon>
+</button>
+
+<button mat-fab matTooltip="Print Report" class="report-button print-button print:hidden" color="white"
+    (click)="print()">
+    <mat-icon svgIcon="heroicons_outline:printer" class="text-iconColor"></mat-icon>
+</button>
+
+<share-button [oPdfName]="'Reports'" [isFab]="true" [oNgClass]="'report-button'" [orientation]="'p'"
+    class="fixed right-5 z-99 pdf-button print:hidden"></share-button>

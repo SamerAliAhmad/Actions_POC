@@ -1,0 +1,78 @@
+<div class="flex flex-row w-full p-2 items-center">
+    <button *ngIf="selectedTab && !isShareView" mat-icon-button class="mr-1" (click)="selectedTab=null"
+        matTooltip="Go Back">
+        <mat-icon class="font-semibold" svgIcon="heroicons_outline:arrow-sm-left"></mat-icon>
+    </button>
+    <label class="text-2xl font-semibold">{{selectedTab?tabs[selectedTab-1]:'Building Video AI Panel'}}</label>
+    <button *ngIf="!isShareView" class="ml-auto m-2" mat-icon-button (click)="closeClickEventEmitter.emit()"
+        matTooltip="Close Drawer">
+        <mat-icon [svgIcon]="'heroicons_outline:x'" class="text-iconColor"></mat-icon>
+    </button>
+</div>
+<div *ngIf="!selectedTab" class="grid grid-cols-2 grid-flow-row w-full h-full">
+    <div (click)="selectedTab=1"
+        class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+        <div
+            class="relative flex shrink-0 items-center justify-center w-20 h-20 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+            <mat-icon class="z-10 icon-size-10" [svgIcon]="'mat_outline:image_search'"></mat-icon>
+        </div>
+        <div class="font-medium text-center mb-2 text-xl">Scene Search</div>
+    </div>
+    <div (click)="selectedTab=2"
+        class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+        <div
+            class="relative flex shrink-0 items-center justify-center w-20 h-20 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+            <mat-icon class="z-10 icon-size-10" [svgIcon]="'mat_outline:video_camera_back'"></mat-icon>
+        </div>
+        <div class="font-medium text-center mb-2 text-xl">Video Monitoring</div>
+    </div>
+    <div (click)="selectedTab=3"
+        class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+        <div
+            class="relative flex shrink-0 items-center justify-center w-20 h-20 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+            <mat-icon class="z-10 icon-size-10" [svgIcon]="'mat_outline:directions_car'"></mat-icon>
+        </div>
+        <div class="font-medium text-center mb-2 text-xl">Vehicle Counting</div>
+    </div>
+    <div (click)="selectedTab=4"
+        class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+        <div
+            class="relative flex shrink-0 items-center justify-center w-20 h-20 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+            <mat-icon class="z-10 icon-size-10" [svgIcon]="'mat_outline:directions_walk'"></mat-icon>
+        </div>
+        <div class="font-medium text-center mb-2 text-xl">People Counting</div>
+    </div>
+    <div (click)="selectedTab=6"
+        class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+        <div
+            class="relative flex shrink-0 items-center justify-center w-20 h-20 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+            <mat-icon class="z-10 icon-size-10" [svgIcon]="'mat_outline:directions_car'"></mat-icon>
+        </div>
+        <div class="font-medium text-center mb-2 text-xl">License Plate Recognition</div>
+    </div>
+    <div (click)="selectedTab=7"
+        class="relative group flex flex-col items-center py-2 justify-center overflow-hidden bg-card border-r border-b even:border-r-0 hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5 cursor-pointer">
+        <div
+            class="relative flex shrink-0 items-center justify-center w-20 h-20 m-3 rounded-full bg-gray-100 dark:bg-gray-700">
+            <mat-icon class="z-10 icon-size-10" [svgIcon]="'mat_outline:face'"></mat-icon>
+        </div>
+        <div class="font-medium text-center mb-2 text-xl">Facial Recognition</div>
+    </div>
+</div>
+<scene-search *ngIf="isVideoDataLoaded && selectedTab==1" class="flex-auto w-full h-full relative"
+    [oEntity]="oEntity"></scene-search>
+<video-monitoring *ngIf="isVideoDataLoaded && selectedTab==2" class="flex-auto w-full h-full relative">
+</video-monitoring>
+<vehicle-counting *ngIf="isVideoDataLoaded && selectedTab==3" class="flex-auto w-full h-full relative"
+    [oEntity]="oEntity"></vehicle-counting>
+<people-counting *ngIf="isVideoDataLoaded && selectedTab==4" class="flex-auto w-full h-full relative"
+    [oEntity]="oEntity">
+</people-counting>
+<license-plate-recognition *ngIf="isVideoDataLoaded && selectedTab==6" class="flex-auto w-full h-full relative"
+    [oEntity]="oEntity">
+</license-plate-recognition>
+<facial-recognition *ngIf="isVideoDataLoaded && selectedTab==7" class="flex-auto w-full h-full relative"
+    [oEntity]="oEntity">
+</facial-recognition>
+<video-ai-skeleton *ngIf="!isVideoDataLoaded && selectedTab" class="flex-auto w-full h-full">
+</video-ai-skeleton>

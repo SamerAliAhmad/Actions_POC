@@ -1,0 +1,13 @@
+<div class="flex flex-row items-center" mat-dialog-title>
+    <div class="text-2xl font-semibold">{{this.title}}</div>
+    <button mat-icon-button mat-dialog-close class="ml-auto">
+        <mat-icon [svgIcon]="'heroicons_outline:x'" class="text-iconColor"></mat-icon>
+    </button>
+</div>
+<div class="flex-auto">
+    <smartr-card class="flex flex-row w-full h-full p-6 bg-chartBackgroundColor">
+        <canvas class="w-full h-full" baseChart [options]="oChartConfiguration.options"
+            [type]="oChartConfiguration.type" [plugins]="oChartConfiguration.plugins"
+            [data]="oChartConfiguration.data"></canvas>
+    </smartr-card>
+</div>

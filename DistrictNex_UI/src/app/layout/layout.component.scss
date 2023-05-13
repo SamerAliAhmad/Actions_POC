@@ -1,0 +1,73 @@
+layout {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    /* Base styles for individual layouts */
+    >* {
+        position: relative;
+        display: flex;
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    /* Base styles for components that load as a route */
+    router-outlet {
+        +* {
+            position: relative;
+            display: flex;
+            flex: 1 1 auto;
+            width: 100%;
+        }
+    }
+}
+
+.smartr-vertical-navigation-wrapper {
+    color: #0f172a !important;
+}
+
+.isDark .smartr-vertical-navigation-wrapper {
+    color: white !important;
+}
+
+.isDark .smartr-vertical-navigation-item.smartr-vertical-navigation-item-active {
+    --tw-bg-opacity: 0.12 !important;
+    background-color: rgba(255, 255, 255, var(--tw-bg-opacity)) !important;
+}
+
+.isDark .smartr-vertical-navigation-item:hover {
+    --tw-bg-opacity: 0.12 !important;
+    background-color: rgba(255, 255, 255, var(--tw-bg-opacity)) !important;
+}
+
+.smartr-vertical-navigation-item.smartr-vertical-navigation-item-active {
+    --tw-bg-opacity: 0.12 !important;
+    background-color: rgba(0, 0, 0, var(--tw-bg-opacity)) !important;
+}
+
+.smartr-vertical-navigation-item:hover {
+    --tw-bg-opacity: 0.12 !important;
+    background-color: rgba(0, 0, 0, var(--tw-bg-opacity)) !important;
+}
+
+.custom-color {
+    color: #0f172a !important;
+    opacity: 0.8;
+}
+
+.isDark .custom-color {
+    color: white !important;
+    opacity: 0.8;
+}
+
+.custom-background:hover {
+    --tw-bg-opacity: 0.12 !important;
+    background-color: rgba(0, 0, 0, var(--tw-bg-opacity)) !important;
+}
+
+.isDark .custom-background:hover {
+    --tw-bg-opacity: 0.12 !important;
+    background-color: rgba(255, 255, 255, var(--tw-bg-opacity)) !important;
+}

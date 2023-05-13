@@ -1,0 +1,65 @@
+<div cdkDrag cdkDragRootElement=".cdk-overlay-pane"
+    class="flex flex-col flex-auto p-0 no-scrollbar select-none overflow-hidden" minWidth="500px" minHeight="500px"
+    style="max-height: 700px !important;">
+    <div class="flex flex-col flex-shrink-0 p-4 bg-chartBackgroundColor text-on-primary">
+        <div class="flex text-lg font-semibold leading-tight" style="align-items: center;">
+            <mat-icon class="icon-size-5 mr-2 text-smallTextColor" svgIcon="mat_solid:calendar_today">
+            </mat-icon>
+            <div class="flex flex-col">
+                <div class="leading-none text-smallTextColor">{{oPublic_event.TITLE}}</div>
+            </div>
+            <button class="ml-auto" mat-icon-button mat-dialog-close>
+                <mat-icon [svgIcon]="'heroicons_outline:x'" class="text-iconColor"></mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto overflow-y-auto p-6">
+        <div *ngIf="oPublic_event.EVENT_CATEGORY"><strong>Event Category:</strong> {{oPublic_event.EVENT_CATEGORY}}
+        </div>
+        <div *ngIf="oPublic_event.EVENT_TYPE"><strong>Event Type:</strong> {{oPublic_event.EVENT_TYPE}}</div>
+        <ng-container *ngIf="oPublic_event.DATE_AND_TIME || oPublic_event.START_TIME || oPublic_event.END_TIME">
+            <div class="w-full border-b my-2"></div>
+            <div *ngIf="oPublic_event.DATE_AND_TIME"><strong>Date and time:</strong> {{oPublic_event.DATE_AND_TIME}}
+            </div>
+            <div *ngIf="oPublic_event.START_TIME"><strong>Begins:</strong> {{oPublic_event.START_TIME | date : "medium"
+                : TimezoneService.oCurrent_Timezone_Offset}}</div>
+            <div *ngIf="oPublic_event.END_TIME"><strong>Ends:</strong> {{oPublic_event.END_TIME | date : "medium" :
+                TimezoneService.oCurrent_Timezone_Offset}}</div>
+        </ng-container>
+        <ng-container *ngIf="oPublic_event.CITY_OR_TOWN || oPublic_event.WHERE || oPublic_event.EVENT_VENUE">
+            <div class="w-full border-b my-2"></div>
+            <div *ngIf="oPublic_event.CITY_OR_TOWN"><strong>City or Town:</strong> {{oPublic_event.CITY_OR_TOWN}}</div>
+            <div *ngIf="oPublic_event.WHERE"><strong>Where:</strong>
+                <a [href]="'http://maps.google.com/?q='+oPublic_event.WHERE" target="_blank"
+                    class="hover:text-secondaryColor">&nbsp;{{oPublic_event.WHERE}}</a>
+            </div>
+            <div *ngIf="oPublic_event.EVENT_VENUE"><strong>Event Venue:</strong> {{oPublic_event.EVENT_VENUE}}</div>
+        </ng-container>
+        <ng-container
+            *ngIf="oPublic_event.COST || oPublic_event.TICKETS_PHONE || oPublic_event.WHERE_TO_PURCHASE_TICKETS">
+            <div class="w-full border-b my-2"></div>
+            <div *ngIf="oPublic_event.COST"><strong>Cost:</strong> {{oPublic_event.COST}}</div>
+            <div *ngIf="oPublic_event.TICKETS_PHONE"><strong>Tickets Phone:</strong> {{oPublic_event.TICKETS_PHONE}}
+            </div>
+            <div *ngIf="oPublic_event.WHERE_TO_PURCHASE_TICKETS"><strong>Where to Purchase Tickets:</strong>
+                {{oPublic_event.WHERE_TO_PURCHASE_TICKETS}}</div>
+        </ng-container>
+        <ng-container *ngIf="oPublic_event.SHORT_DESCRIPTION || oPublic_event.NOTES_1 || oPublic_event.NOTES_2">
+            <div class="w-full border-b my-2"></div>
+            <div *ngIf="oPublic_event.SHORT_DESCRIPTION"><strong>Short Description:</strong>
+                &nbsp;<span [innerHTML]="oPublic_event.SHORT_DESCRIPTION"></span></div>
+            <div *ngIf="oPublic_event.NOTES_1 || oPublic_event.NOTES_2"><strong>Notes:</strong>&nbsp;<span
+                    [innerHTML]="oPublic_event.NOTES_1"></span>
+                <span [innerHTML]="oPublic_event.NOTES_2"></span>
+            </div>
+        </ng-container>
+    </div>
+    <div class="flex flex-row gap-2 pt-2 p-6">
+        <a class="w-full" *ngIf="oPublic_event.EVENT_URL" [href]="oPublic_event.EVENT_URL" target="_blank">
+            <button class="w-full" mat-flat-button>Check Event</button>
+        </a>
+        <a class="w-full" *ngIf="oPublic_event.WEB_LINK" [href]="oPublic_event.WEB_LINK" target="_blank">
+            <button class="w-full" mat-flat-button>Web Link</button>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+:host ::ng-deep .mat-paginator-container {
+    justify-content: space-between;
+    padding: 0;
+}
+
+:host ::ng-deep mat-form-field {
+    .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+}

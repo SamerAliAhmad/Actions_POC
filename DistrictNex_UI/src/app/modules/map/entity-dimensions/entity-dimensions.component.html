@@ -1,0 +1,91 @@
+<div class="flex flex-col flex-auto w-full h-full no-scrollbar select-none overflow-hidden">
+    <div class="w-full" style="height: 130px; max-height: 130px;">
+        <div class="flex flex-row w-full h-full pr-2">
+            <div style="width: 30%;height: 100%;">
+                <img draggable="false" class="object-cover w-full h-full" style="border-radius: 0.5rem;"
+                    [src]="oEntity_Dialog.ENTITY.IMAGE_URL" [alt]="oEntity_Dialog.ENTITY.NAME">
+            </div>
+            <div class="mx-3" style="height: 80%; align-self: center; border-right-width: 2px;"></div>
+            <div class="flex flex-col flex-auto" style="width: 65%;">
+                <div style="grid-column: span 3 / auto;">
+                    <div class="flex flex-col mt-2">
+                        <span class="text-lg font-semibold leading-none mt-1">{{oEntity_Dialog.ENTITY.NAME}}</span>
+                    </div>
+                    <div class="flex flex-row flex-wrap leading-none text-secondary break-normal mt-2">
+                        {{oUpper_Level.LOCATION}} &bull; Loc: {{oEntity_Dialog.ENTITY.GLTF_LONGITUDE}} |
+                        {{oEntity_Dialog.ENTITY.GLTF_LATITUDE}}
+                    </div>
+                </div>
+                <div class="flex flex-col mt-2">
+                    <span class="text-sm text-iconColor leading-none mb-1">Applied
+                        Filters</span>
+                </div>
+                <div class="flex flex-wrap -mx-1 -mb-1 tag-custom-scrollbar"
+                    style="overflow-y: scroll; height: 62px; width: 95%;">
+                    <div
+                        class="flex flex-row mx-0.5 my-0.5 py-1 px-3 h-6 rounded-full text-sm font-large bg-chartBackgroundColor items-center">
+                        <div
+                            style="color: var(--site-chart-color); margin-bottom: 6px; font-size: 26px; font-family: Arial, sans-serif; transform: translateY(4px);">
+                            &#8226;</div>
+                        {{oUpper_Level.NAME}}
+                    </div>
+                    <div
+                        class="flex flex-row mx-0.5 my-0.5 py-1 px-3 h-6 rounded-full text-sm font-large bg-chartBackgroundColor items-center">
+                        <div
+                            style="color: var(--entity-chart-color); margin-bottom: 6px; font-size: 26px; font-family: Arial, sans-serif; transform: translateY(4px);">
+                            &#8226;</div>
+                        {{oEntity_Dialog.ENTITY.NAME}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto overflow-auto no-scrollbar gap-2 pt-2">
+        <ng-container *ngIf="!isChartsLoaded;else LoadedCharts">
+            <div class="w-full grid grid-cols-2 gap-3">
+                <div class="w-full" style="height: 250px; min-height: 250px;">
+                    <smartr-card class="flex flex-row w-full h-full p-2 bg-chartBackgroundColor skeleton-box">
+                    </smartr-card>
+                </div>
+                <div class="w-full" style="height: 250px; min-height: 250px;">
+                    <smartr-card class="flex flex-row w-full h-full p-2 bg-chartBackgroundColor skeleton-box">
+                    </smartr-card>
+                </div>
+                <div class="w-full" style="height: 250px; min-height: 250px;">
+                    <smartr-card class="flex flex-row w-full h-full p-2 bg-chartBackgroundColor skeleton-box">
+                    </smartr-card>
+                </div>
+                <div class="w-full" style="height: 250px; min-height: 250px;">
+                    <smartr-card class="flex flex-row w-full h-full p-2 bg-chartBackgroundColor skeleton-box">
+                    </smartr-card>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #LoadedCharts>
+            <div class="my-1" style="width: 80%; justify-self: center; border-bottom-width: 2px; margin-left: 10%;">
+            </div>
+            <div class="w-full grid grid-cols-2 gap-3">
+                <smartr-card *ngFor="let dimension_data of oList_Dimension_data; let i = index"
+                    class="flex flex-col w-full h-[250px] p-2 bg-chartBackgroundColor"
+                    [ngClass]="[dimension_data.CssClass]">
+                    <div class=" flex flex-row items-center">
+                        <mat-icon class="icon-size-5 mx-1"
+                            [ngClass]="dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'text-gray-500':'text-smallTextColor'"
+                            [svgIcon]="dimension_data.LEVEL_DIMENSION_WITH_STATUS.DIMENSION.DIMENSION_ICON">
+                        </mat-icon>
+                        <div class="text-s font-semibold leading-tight"
+                            [ngClass]="dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'text-gray-500':'text-smallTextColor'">
+                            {{dimension_data.LEVEL_DIMENSION_WITH_STATUS.DIMENSION.NAME}}</div>
+                    </div>
+                    <div *ngIf="dimension_data.ChartConfiguration" class="flex w-full h-full mt-1">
+                        <canvas baseChart class="w-full h-full" [data]="dimension_data.ChartConfiguration.data"
+                            [options]="dimension_data.ChartConfiguration.options"
+                            [type]="dimension_data.ChartConfiguration.type"
+                            [plugins]="dimension_data.ChartConfiguration.plugins"
+                            (dblclick)="openChartModal(dimension_data.ChartConfiguration, dimension_data.LEVEL_DIMENSION_WITH_STATUS.DIMENSION.NAME)"></canvas>
+                    </div>
+                </smartr-card>
+            </div>
+        </ng-template>
+    </div>
+</div>

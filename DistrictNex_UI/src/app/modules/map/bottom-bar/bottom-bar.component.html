@@ -1,0 +1,346 @@
+<ng-container *ngIf="isButtonsVisible">
+    <ng-container *ngIf="isShowButtons">
+        <button [@slideInOutPublicEventsButton]="isShowButtons" mat-fab matTooltip='Switch Map Style'
+            class="map-style-button" color="recenter" (click)="toggleMapStyle()"
+            [ngStyle]="{'right':drawerWidth+20+'px'}" [disabled]="isSwitchStyleDisabled">
+            <mat-icon svgIcon="heroicons_outline:globe" class="text-iconColor"></mat-icon>
+        </button>
+        <button [@slideInOutPublicEventsButton]="isShowButtons" mat-fab
+            [matTooltip]="isShowPublicEvents?'Hide Public Events':'Show Public Events'" class="public-events-button"
+            color="recenter" (click)="togglePublicEvents()" [ngStyle]="{'right':drawerWidth+20+'px'}">
+            <mat-icon [svgIcon]="isShowPublicEvents?'mat_outline:event_busy':'mat_outline:event'"
+                class="text-iconColor"></mat-icon>
+        </button>
+        <button [@slideInOutBylawComplaintsButton]="isShowButtons" mat-fab
+            [matTooltip]="isShowBylawComplaints?'Hide Bylaw Complaints':'Show Bylaw Complaints'"
+            class="bylaw-complaints-button" color="recenter" (click)="toggleByLawComplaints()"
+            [ngStyle]="{'right':drawerWidth+20+'px'}">
+            <mat-icon
+                [svgIcon]="isShowBylawComplaints?'heroicons_solid:exclamation-circle':'heroicons_outline:exclamation-circle'"
+                class="text-iconColor"></mat-icon>
+        </button>
+        <button [@slideInOutBorderButton]="isShowButtons" mat-fab matTooltip="Toggle Border" class="borders-button"
+            color="recenter" (click)="toggleBordersVisibility()" [ngStyle]="{'right':drawerWidth+20+'px'}">
+            <mat-icon [svgIcon]="'mat_outline:border_outer'" class="text-iconColor"></mat-icon>
+        </button>
+        <button [@slideInOutEntitiesButton]="isShowButtons" mat-fab
+            [matTooltip]="isShow3dEntities?'Clear Facade':'Populate Facade'" class="entities-button" color="recenter"
+            (click)="toggleDefaultBuildingsVisibility()" [ngStyle]="{'right':drawerWidth+20+'px'}">
+            <mat-icon [svgIcon]="isShow3dEntities?'mat_outline:browser_not_supported':'mat_outline:corporate_fare'"
+                class="text-iconColor"></mat-icon>
+        </button>
+        <button [@slideInOutMobilityButton]="isShowButtons" mat-fab matTooltip="Toggle Intersection Data"
+            class="mobility-button" color="recenter" (click)="toggleIntersection()"
+            [ngStyle]="{'right':drawerWidth+20+'px'}">
+            <mat-icon [svgIcon]="'mat_outline:directions_car'" class="text-iconColor"></mat-icon>
+        </button>
+    </ng-container>
+    <button mat-fab [matTooltip]="isShowButtons?'Hide Tools':'Show Tools'" class="utility-button" title="Utility"
+        color="recenter" (click)="toggleUtility()" [ngStyle]="{'right':drawerWidth+20+'px'}">
+        <mat-icon [svgIcon]="isShowButtons?'mat_outline:arrow_downward':'mat_solid:build'" class="text-iconColor">
+        </mat-icon>
+    </button>
+    <button mat-fab *ngIf="isEditRemovedExtrusionsOn" title="Removed Extrusions" matTooltip="Edit Removed Extrusions"
+        class="recenter-button" color="recenter" (click)="editRemovedExtrusions()"
+        [ngStyle]="{'right':drawerWidth+160+'px'}">
+        <mat-icon [svgIcon]="'heroicons_outline:pencil-alt'" class="text-iconColor"></mat-icon>
+    </button>
+    <button mat-fab matTooltip="Recenter Map - Wide" title="Recenter Wide" class="recenter-button" color="recenter"
+        (click)="recenterMap(false)" [ngStyle]="{'right':drawerWidth+90+'px'}">
+        <mat-icon [svgIcon]="'mat_outline:gps_not_fixed'" class="text-iconColor"></mat-icon>
+    </button>
+    <button mat-fab matTooltip="Recenter Map - Focused" title="Recenter Focused" class="recenter-button"
+        color="recenter" (click)="recenterMap(true)" [ngStyle]="{'right':drawerWidth+20+'px'}">
+        <mat-icon [svgIcon]="'mat_outline:gps_fixed'" class="text-iconColor"></mat-icon>
+    </button>
+</ng-container>
+
+<div id="bar" class="items-center bg-whiteColor" [ngClass]="[isPinned?'fixed-bar':'bar']">
+
+    <div *ngIf="showSmallBar() || isPinned" (click)="togglePin()" class="flex flew-row bg-whiteColor"
+        style="width: 70px; height: 20px; position: absolute; margin-top: 4px; left: 0; top: -20px; border-top-right-radius: 5px; cursor: pointer; align-items: center; justify-content: center; z-index: 1;">
+        <div *ngIf="!isPinned" class="text-xs text-smallTextColor leading-tight">Pin Bar</div>
+        <div *ngIf="isPinned" class="text-xs text-smallTextColor leading-tight">Pinned</div>
+        <mat-icon *ngIf="isPinned" class="text-smallTextColor" svgIcon="mat_solid:push_pin"
+            style="transform: scale(0.55);">
+        </mat-icon>
+        <mat-icon *ngIf="!isPinned" class="text-smallTextColor" svgIcon="mat_outline:push_pin"
+            style="transform: rotate(45deg) scale(0.55);">
+        </mat-icon>
+    </div>
+
+    <!-- Expanded Bar -->
+
+    <div id="bottom-bar" class="flex flex-row w-full h-full px-1.5 overflow-y-hidden"
+        [ngClass]="(showSmallBar() || isPinned?true:false)?'py-3':'pt-1.5'">
+        <ng-container *ngIf="showSmallBar() || isPinned?true:false">
+            <div [bdcWalkTriggerFor]="levelSwitchPopup" *ngIf="!isHideViewSelector && isShowLevels"
+                class="absolute left-1.5 flex flex-col gap-1 bottom-40 pb-6 items-end" style="width: 10%;">
+                <div *ngIf="isTopLevelAccessible" (click)="openTopLevelSelector()"
+                    [ngClass]="oEnum_Map_view==Enum_Map_view.top_level?'bg-gray-200':'bg-white'" mat-ripple
+                    class="flex flex-row w-full h-8 items-center gap-2 hover:bg-gray-100 transition-all cursor-pointer hover:text-primary-500 px-2 rounded-lg">
+                    <img class="w-6 h-6" src="assets/images/top-level.svg" alt="top-level">
+                    <div>Top-Level</div>
+                </div>
+                <div *ngIf="isDistrictAccessible" (click)="changeMapView(Enum_Map_view.district)"
+                    [ngClass]="oEnum_Map_view==Enum_Map_view.district?'bg-gray-200':'bg-white'" mat-ripple
+                    class="flex flex-row w-full h-8 items-center gap-2 hover:bg-gray-100 transition-all cursor-pointer hover:text-primary-500 px-2 rounded-lg">
+                    <img class="w-6 h-6" src="assets/images/district.svg" alt="district">
+                    <div>District</div>
+                </div>
+                <div *ngIf="isAreaAccessible" (click)="changeMapView(Enum_Map_view.area)"
+                    [ngClass]="oEnum_Map_view==Enum_Map_view.area?'bg-gray-200':'bg-white'" mat-ripple
+                    class="flex flex-row w-full h-8 items-center gap-2 hover:bg-gray-100 transition-all cursor-pointer hover:text-primary-500 px-2 rounded-lg">
+                    <img class="w-6 h-6" src="assets/images/area.svg" alt="area">
+                    <div>Area</div>
+                </div>
+                <div *ngIf="isSiteAccessible" (click)="changeMapView(Enum_Map_view.site)"
+                    [ngClass]="oEnum_Map_view==Enum_Map_view.site?'bg-gray-200':'bg-white'" mat-ripple
+                    class="flex flex-row w-full h-8 items-center gap-2 hover:bg-gray-100 transition-all cursor-pointer hover:text-primary-500 px-2 rounded-lg">
+                    <img class="w-6 h-6" src="assets/images/site.svg" alt="site">
+                    <div>Site</div>
+                </div>
+                <div *ngIf="isEntityAccessible" (click)="changeMapView(Enum_Map_view.entity)"
+                    [ngClass]="oEnum_Map_view==Enum_Map_view.entity?'bg-gray-200':'bg-white'" mat-ripple
+                    class="flex flex-row w-full h-8 items-center gap-2 hover:bg-gray-100 transition-all cursor-pointer hover:text-primary-500 px-2 rounded-lg">
+                    <img class="w-6 h-6" src="assets/images/entity.svg" alt="entity">
+                    <div>Object</div>
+                </div>
+            </div>
+            <div *ngIf="!isHideViewSelector" (click)="isShowLevels=!isShowLevels; completeHoverPopup()"
+                class="flex flex-col rounded-xl overflow-hidden cursor-pointer" style="width: 10%;">
+                <img class="w-full h-[100px] bg-chartBackgroundColor" [src]="'assets/images/' + view_type + '.svg'"
+                    [alt]="oEnum_Map_view==Enum_Map_view.district?'district':oEnum_Map_view==Enum_Map_view.area?'area':oEnum_Map_view==Enum_Map_view.site?'site':'entity'">
+                <div *ngIf="isValidViewType"
+                    class="flex flex-row flex-auto w-full h-8 items-center justify-center text-center px-2 text-xl font-semibold bg-chartBackgroundColor">
+                    {{Current_View_Type=="Entity"?"Object":Current_View_Type}} View
+                </div>
+            </div>
+            <div class="border-chartBackgroundColor"
+                style="height: 80%; align-self: center; border-right-width: 2px; margin-left: 0.3%; margin-right: 0.3%;">
+            </div>
+            <ng-container>
+                <div class="h-full px-1.5 dimension-tab-left" unselectable="on" (click)="toggleSelection()">
+                    <smartr-card class="flex flex-col h-full w-full bg-chartBackgroundColor" id="site-card">
+                        <img *ngIf="isContentLoaded" class="object-cover" draggable="false" style="height: 65%;"
+                            [src]="Upper_Level_Image_URL" [alt]="Upper_Level_Name">
+                        <div *ngIf="!isContentLoaded" class="skeleton-box object-cover" style="height: 65%;"></div>
+                        <div *ngIf="isContentLoaded" class="flex flex-row m-2">
+                            <div class="flex flex-col w-full">
+                                <div class="text-s font-semibold leading-tight text-smallTextColor">
+                                    {{Upper_Level_Name}}
+                                </div>
+                                <div class="text-xs leading-tight text-smallTextColor">
+                                    {{Upper_Level_Location}}
+                                </div>
+                            </div>
+                            <img [src]="Upper_Level_Logo_URL" [alt]="Upper_Level_Name" class="ml-auto"
+                                style="width: 30px;height: 30px;">
+                        </div>
+                        <div *ngIf="!isContentLoaded" class="flex flex-row m-2">
+                            <div class="flex flex-col" style="width: 70%;">
+                                <div class="skeleton-box object-cover"
+                                    style="width: 100%; height: 15px; margin-bottom: 1.8px;">
+                                </div>
+                                <div class="skeleton-box object-cover" style="width: 75%; height: 12px;"></div>
+                            </div>
+                            <div class="skeleton-box ml-auto mr-2" style="width: 30px;height: 30px;border-radius: 50%;">
+                            </div>
+                        </div>
+                    </smartr-card>
+                </div>
+
+                <drag-scroll class="site-choice-panel site-choice-scrollbar pl-1.5" unselectable="on"
+                    [scrollbar-hidden]="false" *ngIf="isShowChoicePanel" [@slideInOut]>
+                    <div *ngFor="let current_level_location of oList_Current_Level_Location; let i = index"
+                        drag-scroll-item class="h-full site-choice site-choice-scrollbar inline-block"
+                        [style.min-width.px]="getIconWidth()" [ngClass]="{'px-1.5': i!=0 , 'pr-1.5': i==0}">
+                        <smartr-card class="flex flex-col h-full w-full bg-chartBackgroundColor"
+                            (click)="Select_Location(current_level_location)">
+                            <img class="object-cover" style="height: 65%;" [src]="current_level_location.IMAGE_URL"
+                                [alt]="current_level_location.NAME">
+                            <div *ngIf="!isContentLoaded" class="skeleton-box object-cover" style="height: 65%;">
+                            </div>
+                            <div *ngIf="isContentLoaded" class="flex flex-row m-2">
+                                <div class="flex flex-col w-full">
+                                    <div class="text-s font-semibold leading-tight text-smallTextColor">
+                                        {{current_level_location.NAME}}
+                                    </div>
+                                    <div class="text-xs leading-tight text-smallTextColor">
+                                        {{current_level_location.LOCATION}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!isContentLoaded" class="flex flex-row m-2">
+                                <div class="flex flex-col ml-1" style="width: 70%;">
+                                    <div class="skeleton-box object-cover"
+                                        style="width: 100%; height: 15px; margin-bottom: 1.8px;"></div>
+                                    <div class="skeleton-box object-cover" style="width: 75%; height: 12px;"></div>
+                                </div>
+                                <div class="skeleton-box ml-auto mr-2"
+                                    style="width: 30px;height: 30px;border-radius: 50%;">
+                                </div>
+                            </div>
+                        </smartr-card>
+                    </div>
+                </drag-scroll>
+            </ng-container>
+
+            <ng-container *ngIf="!isShowChoicePanel">
+                <ng-container *ngIf="!isContentLoaded else contentLoaded">
+                    <big-skeleton class="h-full px-1.5 dimension-tab"></big-skeleton>
+                    <big-skeleton class="h-full px-1.5 dimension-tab"></big-skeleton>
+                    <big-skeleton class="h-full px-1.5 dimension-tab"></big-skeleton>
+                    <big-skeleton class="h-full px-1.5 dimension-tab"></big-skeleton>
+                </ng-container>
+
+                <ng-template #contentLoaded>
+                    <div *ngFor="let dimension_data of oList_Dimension_data; let i = index"
+                        class="flex flex-col px-1.5 flex-1" [ngClass]="dimension_data.CssClass">
+                        <div class="flex flex-col flex-auto h-full p-3 rounded-2xl shadow" [ngClass]="[dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'bg-gray-900 cursor-auto':'bg-chartBackgroundColor',
+                        dimension_data.Enum_Dimension_Status!=Enum_Dimension_Status.ENABLED?'cursor-auto':'']">
+                            <div class=" flex flex-row items-start">
+                                <mat-icon [svgIcon]="dimension_data.DIMENSION_ICON"
+                                    [ngClass]="dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'text-gray-400':'text-smallTextColor'">
+                                </mat-icon>
+                                <div class="text-s font-semibold leading-tight dimension-title"
+                                    [ngClass]="dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'text-gray-400':'text-smallTextColor'">
+                                    {{dimension_data.LEVEL_DIMENSION_WITH_STATUS.DIMENSION.NAME}}</div>
+                            </div>
+                            <div class="flex flex-row flex-auto w-full items-center pt-2 overflow-hidden">
+                                <div class="flex flex-col h-full mr-2">
+                                    <div class="mt-1 text-s font-medium text-center" [ngClass]="[(dimension_data.Enum_Dimension_Status !=
+                                    Enum_Dimension_Status.HIDDEN)? dimension_data.INDEX_COLOR: 'text-gray-400']">
+                                        <label>Index</label>
+                                    </div>
+                                    <div class="pb-3 pr-2 text-5xl sm:text-7xl font-semibold leading-none tracking-tight"
+                                        [ngClass]="[(dimension_data.Enum_Dimension_Status !=
+                                        Enum_Dimension_Status.HIDDEN)? dimension_data.INDEX_COLOR: 'text-gray-400']">
+                                        <label>{{(dimension_data.Enum_Dimension_Status ==
+                                            Enum_Dimension_Status.HIDDEN)? "-":
+                                            dimension_data.INDEX_VALUE}}</label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-auto w-full h-full pb-0.5">
+                                    <canvas baseChart class="w-full h-full"
+                                        [data]="dimension_data.ChartConfiguration.data"
+                                        [options]="dimension_data.ChartConfiguration.options"
+                                        [type]="dimension_data.ChartConfiguration.type"
+                                        [plugins]="dimension_data.ChartConfiguration.plugins"></canvas>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ng-container>
+        </ng-container>
+        <!-- Small Bar -->
+        <ng-container *ngIf="(!showSmallBar() && !isPinned)?true:false">
+            <div *ngIf="!isHideViewSelector" class="flex flex-col gap-1" style="width: 10%;">
+                <div *ngIf="oEnum_Map_view==Enum_Map_view.top_level"
+                    class="flex flex-row flex-auto items-center gap-2 cursor-pointer hover:text-primary-500">
+                    <mat-icon svgIcon="heroicons_solid:globe-alt"></mat-icon>
+                    <div>Top-Level View</div>
+                </div>
+                <div [bdcWalkTriggerFor]="hoverPopup" *ngIf="isValidViewType"
+                    class="flex flex-row flex-auto items-center gap-2 cursor-pointer hover:text-primary-500">
+                    <img class="w-6 h-6" [src]="'assets/images/' + view_type + '.svg'" alt="district">
+                    <div>{{Current_View_Type=="Entity"?"Object":Current_View_Type}} View</div>
+                </div>
+            </div>
+            <div class="border-chartBackgroundColor"
+                style="height: 80%; align-self: center; border-right-width: 2px; margin-left: 0.3%; margin-right: 0.3%;">
+            </div>
+            <ng-container>
+                <div class="h-full px-1.5 dimension-tab-left">
+                    <div class="flex flex-col w-full h-full p-3 bg-chartBackgroundColor shadow"
+                        style="border-top-right-radius: 1rem !important; border-top-left-radius: 1rem !important; justify-content: center;">
+                        <div *ngIf="isContentLoaded; else levelNotLoaded" class="flex items-start">
+                            <div class="flex flex-col ml-1 w-full">
+                                <div class="text-s font-semibold leading-tight text-smallTextColor">
+                                    {{Upper_Level_Name}}
+                                </div>
+                                <div class="text-xs leading-tight text-smallTextColor">
+                                    {{Upper_Level_Location}}
+                                </div>
+                            </div>
+                            <img [src]="Upper_Level_Logo_URL" [alt]="oSelected_District?.NAME" class="ml-auto"
+                                style="width: 30px;height: 30px;">
+                        </div>
+                        <ng-template class="flex items-start" #levelNotLoaded>
+                            <div class="flex flex-col ml-1" style="width: 70%;">
+                                <div class="skeleton-box object-cover"
+                                    style="width: 100%; height: 15px; margin-bottom: 1.8px;"></div>
+                                <div class="skeleton-box object-cover" style="width: 75%; height: 12px;"></div>
+                            </div>
+                            <div class="skeleton-box ml-auto mr-2" style="width: 30px;height: 30px;border-radius: 50%;">
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!isContentLoaded; else dimensionList">
+                <small-skeleton class="h-full px-1.5 dimension-tab"></small-skeleton>
+                <small-skeleton class="h-full px-1.5 dimension-tab"></small-skeleton>
+                <small-skeleton class="h-full px-1.5 dimension-tab"></small-skeleton>
+                <small-skeleton class="h-full px-1.5 dimension-tab"></small-skeleton>
+            </ng-container>
+            <ng-template #dimensionList>
+                <div *ngFor="let dimension_data of oList_Dimension_data" class="h-full px-1.5 dimension-tab"
+                    [ngClass]="dimension_data.CssClass">
+                    <div class="flex flex-col w-full h-full p-3 shadow"
+                        [ngClass]="dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'bg-gray-900':'bg-chartBackgroundColor'"
+                        style="border-top-right-radius: 1rem !important; border-top-left-radius: 1rem !important; justify-content: center;">
+                        <div class="flex flow-row items-start">
+                            <mat-icon [svgIcon]="dimension_data.DIMENSION_ICON"
+                                [ngClass]="dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'text-gray-400':'text-smallTextColor'">
+                            </mat-icon>
+                            <div class="text-s font-semibold leading-tight dimension-title"
+                                [ngClass]="dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'text-gray-400':'text-smallTextColor'">
+                                {{dimension_data.LEVEL_DIMENSION_WITH_STATUS.DIMENSION.NAME}}</div>
+                            <div class="text-xl sm:text-2xl font-semibold leading-none tracking-tight ml-auto"
+                                [ngClass]="[(dimension_data.Enum_Dimension_Status !=
+                            Enum_Dimension_Status.HIDDEN)? dimension_data.INDEX_COLOR: 'text-gray-400']"
+                                style="align-self: center;">
+                                {{(dimension_data.Enum_Dimension_Status == Enum_Dimension_Status.HIDDEN)? "-":
+                                dimension_data.INDEX_VALUE}}
+                            </div>
+                            <ng-container *ngIf="dimension_data.Enum_Dimension_Status != Enum_Dimension_Status.HIDDEN">
+                                <mat-icon *ngIf="dimension_data.DISPLAY_ICON==1" class="icon-size-5 text-highIndexColor"
+                                    [svgIcon]="'heroicons_solid:trending-up'" style="align-self: center;">
+                                </mat-icon>
+                                <mat-icon *ngIf="dimension_data.DISPLAY_ICON==2" class="icon-size-5 text-lowIndexColor"
+                                    [svgIcon]="'heroicons_solid:trending-down'" style="align-self: center;">
+                                </mat-icon>
+                                <mat-icon *ngIf="dimension_data.DISPLAY_ICON==3" class="icon-size-5 text-gray-400"
+                                    [svgIcon]="'heroicons_solid:minus-sm'" style="align-self: center;">
+                                </mat-icon>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ng-container>
+    </div>
+</div>
+
+<ng-container *ngIf="!isShowLevels && isShowToggleButtons">
+    <button mat-fab matTooltip="Toggle View Up" title="View Up" class="level-up-button" color="recenter"
+        (click)="Change_Map_View_Using_Buttons(Enum_Up_Down.UP)" [disabled]="isToggleViewUpButtonDisabled">
+        <mat-icon [svgIcon]="'mat_outline:arrow_upward'" class="text-iconColor"></mat-icon>
+    </button>
+    <button mat-fab matTooltip="Toggle View Down" title="View Down" class="level-down-button" color="recenter"
+        (click)="Change_Map_View_Using_Buttons(Enum_Up_Down.DOWN)" [disabled]="isToggleViewDownButtonDisabled">
+        <mat-icon [svgIcon]="'mat_outline:arrow_downward'" class="text-iconColor"></mat-icon>
+    </button>
+</ng-container>
+
+<bdc-walk-popup #levelSwitchPopup name="levelSwitchPopup" [mustCompleted]="{hoverPopup: true}" yPosition="above"
+    xPosition="after" [showCloseButton]="false">Try switching
+    levels
+    here.</bdc-walk-popup>
+<bdc-walk-popup #hoverPopup name="hoverPopup" [mustCompleted]="{introModal:true}" [showCloseButton]="false">Hover and
+    click here to view the level
+    selector.</bdc-walk-popup>

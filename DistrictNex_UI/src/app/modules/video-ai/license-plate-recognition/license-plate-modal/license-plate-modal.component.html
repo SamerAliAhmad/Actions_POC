@@ -1,0 +1,105 @@
+<div class="flex flex-row flex-auto h-full relative" style="min-height: 450px; min-width: 696px;">
+    <div class="flex flex-col flex-auto overflow-x-auto">
+        <div class="flex flex-row items-center mb-4">
+            <div class="text-3xl font-bold tracking-tight leading-none">Scene Details</div>
+            <button class="ml-auto" mat-icon-button [mat-dialog-close]="'cancel'">
+                <mat-icon svgIcon="heroicons_outline:x" class="text-iconColor"></mat-icon>
+            </button>
+        </div>
+        <ng-container *ngIf="oScene">
+            <div class="flex flex-row">
+                <div class="flex flex-col flex-auto" id="main-data-container">
+                    <div class="flex flex-row mb-4">
+                        <div>
+                            <div class="flex flex-row items-center">
+                                <mat-icon class="cursor-pointer" svgIcon="heroicons_outline:clock"
+                                    matTooltip="Scene Time"></mat-icon>
+                                <div class="ml-2">{{oScene.Datetime | date : "medium" :
+                                    TimezoneService.oCurrent_Timezone_Offset}}</div>
+                            </div>
+                            <div class="flex flex-row items-center mt-1">
+                                <mat-icon class="cursor-pointer" svgIcon="heroicons_outline:video-camera"
+                                    matTooltip="Camera Name"></mat-icon>
+                                <div class="ml-2">{{oScene.Camera.Name}}</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-row items-center ml-auto">
+                            <mat-form-field *ngIf="isLoopOn" class="smartr-mat-emphasized-affix"
+                                subscriptSizing="dynamic" [floatLabel]="'always'">
+                                <div class="text-secondary" matPrefix>
+                                    Zoom
+                                </div>
+                                <input numbersOnly matInput [(ngModel)]="loopZoom" placeholder="Loop Zoom"
+                                    (ngModelChange)="fixMagnification()" min="0.5" max="8" autocomplete="off">
+                            </mat-form-field>
+                            <div class="flex rounded p-3 magnifying-glass-button"
+                                [style.background-color]="isLoopOn?'var(--smartr-button)':'#f1f5f9'"
+                                (click)="toggleLoop()">
+                                <mat-icon *ngIf="isLoopOn" svgIcon="mat_outline:search_off"
+                                    [style.color]="isDark()?'white':'#0f172a'">
+                                </mat-icon>
+                                <mat-icon *ngIf="!isLoopOn" svgIcon="mat_outline:search">
+                                </mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="img-magnifier-container">
+                            <img id="myimage" class="image-magnified" [src]="sceneFile" (load)="imageLoaded()">
+                            <div *ngIf="isLoopOn" id="magnifier" class="img-magnifier-glass z-20"
+                                style="background-image: url('{{oScene.File}}'); background-repeat: no-repeat;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isImageLoaded"
+                    class="flex flex-col p-4 ml-4 rounded-2xl bg-gray-100 items-center justify-center space-y-2"
+                    style="min-width: 250px;">
+                    <div class="flex flex-auto items-center justify-center" style="width: 150px; height: 150px;">
+                        <img [src]="licensePlate.File" style="width: 150px; height: 150px; object-fit: contain;">
+                    </div>
+                    <div class="flex flex-col w-full space-y-2">
+                        <div class="border-black bg-white self-center border font-bold p-2.5 max-w-36 text-center rounded-md"
+                            style="border-left: 15px solid black !important">
+                            {{licensePlate.Characters}}
+                        </div>
+                        <div class="grid grid-cols-2 w-full">
+                            <div class="font-semibold">Vehicle Type: </div>
+                            <div>{{licensePlate.Type | titlecase}}</div>
+                        </div>
+                        <div class="grid grid-cols-2 w-full">
+                            <div class="font-semibold">Confidence: </div>
+                            <div>{{licensePlate.Confidence}}</div>
+                        </div>
+                        <div class="grid grid-cols-2 w-full" *ngIf="licensePlate.Make">
+                            <div class="font-semibold">Make: </div>
+                            <div>{{licensePlate.Make}}</div>
+                        </div>
+                        <div class="grid grid-cols-2 w-full" *ngIf="licensePlate.Model">
+                            <div class="font-semibold">Model: </div>
+                            <div>{{licensePlate.Model}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!oScene">
+            <div class="flex flex-row">
+                <div class="flex flex-col">
+                    <div class="flex flex-row w-full mb-2">
+                        <div class="flex flex-col">
+                            <div class="skeleton-box mb-1" style="width: 180px; height: 21px;"></div>
+                            <div class="skeleton-box" style="width: 160px; height: 21px;"></div>
+                        </div>
+                        <div class="skeleton-box ml-auto" style="width: 50px; height: 50px;"></div>
+                        <div class="skeleton-box ml-2" style="width: 50px; height: 50px;"></div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="skeleton-box" style="width: 600px; height: 337.5px;"></div>
+                    </div>
+                </div>
+                <div class="skeleton-box ml-4" style="width: 275px; height: 400px;"></div>
+            </div>
+        </ng-container>
+    </div>
+</div>

@@ -1,0 +1,155 @@
+<div class="flex flex-row flex-auto gap-2">
+    <div *ngIf="oBest_And_Worst_Wifi_signal" class="flex flex-col flex-auto gap-2 w-full">
+        <smartr-card class="flex flex-col flex-auto bg-chartBackgroundColor text-smallTextColor p-3 w-full h-full">
+            <div class="flex flex-row">
+                <div class="text-lg font-semibold">Top Performer (Average Value)</div>
+            </div>
+            <div class="flex flex-col mt-3">
+                <div class="w-full flex flex-col justify-center items-center gap-3">
+                    <img class="object-cover w-full h-auto max-h-40 mb-2" style="border-radius: 0.5rem;"
+                        [src]="oBest_And_Worst_Wifi_signal.Best_Performance_object.Entity.IMAGE_URL"
+                        [alt]="oBest_And_Worst_Wifi_signal.Best_Performance_object.Entity.NAME">
+                    <div class="flex flex-row justify-between w-full items-center gap-3">
+                        <div class="w-full flex flex-col gap-3">
+                            <div class="font-semibold leading-tight text-smallTextColor">
+                                {{oBest_And_Worst_Wifi_signal.Best_Performance_object.Entity.NAME}}
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Floor: {{oBest_And_Worst_Wifi_signal.Best_Performance_object.Floor.NAME}}</div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space: {{oBest_And_Worst_Wifi_signal.Best_Performance_object.Space.NAME}}
+                                </div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space Asset:
+                                    {{oBest_And_Worst_Wifi_signal.Best_Performance_object.Space_asset.CUSTOM_NAME}}
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex bg-white items-center justify-center text-2xl font-semibold border-primary border-2 h-10 rounded-xl p-2 mr-4 whitespace-nowrap min-w-40 text-highIndexColor">
+                            {{-oBest_And_Worst_Wifi_signal.Best_Performance_object.value | number : '1.2-2'}}dbm</div>
+                    </div>
+                </div>
+            </div>
+        </smartr-card>
+        <smartr-card class="flex flex-col flex-auto bg-chartBackgroundColor text-smallTextColor p-3 w-full h-full">
+            <div class="flex flex-row">
+                <div class="text-lg font-semibold">Bottom Performer (Average Value)</div>
+            </div>
+            <div class="flex flex-col mt-3">
+                <div class="w-full flex flex-col justify-center items-center gap-3">
+                    <img class="object-cover w-full h-auto max-h-40 mb-2" style="border-radius: 0.5rem;"
+                        [src]="oBest_And_Worst_Wifi_signal.Worst_Performance_object.Entity.IMAGE_URL"
+                        [alt]="oBest_And_Worst_Wifi_signal.Worst_Performance_object.Entity.NAME">
+                    <div class="flex flex-row justify-between w-full items-center gap-3">
+                        <div class="w-full flex flex-col gap-3">
+                            <div class="font-semibold leading-tight text-smallTextColor">
+                                {{oBest_And_Worst_Wifi_signal.Worst_Performance_object.Entity.NAME}}
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Floor: {{oBest_And_Worst_Wifi_signal.Worst_Performance_object.Floor.NAME}}</div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space: {{oBest_And_Worst_Wifi_signal.Worst_Performance_object.Space.NAME}}
+                                </div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space Asset:
+                                    {{oBest_And_Worst_Wifi_signal.Worst_Performance_object.Space_asset.CUSTOM_NAME}}
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex bg-white items-center justify-center text-2xl font-semibold border-primary border-2 h-10 rounded-xl p-2 mr-4 whitespace-nowrap min-w-40 text-lowIndexColor">
+                            {{-oBest_And_Worst_Wifi_signal.Worst_Performance_object.value | number : '1.2-2'}}dbm</div>
+                    </div>
+                </div>
+            </div>
+        </smartr-card>
+    </div>
+    <div *ngIf="oBest_And_Worst_Wifi_signal_With_Alerts" class="flex flex-col flex-auto gap-2 w-full">
+        <smartr-card class="flex flex-col flex-auto bg-chartBackgroundColor text-smallTextColor p-3 w-full h-full">
+            <div class="flex flex-row">
+                <div class="text-lg font-semibold">Top Performer (Number of Alerts)</div>
+            </div>
+            <div class="flex flex-col mt-3">
+                <div class="w-full flex flex-col justify-center items-center gap-3">
+                    <img class="object-cover w-full h-auto max-h-40 mb-2" style="border-radius: 0.5rem;"
+                        [src]="oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.Entity.IMAGE_URL"
+                        [alt]="oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.Entity.NAME">
+                    <div class="flex flex-row justify-between w-full items-center">
+                        <div class="w-full flex flex-col gap-3">
+                            <div class="font-semibold leading-tight text-smallTextColor">
+                                {{oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.Entity.NAME}}
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Floor:
+                                    {{oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.Floor.NAME}}
+                                </div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space:
+                                    {{oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.Space.NAME}}
+                                </div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space Asset:
+                                    {{oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.Space_asset.CUSTOM_NAME}}
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex bg-white items-center justify-center text-2xl font-semibold border-primary border-2 h-10 rounded-xl p-2 mr-4 whitespace-nowrap min-w-40 text-highIndexColor">
+                            {{oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.value | number}}
+                            Alert{{oBest_And_Worst_Wifi_signal_With_Alerts.Worst_Performance_object.value==1?'':'s'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </smartr-card>
+        <smartr-card class="flex flex-col flex-auto bg-chartBackgroundColor text-smallTextColor p-3 w-full h-full">
+            <div class="flex flex-row">
+                <div class="text-lg font-semibold">Bottom Performer (Number of Alerts)</div>
+            </div>
+            <div class="flex flex-col mt-3">
+                <div class="w-full flex flex-col justify-center items-center gap-3">
+                    <img class="object-cover w-full h-auto max-h-40 mb-2" style="border-radius: 0.5rem;"
+                        [src]="oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.Entity.IMAGE_URL"
+                        [alt]="oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.Entity.NAME">
+                    <div class="flex flex-row justify-between w-full items-center">
+                        <div class="w-full flex flex-col gap-3">
+                            <div class="font-semibold leading-tight text-smallTextColor">
+                                {{oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.Entity.NAME}}
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Floor:
+                                    {{oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.Floor.NAME}}
+                                </div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space:
+                                    {{oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.Space.NAME}}
+                                </div>
+                            </div>
+                            <div class="flex flex-row leading-none text-smallTextColor items-center gap-1">
+                                <div>Space Asset:
+                                    {{oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.Space_asset.CUSTOM_NAME}}
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex bg-white items-center justify-center text-2xl font-semibold border-primary border-2 h-10 rounded-xl p-2 mr-4 whitespace-nowrap min-w-40 text-lowIndexColor">
+                            {{oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.value | number}}
+                            Alert{{oBest_And_Worst_Wifi_signal_With_Alerts.Best_Performance_object.value==1?'':'s'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </smartr-card>
+    </div>
+    <div class="loader-container" *ngIf="!oBest_And_Worst_Wifi_signal && !oBest_And_Worst_Wifi_signal_With_Alerts">
+        <div class="loader"></div>
+    </div>
+</div>

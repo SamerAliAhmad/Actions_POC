@@ -1,0 +1,77 @@
+<div class="flex flex-col w-full h-full p-2 overflow-hidden relative bg-transparent">
+    <div class="flex flex-row gap-1 overflow-hidden absolute left-0 right-0 top-0 m-2">
+        <div *ngFor="let dimension_data of oList_Dimension_data"
+            class="flex flex-col border border-primary rounded-md items-center w-full overflow-hidden" [ngClass]="[dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.ENABLED?'cursor-pointer':'',
+            dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.DISABLED?'opacity-40':'',
+            dimension_data.Enum_Dimension_Status!=Enum_Dimension_Status.ENABLED?'cursor-auto':'',
+            dimension_data.Enum_Dimension_Status==Enum_Dimension_Status.HIDDEN?'!bg-gray-600':'bg-white']"
+            (click)="dimension_data.Enum_Dimension_Status == Enum_Dimension_Status.ENABLED?dimensionClicked():''">
+            <div class="flex flex-row w-full items-center px-2">
+                <mat-icon class="icon-size-6 text-smallTextColor"
+                    [svgIcon]="dimension_data.LEVEL_DIMENSION_WITH_STATUS.DIMENSION.DIMENSION_ICON">
+                </mat-icon>
+                <strong class="text-center text-2xl flex-auto"> {{dimension_data.Enum_Dimension_Status ==
+                    Enum_Dimension_Status.HIDDEN? "-" :
+                    dimension_data.INDEX_VALUE}}</strong>
+            </div>
+            <div *ngIf="dimension_data.Enum_Dimension_Status != Enum_Dimension_Status.HIDDEN"
+                class="h-2 ml-auto w-full border-t border-primary" [ngClass]="dimension_data.INDEX_COLOR">
+            </div>
+        </div>
+    </div>
+    <div class="relative flex flex-auto" style="margin-bottom: 108px; margin-top: 64px;">
+        <div class="flex flex-row absolute top-0 left-0" *ngIf="assetHovered">
+            <mat-icon *ngIf="isAlert" class="icon-size-5 mr-2" svgIcon="heroicons_outline:exclamation-circle">
+            </mat-icon>
+            <div>{{assetHovered}}</div>
+        </div>
+        <div class="w-full flex-auto" id="rendering-container">
+        </div>
+    </div>
+    <div
+        class="flex flex-col flex-auto items-center justify-center absolute left-0 right-0 bottom-0 gap-2 p-2 bg-white">
+        <mat-button-toggle-group *ngIf="!isShareView" [bdcWalkTriggerFor]="drawerExtraPopup3"
+            [(ngModel)]="oChosen_Render_Type_Setup" (ngModelChange)="setRenderType()" class="top-button-toggle w-full"
+            [disabled]="!isRendererIdle">
+            <mat-button-toggle class="flex items-center justify-center" style="min-width: 148px;" disabled>
+                <div style="color: #2C2E30 !important;">Building View</div>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="oSolid_Render_Type_Setup" class="flex flex-auto items-center justify-center"
+                matTooltip="Solid">
+                <img src="assets/icons/Solid.svg" alt="Solid" class="absolute" style="width: 30px; height: 30px;">
+            </mat-button-toggle>
+            <mat-button-toggle [value]="oShell_Render_Type_Setup" class="flex flex-auto items-center justify-center"
+                matTooltip="Shell">
+                <img src="assets/icons/Shell.svg" alt="Shell" class="absolute" style="width: 30px; height: 30px;">
+            </mat-button-toggle>
+            <mat-button-toggle (click)="completeExtraPopup3()" [value]="oFloor_Stack_Render_Type_Setup"
+                class="flex flex-auto items-center justify-center" matTooltip="Floor Stack">
+                <img src="assets/icons/Floor_Stack.svg" alt="Floor_Stack" class="absolute"
+                    style="width: 30px; height: 30px;">
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-button-toggle-group [bdcWalkTriggerFor]="drawerExtraPopup2" [(ngModel)]="perspective"
+            (ngModelChange)="setPerspective()" class="top-button-toggle w-full">
+            <mat-button-toggle class="flex items-center justify-center" style="min-width: 148px;" disabled>
+                <div style="color: #2C2E30 !important;">Preset View</div>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="0" class="flex flex-auto items-center justify-center" matTooltip="Default">
+                <img src="assets/icons/Default.svg" alt="Default" class="absolute" style="width: 30px; height: 30px;">
+            </mat-button-toggle>
+            <mat-button-toggle [value]="1" class="flex flex-auto items-center justify-center" matTooltip="Facade">
+                <img src="assets/icons/Facade.svg" alt="Facade" class="absolute" style="width: 30px; height: 30px;">
+            </mat-button-toggle>
+            <mat-button-toggle [value]="2" class="flex flex-auto items-center justify-center" matTooltip="Drone">
+                <img src="assets/icons/Drone.svg" alt="Drone" class="absolute" style="width: 30px; height: 30px;">
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</div>
+
+<bdc-walk-popup #drawerExtraPopup2 name="drawerExtraPopup2" [mustCompleted]="{drawerPopup2:true}"
+    [showCloseButton]="false" [showButton]="true" [buttonText]="'Next'">
+    You can make use of preset building views</bdc-walk-popup>
+<bdc-walk-popup #drawerExtraPopup3 name="drawerExtraPopup3" [mustCompleted]="{drawerExtraPopup2:true}"
+    [showCloseButton]="false">
+    You can also switch between Solid, Shell, and Floor Stack representations.<br>Try selecting the floor stack.
+</bdc-walk-popup>
