@@ -1,0 +1,14 @@
+name: My GitHub Action
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run my command
+      run: echo "Hello, GitHub Actions!"
