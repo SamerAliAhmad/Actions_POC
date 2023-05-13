@@ -27,6 +27,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: samerahmad01/ui:ui-build-v-8
+          tags: samerahmad01/ui:${{ github.ref_name }}
           context: DistrictNex_UI
           dockerfile: Dockerfile
