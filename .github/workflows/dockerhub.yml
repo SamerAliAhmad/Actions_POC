@@ -72,7 +72,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:api-gateway-${{ github.ref_name }}
           context: Microservices
-          dockerfile: Microservices/Api-Gateway-Dockerfile
+          file: Microservices/Api-Gateway-Dockerfile
 
   # area-management:
   #   runs-on: ubuntu-latest
