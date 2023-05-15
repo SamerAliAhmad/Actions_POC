@@ -30,7 +30,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:ui-${{ github.ref_name }}
           context: DistrictNex_UI
-          file: Dockerfile
+          file: ./Dockerfile
 
   admin:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:admin-${{ github.ref_name }}
           context: DistrictNex_Admin
-          file: Dockerfile
+          file: ./Dockerfile
 
   api-gateway:
     runs-on: ubuntu-latest
@@ -90,7 +90,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:area-management-${{ github.ref_name }}
           context: Microservices
-          file: Area-Management-Dockerfile
+          file: Microservices/Area-Management-Dockerfile
 
   asset-management:
     runs-on: ubuntu-latest
@@ -108,7 +108,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:asset-management-${{ github.ref_name }}
           context: Microservices
-          file: Asset-Management-Dockerfile
+          file: Microservices/Asset-Management-Dockerfile
 
   cloud-interface:
     runs-on: ubuntu-latest
@@ -126,7 +126,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:cloud-interface-${{ github.ref_name }}
           context: Microservices
-          file: Cloud-Interface-Dockerfile
+          file: Microservices/Cloud-Interface-Dockerfile
 
   correlation-calculation:
     runs-on: ubuntu-latest
@@ -147,7 +147,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:correlation-calculation-${{ github.ref_name }}
           context: Microservices
-          file: Correlation-Calculation-Dockerfile
+          file: Microservices/Correlation-Calculation-Dockerfile
 
   data-creation-cron:
     runs-on: ubuntu-latest
@@ -165,7 +165,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:data-creation-cron-${{ github.ref_name }}
           context: Microservices
-          file: Data-Creation-Cron-Dockerfile
+          file: Microservices/Data-Creation-Cron-Dockerfile
 
   data-retention-cron:
     runs-on: ubuntu-latest
@@ -201,4 +201,4 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:dimension-management-${{ github.ref_name }}
           context: Microservices
-          file: Dimension-Management-Dockerfile
+          file: Microservices/Dimension-Management-Dockerfile
