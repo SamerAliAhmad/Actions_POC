@@ -1,0 +1,112 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col flex-auto h-full bg-card dark:bg-transparent">
+        <!-- Main -->
+
+        <!-- Header -->
+        <div class="flex flex-col justify-between py-8 px-6 md:px-8 border-b">
+
+            <!-- Title -->
+            <div class="flex flex-col">
+                <div class="flex flex-row items-center">
+                    <button mat-icon-button class="backBig mr-2" (click)="goBack()">
+                        <i class="fas fa-arrow-left fa-lg"></i>
+                    </button>
+                    <div class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-none">Instances</div>
+                </div>
+                <div class="ml-12 font-medium text-secondary">
+                    <ng-container *ngIf="isContentLoaded && oList_Video_ai_instance; else loadingInstances">
+                        {{oList_Video_ai_instance.length}} {{oList_Video_ai_instance.length | i18nPlural: {
+                        '=0' : 'Engine Instances',
+                        '=1' : 'Engine Instance',
+                        'other': 'Engine Instances'
+                        } }}
+                    </ng-container>
+                    <ng-template #loadingInstances>
+                        Loading...
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="flex items-center mt-4">
+                <div class="flex-auto">
+                    <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                        <input matInput [formControl]="instanceSearchFormControl" [autocomplete]="'off'"
+                            [placeholder]="'Search Instances'">
+                    </mat-form-field>
+                </div>
+                <!-- Add instance button -->
+                    <div class="hidden sm:flex search-side-button">
+                        <button class="ml-4" mat-flat-button (click)="createInstance()" [disabled]="!isContentLoaded">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+            </div>
+                <div class="flex items-center mt-2">
+                    <!-- Add instance button -->
+                    <div class="flex sm:hidden search-side-button w-full">
+                        <button class="mr-2 w-full" mat-flat-button (click)="createInstance()"
+                            [disabled]="!isContentLoaded">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+        </div>
+
+        <div *ngIf="!isContentLoaded" class="loader-container">
+            <div class="loader"></div>
+        </div>
+        <!-- instance list -->
+        <div class="relative bg-card dark:bg-transparent flex flex-col flex-auto overflow-hidden">
+            <ng-container *ngIf="isContentLoaded">
+                <ng-container *ngIf="oList_Video_ai_instance && oList_Video_ai_instance.length > 0; else noInstances">
+                    <div
+                        class="z-10 flex items-center sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-100">
+                        <div class="flex flex-0 items-center justify-center w-4 h-10">
+                        </div>
+                        <div class="grid grid-cols-5 w-full">
+                            <div class="min-w-0 col-span-3">
+                                <div class="font-medium leading-5 truncate">Name</div>
+                            </div>
+                            <div class="min-w-0 col-span-2 sm:col-span-1">
+                                <div class="font-medium leading-5 truncate ml-5">Status</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto overflow-y-auto">
+                        <ng-container
+                            *ngFor="let instance of oList_Video_ai_instance; let i = index; let first = first">
+                            <!-- Instance -->
+                            <a [ngClass]="first?'border-t':''"
+                                class="flex items-center px-6 py-5 md:px-8 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover"
+                                [routerLink]="['./', instance.VIDEO_AI_INSTANCE_ID]">
+                                <div class="grid grid-cols-5 w-full">
+                                    <div class="min-w-0 ml-4 col-span-3">
+                                        <div class="font-medium leading-5 truncate">{{instance.FRIENDLY_NAME}}
+                                        </div>
+                                    </div>
+                                    <div class="min-w-0 ml-8 col-span-2 sm:col-span-1" style="align-self: center;">
+                                        <div class="font-medium leading-5 truncate">
+                                            {{!instance.IS_DELETED?'Active':'Not Active'}}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!-- No instances -->
+            <ng-template #noInstances>
+                <div class="flex items-center justify-center p-6 sm:p-10">
+                    <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                        No Engine Instances</div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>

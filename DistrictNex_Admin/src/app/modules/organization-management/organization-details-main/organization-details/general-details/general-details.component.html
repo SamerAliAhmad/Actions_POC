@@ -1,0 +1,172 @@
+<form #organizationForm="ngForm" class="w-full" *ngIf="oOrganization">
+    <div class="grid grid-cols-1 sm:grid-cols-6 gap-6 w-full">
+        <div class="col-span-1 sm:col-span-3 lg:col-span-2">
+            <smartr-card class="flex flex-col w-full p-8">
+                <div class="rounded-2xl relative flex overflow-hidden justify-center place-self-center">
+                    <!-- On Hover Overlay -->
+                    <div class="changePicture">
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50 z-1"></div>
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                            <button mat-icon-button (click)="openChangePictureDialog('Dark_Square_Logo', false)">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deletePicture('Dark_Square_Logo')">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Profile Picture -->
+                    <ng-container *ngIf="oOrganization_Original.DARK_SQUARE_LOGO_URL">
+                        <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                            [src]="oOrganization_Original.DARK_SQUARE_LOGO_URL">
+                    </ng-container>
+                    <ng-container *ngIf="!oOrganization_Original.DARK_SQUARE_LOGO_URL">
+                        <div
+                            class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                            <mat-icon class="icon-size-10" svgIcon="heroicons_outline:library"></mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+                <!-- Organization Name -->
+                <div class="flex flex-col mt-4" [bdcWalkTriggerFor]="organizationGeneralDetailsPopup1">
+                    <div class="text-lg font-semibold leading-tight text-center">
+                        {{oOrganization.ORGANIZATION_NAME}}</div>
+                </div>
+
+                <hr class="w-full border-t my-4">
+
+                <div class="flex flex-col">
+                    <!-- Active / Inactive -->
+                    <div class="flex items-center">
+                        <mat-icon class="icon-size-5 mr-3"
+                            [svgIcon]="!oOrganization.IS_DELETED && oOrganization.IS_ACTIVE?'mat_solid:verified_user':'mat_solid:do_disturb_on'">
+                        </mat-icon>
+                        <span *ngIf="oOrganization.IS_DELETED || !oOrganization.IS_ACTIVE" class="leading-none">Inactive
+                            Organization</span>
+                        <span *ngIf="!oOrganization.IS_DELETED && oOrganization.IS_ACTIVE" class="leading-none">Active
+                            Organization</span>
+                    </div>
+                    <!-- Admin Accounts -->
+                    <div class="flex items-center mt-4" *ngIf="numberAdmins">
+                        <mat-icon class="icon-size-5 mr-3" [svgIcon]="'mat_solid:admin_panel_settings'"></mat-icon>
+                        <span class="leading-none">{{numberAdmins}}
+                            {{numberAdmins |
+                            i18nPlural: {
+                            '=0' : 'Administrators',
+                            '=1' : 'Administrator',
+                            'other': 'Administrators'
+                            } }}</span>
+                    </div>
+                    <!-- User Accounts -->
+                    <div class="flex items-center mt-4" *ngIf="numberUsers">
+                        <mat-icon class="icon-size-5 mr-3" [svgIcon]="'heroicons_solid:user-group'"></mat-icon>
+                        <span class="leading-none">{{numberUsers}}
+                            {{numberUsers |
+                            i18nPlural: {
+                            '=0' : 'User Accounts',
+                            '=1' : 'User Account',
+                            'other': 'User Accounts'
+                            } }}</span>
+                    </div>
+                    <!-- Date Created -->
+                    <div class="flex items-center mt-4">
+                        <mat-icon class="icon-size-5 mr-3" [svgIcon]="'mat_solid:edit_calendar'"></mat-icon>
+                        <span class="leading-none">Created {{oOrganization.ENTRY_DATE | date}}</span>
+                    </div>
+                    <!-- If Deleted -->
+                    <div class="flex items-center mt-4" *ngIf="!oOrganization.IS_ACTIVE">
+                        <mat-icon class="icon-size-5 mr-3" [svgIcon]="'mat_solid:auto_delete'"></mat-icon>
+                        <span>Scheduled to be deleted on {{getDeleteDate() | date}}</span>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="!isMyOrganization">
+                    <hr class="w-full border-t my-4">
+
+                    <button *ngIf="oOrganization.IS_ACTIVE" class="px-6" mat-flat-button [color]="'warn'"
+                        (click)="deactivateOrganization()" [disabled]="isLoading">
+                        <span *ngIf="!isLoading">Deactivate Organization</span>
+                        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                    </button>
+                    <button *ngIf="!oOrganization.IS_ACTIVE" class="px-6" mat-flat-button
+                        (click)="restoreOrganization()">
+                        <span *ngIf="!isLoading">Restore Organization</span>
+                        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                    </button>
+                </ng-container>
+
+
+            </smartr-card>
+        </div>
+        <div class="col-span-1 sm:col-span-3 lg:col-span-4">
+            <smartr-card class="flex flex-col w-full h-full p-8">
+                <!-- Organization Name -->
+                <mat-form-field class="w-full mt-2" [floatLabel]="'always'">
+                    <mat-label>Organization Name</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:library'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oOrganization.ORGANIZATION_NAME" matInput placeholder="Organization Name"
+                        name="org-name" required>
+                    <mat-error>** Organization Name is Required</mat-error>
+                </mat-form-field>
+                <!-- Organization Phone Number -->
+                <mat-form-field class="w-full mt-2" [floatLabel]="'always'">
+                    <mat-label>Phone Number</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oOrganization.ORGANIZATION_PHONE_NUMBER" #organizationPhoneNumber="ngModel"
+                        matInput type="tel" placeholder="Organization Phone Number" name="phone-number" minlength="5">
+                    <mat-error *ngIf="organizationPhoneNumber.errors?.minlength">** Phone
+                        Number Should be a Minimum of 5 Characters</mat-error>
+                </mat-form-field>
+                <!-- Organization Email -->
+                <mat-form-field class="w-full mt-2" [floatLabel]="'always'">
+                    <mat-label>Email</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oOrganization.ORGANIZATION_EMAIL" type="email" matInput
+                        placeholder="Organization Email" name="email">
+                    <mat-error>** Invalid Organization Email</mat-error>
+                </mat-form-field>
+                <!-- Organization Address -->
+                <mat-form-field class="smartr-mat-textarea flex-auto mt-2" [floatLabel]="'always'">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput [(ngModel)]="oOrganization. ORGANIZATION_ADDRESS" [placeholder]="'Address'"
+                        name="address" [rows]="3"></textarea>
+                    <mat-error>** Invalid Organization Address</mat-error>
+                </mat-form-field>
+
+                <ng-container *ngIf="oOrganization.IS_ACTIVE">
+                    <div class="mt-3 mb-6 border-t"></div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end -mb-2">
+                        <button mat-stroked-button type="button" (click)="resetOrganizationDetails(organizationForm)"
+                            [disabled]="isLoading || organizationForm.pristine">Reset
+                        </button>
+
+                        <button class="ml-4 w-40" mat-flat-button type="button"
+                            (click)="editOrganization(organizationForm)"
+                            [disabled]="organizationForm.invalid || isLoading || organizationForm.pristine">
+                            <span *ngIf="!isLoading">Save Changes</span>
+                            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+                    </div>
+                </ng-container>
+            </smartr-card>
+        </div>
+    </div>
+</form>
+<progress-spinner-dialog [color]="oTheme_Palette_Color" [mode]="oProgress_Spinner_Mode" [value]="value"
+    [backdropEnabled]="true" [positionGloballyCenter]="true" [displayProgressSpinner]="isProgressSpinerVisible">
+</progress-spinner-dialog>
+
+<bdc-walk-popup #organizationGeneralDetailsPopup1 name="organizationGeneralDetailsPopup1"
+    [mustCompleted]="{introModal:true}" [showCloseButton]="false" [showButton]="true" xPosition="after"
+    [horizontal]="true">
+    Here are the organization general details.<br>Deactivating an organization depends on the retention period of this
+    organization. If it is zero, the organization with all its users will be deleted immediatly upon deactivation.
+    Otherwise, the organization will be deactivated, users will not be able to login, and after the retention period
+    ends, the organization will be deleted.</bdc-walk-popup>

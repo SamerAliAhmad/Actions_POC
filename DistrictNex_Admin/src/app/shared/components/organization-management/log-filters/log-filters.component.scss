@@ -1,0 +1,11 @@
+:host ::ng-deep .mat-tab-group .mat-tab-header .mat-tab-label-container {
+    padding: 0;
+}
+
+:host ::ng-deep .mat-tab-label-container {
+    padding: 0 !important;
+}
+
+:host ::ng-deep .mat-tab-body-content {
+    padding: 0 !important;
+}

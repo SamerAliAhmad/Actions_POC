@@ -1,0 +1,254 @@
+<mat-tab-group [animationDuration]="'0'" [(selectedIndex)]="matTabIndex" (selectedTabChange)="loadChart($event)"
+    class="flex-auto h-full">
+    <form class="flex flex-col flex-auto" #themeForm="ngForm">
+
+        <mat-tab label="Main Theme">
+            <div class="flex my-3 mr-0 sm:mr-1">
+                <mat-checkbox class="ml-auto" labelPosition="before" [color]="'primary'"
+                    [(ngModel)]="isUseDefaultColorsScheme" name="isUseDefaultColorsScheme"
+                    (change)="checkMainColorsDefaultTheme($event)">
+                    Use Default Color Scheme&nbsp;
+                </mat-checkbox>
+            </div>
+            <div class="grid sm:grid-cols-2 w-full mt-2 gap-0 sm:gap-4">
+                <div>
+                    <label class="mt-2">Primary Color</label>
+                    <div class="flex flex-row">
+                        <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                            [cpDisabled]="isUseDefaultColorsScheme" [cpOutputFormat]="'hex'"
+                            [style.background]="oOrganization_color_scheme.PLATFORM_PRIMARY"
+                            [colorPicker]="oOrganization_color_scheme.PLATFORM_PRIMARY" [cpEyeDropper]="true"
+                            (colorPickerChange)="oOrganization_color_scheme.PLATFORM_PRIMARY=$event; themeForm.form.markAsDirty()"
+                            cpPosition="bottom-right" [(cpToggle)]="openPrimaryColorPicker" [cpCancelButton]="true"
+                            [cpCancelButtonClass]="'btn btn-primary btn-xs'" autocomplete="off">
+                        </div>
+                        <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                            <div (click)="isUseDefaultColorsScheme?'':openPrimaryColorPicker=!openPrimaryColorPicker"
+                                class="w-full cursor-pointer">
+                                <input [(ngModel)]="oOrganization_color_scheme.PLATFORM_PRIMARY" name="PLATFORM_PRIMARY"
+                                    matInput [readonly]="true" autocomplete="off" class="cursor-pointer pl-2" required>
+                            </div>
+                            <mat-error>** Primary Color is Required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <label class="mt-2">Secondary Color</label>
+                    <div class="flex flex-row">
+                        <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                            [cpDisabled]="isUseDefaultColorsScheme" [cpOutputFormat]="'hex'"
+                            [style.background]="oOrganization_color_scheme.PLATFORM_BUTTON"
+                            [colorPicker]="oOrganization_color_scheme.PLATFORM_BUTTON" [cpEyeDropper]="true"
+                            (colorPickerChange)="oOrganization_color_scheme.PLATFORM_BUTTON=$event; themeForm.form.markAsDirty()"
+                            [cpPosition]="'right'" [(cpToggle)]="openSecondaryColorPicker" [cpCancelButton]="true"
+                            [cpCancelButtonClass]="'btn btn-primary btn-xs'" autocomplete="off">
+                        </div>
+                        <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                            <div (click)="isUseDefaultColorsScheme?'':openSecondaryColorPicker=!openSecondaryColorPicker"
+                                class="w-full cursor-pointer">
+                                <input [(ngModel)]="oOrganization_color_scheme.PLATFORM_BUTTON" name="PLATFORM_BUTTON"
+                                    matInput [readonly]="true" autocomplete="off" class="cursor-pointer pl-2" required>
+                            </div>
+                            <mat-error> ** Secondary Color is Required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex flex-col cursor-pointer w-full sm:w-4/5 justify-self-center sm:justify-self-end"
+                    *ngIf="!isShowAdmin">
+                    <div class="flex screen-height rounded-md overflow-hidden border-2">
+                        <div class="admin-tab-width" [style.background]="oOrganization_color_scheme.PLATFORM_PRIMARY">
+                            <div class="flex items-center mt-1 mx-1">
+                                <div class="w-1 h-1 rounded-full"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="w-1 h-1 ml-auto rounded-full"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="w-1 h-1 ml-0.5 rounded-full"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                            </div>
+                            <div class="admin-tab-circle mt-2.5 mx-auto rounded-full"
+                                [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                            </div>
+                            <div class="mt-2 mx-1 space-y-2">
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-auto border-l bg-white">
+                            <div class="h-3">
+                                <div class="flex items-center justify-end h-full mr-2">
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-auto border-t bg-white">
+                                <div class="flex flex-col h-full space-y-1 p-2 ml-auto">
+                                    <div class="admin-window mx-auto rounded-sm bg-gray-100 border"></div>
+                                    <div class="admin-window-button mx-auto rounded-full"
+                                        [style.background]="oOrganization_color_scheme.PLATFORM_BUTTON">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col cursor-pointer w-full sm:w-4/5 justify-self-center sm:justify-self-end"
+                    *ngIf="isShowAdmin">
+                    <div class="flex screen-height rounded-md overflow-hidden border-2">
+                        <div class="site-tab-width" [style.background]="oOrganization_color_scheme.PLATFORM_PRIMARY">
+                            <div class="site-tab-tile mt-2 mx-auto rounded-sm"
+                                [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                            </div>
+                            <div class="flex flex-col items-center w-full mt-2 space-y-2">
+                                <div class="site-tab-tile rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="site-tab-tile rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="site-tab-tile rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                                <div class="site-tab-tile rounded-sm"
+                                    [style.background]="LightenColor(oOrganization_color_scheme.PLATFORM_PRIMARY,20)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-auto border-l bg-white">
+                            <div class="h-3">
+                                <div class="flex items-center justify-end h-full mr-2">
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col h-full border-t bg-white">
+                                <div class="flex flex-auto border-t bg-white">
+                                    <div class="flex flex-col h-full space-y-1 p-2 ml-auto">
+                                        <div class="admin-window mx-auto rounded-sm bg-gray-100 border"></div>
+                                        <div class="admin-window-button mx-auto rounded-full"
+                                            [style.background]="oOrganization_color_scheme.PLATFORM_BUTTON">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-row mb-auto border-t bg-white site-bottom-bar">
+                                    <div class="flex flex-row w-full gap-2 px-2 items-center justify-center mx-auto">
+                                        <div class="site-bottom-bar-tile rounded-sm platform-background"></div>
+                                        <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                        </div>
+                                        <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                        </div>
+                                        <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                        </div>
+                                        <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div></div>
+                <div
+                    class="flex flex-row mx-auto mt-2 sm:mt-0 w-full text-center sm:text-right justify-center sm:justify-end">
+                    <div class="w-full sm:w-4/5 text-center">
+                        <mat-label class="mr-2">DistrictNex&nbsp;</mat-label>
+                        <mat-slide-toggle [(ngModel)]="isShowAdmin" name="isShowAdmin" color="none"></mat-slide-toggle>
+                        <mat-label class="ml-2">&nbsp;Admin</mat-label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="my-4 sm:my-6 border-t"></div>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-end">
+                <button *ngIf="isMyOrganization" mat-stroked-button type="button" (click)="applyChanges()">
+                    <span>Apply Changes</span>
+                </button>
+                <button class="ml-4" mat-stroked-button type="button" (click)="resetOrganizationTheme(themeForm)"
+                    [disabled]="isLoading || themeForm.pristine">Reset
+                </button>
+
+                <button class="ml-4 w-40" mat-flat-button type="button" (click)="editOrganizationTheme(themeForm)"
+                    [disabled]="themeForm.invalid || isLoading || themeForm.pristine">
+                    <span *ngIf="!isLoading">Save Changes</span>
+                    <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+            </div>
+        </mat-tab>
+    </form>
+
+    <mat-tab label="Chart Theme" class="flex flex-col flex-auto">
+        <div class="flex my-3 mr-0 sm:mr-4">
+            <mat-checkbox class="ml-auto" labelPosition="before" [color]="'primary'"
+                [(ngModel)]="isUseDefaultColorsCharts" [checked]="isUseDefaultColorsCharts"
+                name="isUseDefaultColorsCharts"
+                (change)="checkChartColorsDefaultTheme($event);themeForm.form.markAsDirty()">
+                Use Default Color Scheme&nbsp;
+            </mat-checkbox>
+        </div>
+        <div class="grid sm:grid-cols-2 w-full mt-2 gap-4">
+            <div>
+                <ng-container *ngFor="let organization_chart_color of oList_Organization_chart_color; let i = index">
+                    <label class="mt-2">{{organization_chart_color.Data_level_setup.VALUE}} Chart Color</label>
+                    <div class="flex flex-row">
+                        <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                            [style.background]="organization_chart_color.COLOR"
+                            [colorPicker]="organization_chart_color.COLOR" [cpEyeDropper]="true"
+                            (colorPickerChange)="organization_chart_color.COLOR = $event; updateChartColors();themeForm.form.markAsDirty();this.isUseDefaultColorsCharts = false"
+                            cpPosition="right" [(cpToggle)]="oList_Color_Picker[i]" [cpCancelButton]="true"
+                            [cpCancelButtonClass]="'btn btn-primary btn-xs'" autocomplete="off">
+                        </div>
+                        <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                            <div (click)="oList_Color_Picker[i]=!oList_Color_Picker[i]" class="w-full cursor-pointer">
+                                <input [(ngModel)]="organization_chart_color.COLOR"
+                                    (ngModelChange)="updateChartColors();themeForm.form.markAsDirty();this.isUseDefaultColorsCharts = false"
+                                    matInput autocomplete="off" class="cursor-pointer pl-2">
+                            </div>
+                            <mat-error *ngIf="!organization_chart_color.COLOR">
+                                ** Chart Color is Required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+
+            </div>
+            <!-- chart here -->
+            <div class="flex h-full w-full">
+                <div id="demoChart" style="width: 100%; height: 100%; display: flex;">
+                </div>
+            </div>
+        </div>
+        <!-- Divider -->
+        <div class="mt-6 mb-6 border-t"></div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end">
+            <button mat-stroked-button type="button" (click)="resetOrganizationTheme(themeForm)"
+                [disabled]="isLoading || themeForm.pristine">Reset
+            </button>
+
+            <button class="ml-4 w-40" mat-flat-button type="button" (click)="editOrganizationTheme(themeForm)"
+                [disabled]="themeForm.invalid || isLoading || themeForm.pristine|| !isThereChange">
+                <span *ngIf="!isLoading">Save Changes</span>
+                <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+            </button>
+        </div>
+    </mat-tab>
+
+</mat-tab-group>

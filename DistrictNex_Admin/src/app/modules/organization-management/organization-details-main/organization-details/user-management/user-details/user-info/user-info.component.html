@@ -1,0 +1,193 @@
+<form #userForm="ngForm" *ngIf="oUser">
+    <div class="grid grid-cols-1 sm:grid-cols-6 gap-6 w-full">
+        <div class="col-span-1 sm:col-span-3 xl:col-span-2">
+            <smartr-card class="flex flex-col w-full p-8">
+                <div class="rounded-2xl relative flex overflow-hidden justify-center place-self-center">
+                    <!-- Profile Picture -->
+                    <ng-container *ngIf="oUser.IMAGE_URL">
+                        <img class="w-36 h-36 rounded-2xl ring-4 ring-bg-card" [src]="oUser.IMAGE_URL">
+                    </ng-container>
+                    <ng-container *ngIf="!oUser.IMAGE_URL">
+                        <div
+                            class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                            <mat-icon class="icon-size-10" svgIcon="heroicons_outline:user"></mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+                <!-- User Name -->
+                <div [bdcWalkTriggerFor]="userInfoPopup1" class="flex flex-col mt-4">
+                    <div class="text-lg font-semibold leading-tight text-center">
+                        {{oUser.FIRST_NAME}} {{oUser.LAST_NAME}}</div>
+                </div>
+
+                <hr class="w-full border-t my-4">
+
+                <div class="flex flex-col">
+                    <!-- Active / Inactive -->
+                    <div class="flex items-center">
+                        <mat-icon class="icon-size-5 mr-3"
+                            [svgIcon]="!oUser.IS_DELETED && oUser.IS_ACTIVE?'mat_solid:verified_user':'mat_solid:do_disturb_on'">
+                        </mat-icon>
+                        <span *ngIf="oUser.IS_DELETED || !oUser.IS_ACTIVE" class="leading-none">Inactive
+                            User</span>
+                        <span *ngIf="!oUser.IS_DELETED && oUser.IS_ACTIVE" class="leading-none">Active
+                            User</span>
+                    </div>
+                    <!-- User Type -->
+                    <div class="flex items-center mt-4" *ngIf="oUser.User_type_setup.VALUE">
+                        <ng-container [ngSwitch]="oUser.User_type_setup.VALUE">
+                            <ng-container *ngSwitchCase="'Super Admin'">
+                                <mat-icon class="icon-size-5 mr-3" [svgIcon]="'mat_outline:shield'"></mat-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'Organization Admin'">
+                                <mat-icon class="icon-size-5 mr-3" [svgIcon]="'mat_outline:admin_panel_settings'">
+                                </mat-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'Organization User'">
+                                <mat-icon class="icon-size-5 mr-3" [svgIcon]="'heroicons_outline:user-group'">
+                                </mat-icon>
+                            </ng-container>
+                        </ng-container>
+                        <span class="leading-none">{{oUser.User_type_setup.VALUE}}</span>
+                    </div>
+                    <!-- Date Created -->
+                    <div class="flex items-center mt-4">
+                        <mat-icon class="icon-size-5 mr-3" [svgIcon]="'mat_solid:edit_calendar'"></mat-icon>
+                        <span class="leading-none">Created {{oUser.ENTRY_DATE | date}}</span>
+                    </div>
+                    <!-- If Deleted -->
+                    <div class="flex items-center mt-4" *ngIf="!oUser.IS_ACTIVE">
+                        <mat-icon class="icon-size-5 mr-3" [svgIcon]="'mat_solid:auto_delete'"></mat-icon>
+                        <span>Scheduled to be deleted on {{getDeleteDate() | date}}</span>
+                    </div>
+                </div>
+
+                <hr class="w-full border-t my-4">
+
+                <button *ngIf="oUser.IS_ACTIVE" class="px-6" mat-flat-button [disabled]="isLoading"
+                    (click)="openChangePasswordDialog()">
+                    <span *ngIf="!isLoading">Change Password</span>
+                    <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+                <button *ngIf="oUser.IS_ACTIVE && oUser.User_type_setup.VALUE!='Super Admin'" class="px-6 mt-2"
+                    mat-flat-button [color]="'warn'" [disabled]="isLoading" (click)="deactivateUser()">
+                    <span *ngIf="!isLoading">Deactivate User</span>
+                    <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+                <span *ngIf="oUser.User_type_setup.VALUE=='Super Admin'" class="text-center italic mt-3">Super
+                    Admins Can't be Deactivated</span>
+                <button *ngIf="!oUser.IS_ACTIVE" class="px-6" mat-flat-button (click)="restoreUser()">
+                    <span *ngIf="!isLoading">Restore User</span>
+                    <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+
+            </smartr-card>
+        </div>
+        <div class="col-span-1 sm:col-span-3 xl:col-span-4">
+            <smartr-card class="flex flex-col w-full h-full p-8">
+                <!-- User Name -->
+                <mat-form-field [floatLabel]="'always'">
+                    <mat-label>First Name</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oUser.FIRST_NAME" name="FIRST_NAME" matInput placeholder="First Name" required>
+                    <mat-error>** First Name is Required
+                    </mat-error>
+                </mat-form-field>
+                <!-- User Name -->
+                <mat-form-field [floatLabel]="'always'">
+                    <mat-label>Last Name</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oUser.LAST_NAME" name="LAST_NAME" matInput placeholder="Last Name" required>
+                    <mat-error>** Last Name is Required
+                    </mat-error>
+                </mat-form-field>
+                <!-- User Type -->
+                <mat-form-field *ngIf="isSuperAdmin" [floatLabel]="'always'">
+                    <mat-label>Organization User Type</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:user'" matPrefix>
+                    </mat-icon>
+                    <mat-select [(ngModel)]="oUser.USER_TYPE_SETUP_ID" name="USER_TYPE_SETUP_ID"
+                        placeholder="Organization User Type" required>
+                        <mat-option *ngFor="let user_type_setup of oList_User_type_setup"
+                            [value]="user_type_setup.SETUP_ID">
+                            {{user_type_setup.VALUE}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>** Organization User Type
+                        is Required</mat-error>
+                </mat-form-field>
+                <mat-form-field *ngIf="!isSuperAdmin" [floatLabel]="'always'">
+                    <mat-label>Organization User Type</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+                    <input [value]="oUser_Original.User_type_setup.VALUE" matInput placeholder="Organization User Type"
+                        name="Organization-User-Type" [readonly]="true">
+                </mat-form-field>
+                <!-- User Phone Number -->
+                <mat-form-field [floatLabel]="'always'">
+                    <mat-label>Phone Number</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oUser.PHONE_NUMBER" name="PHONE_NUMBER" matInput type="tel"
+                        placeholder="User Phone Number" #userPhoneNumber="ngModel" required minlength="5">
+                    <mat-error *ngIf="userPhoneNumber.errors?.minlength">** Phone
+                        Number Should be a Minimum of 5 Characters</mat-error>
+                    <mat-error *ngIf="userPhoneNumber.errors?.required">** Phone Number is Required
+                    </mat-error>
+                </mat-form-field>
+                <!-- Username -->
+                <mat-form-field [floatLabel]="'always'">
+                    <mat-label>Username</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oUser.USERNAME" name="USERNAME" #usernameField="ngModel" type="email" matInput
+                        placeholder="User Username" required>
+                    <mat-error *ngIf="usernameField.errors?.required">** Username is Required</mat-error>
+                </mat-form-field>
+                <!-- User Email -->
+                <mat-form-field [floatLabel]="'always'">
+                    <mat-label>Email</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'" matPrefix></mat-icon>
+                    <input [(ngModel)]="oUser.EMAIL" name="EMAIL" #userEmail="ngModel" type="email" matInput
+                        placeholder="User Email" required email>
+                    <mat-error *ngIf="userEmail.errors?.email">** Invalid User Email</mat-error>
+                    <mat-error *ngIf="userEmail.errors?.required">** Email is Required</mat-error>
+                </mat-form-field>
+                <!-- Receive Email Notifications -->
+                <div class="sm:col-span-1 flex" style="align-items: center;">
+                    <mat-checkbox class="pr-2 pl-5 flex align-center w-full"
+                        style="border-radius: 6px; border-width: 1px; border-color: #cbd5e1; height: 48px; margin-top: 8px !important;"
+                        labelPosition="before" [(ngModel)]="oUser.IS_RECEIVE_EMAIL" name="IS_RECEIVE_EMAIL">
+                        Receives Email Alert Notifications
+                    </mat-checkbox>
+                </div>
+
+                <ng-container *ngIf="oUser.IS_ACTIVE">
+                    <!-- Divider -->
+                    <div class="mt-4 mb-4 border-t"></div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end -mb-4">
+                        <button mat-stroked-button type="button" (click)="resetUserDetails()"
+                            [disabled]="isLoading || userForm.pristine">Reset
+                        </button>
+
+                        <button class="ml-4 w-40" mat-flat-button type="button" (click)="editUser(userForm)"
+                            [disabled]="userForm.invalid || isLoading || userForm.pristine">
+                            <span *ngIf="!isLoading">Save Changes</span>
+                            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+                    </div>
+                </ng-container>
+            </smartr-card>
+        </div>
+    </div>
+</form>
+
+
+<bdc-walk-popup #userInfoPopup1 name="userInfoPopup1" [mustCompleted]="{introModal:true}" [showCloseButton]="false"
+    [showButton]="true" xPosition="after" [horizontal]="true">
+    You can change the user's details here, and also change their password. You can also deactivate their account (if
+    data retention period for their organization is not 0) or permanently delete it (if data retention period for their
+    organization is 0)</bdc-walk-popup>

@@ -1,0 +1,91 @@
+<smartr-card class="flex flex-col w-full p-8">
+    <form #organizationRetentionPeriodForm="ngForm">
+        <div class="flex mb-4">
+        </div>
+        <div *ngIf="oOrganization.IS_ACTIVE" class="grid sm:grid-cols-2 w-full gap-x-4">
+            <mat-form-field class="w-full smartr-mat-emphasized-affix" [floatLabel]="'always'">
+                <mat-label class="font-semibold text-textMain">Data Retention Period</mat-label>
+                <input matInput type="number" numbersOnly min="0"
+                    [(ngModel)]="oParams_Modify_Data_Settings.DATA_RETENTION_PERIOD" name="DATA_RETENTION_PERIOD"
+                    autocomplete="off" required>
+                <span matSuffix>&nbsp;days after deletion</span>
+                <mat-error>** Data Retention Period is Required
+                </mat-error>
+                <mat-hint *ngIf="oParams_Modify_Data_Settings.DATA_RETENTION_PERIOD==0">
+                    ** Deleted data will not be retained due to this setting</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="w-full smartr-mat-emphasized-affix" [floatLabel]="'always'">
+                <mat-label class="font-semibold text-textMain">Session Period In Minutes</mat-label>
+                <input matInput type="number" numbersOnly min="60"
+                    [(ngModel)]="oParams_Modify_Data_Settings.TICKET_DURATION_IN_MINUTES"
+                    name="TICKET_DURATION_IN_MINUTES" autocomplete="off" required>
+                <span matSuffix>&nbsp;minutes</span>
+                <mat-error>** Session Period in minutes is required and cannot be less than 60
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="!oOrganization.IS_ACTIVE" class="grid sm:grid-cols-2 w-full gap-x-4">
+            <div class="flex flex-col w-full gap-1.5 mb-4">
+                <mat-label class="font-semibold text-textMain text-[0.875rem] leading-[1.28571]">Data Retention Period
+                </mat-label>
+                <div
+                    class="flex flex-row h-12 min-h-12 max-h-12 w-full items-center border border-gray-300 px-4 rounded-md overflow-hidden">
+                    <div class="flex-auto py-3.5">{{oOrganization.DATA_RETENTION_PERIOD}}</div>
+                    <div
+                        class="flex items-center h-full ml-4 -mr-4 px-4 border-l border-gray-300 bg-slate-100 text-slate-400">
+                        days after deletion
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col w-full gap-1.5 mb-4">
+                <mat-label class="font-semibold text-textMain text-[0.875rem] leading-[1.28571]">Session Period In
+                    Minutes
+                </mat-label>
+                <div
+                    class="flex flex-row h-12 min-h-12 max-h-12 w-full items-center border border-gray-300 px-4 rounded-md overflow-hidden">
+                    <div class="flex-auto py-3.5">{{oOrganization.TICKET_DURATION_IN_MINUTES}}</div>
+                    <div
+                        class="flex items-center h-full ml-4 -mr-4 px-4 border-l border-gray-300 bg-slate-100 text-slate-400">
+                        minutes
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="mt-2 mb-4 border-t"></div>
+
+        <div class="flex mb-4">
+            <span class="font-semibold text-textMain">Recorded Log Events</span>
+        </div>
+        <div class="grid grid-cols-2 w-full gap-2">
+            <mat-checkbox *ngFor="let logType of oList_Log_type_Setup;" [checked]="isLogConfigChecked(logType)"
+                (change)="checkLogConfig(logType)">{{logType.VALUE}}</mat-checkbox>
+        </div>
+    </form>
+
+
+    <!-- Divider -->
+    <div class="mt-4 mb-6 border-t"></div>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-end -mb-2">
+        <button mat-stroked-button type="button" (click)="resetChosenLogList(organizationRetentionPeriodForm)"
+            [disabled]="isLoading || (organizationRetentionPeriodForm.pristine && !canSaveOrganizationLogConfig())">Reset
+        </button>
+
+        <button [bdcWalkTriggerFor]="organizationDataSettingsPopup1" class="ml-4 w-40" mat-flat-button type="button"
+            (click)="editChosenLogTypes(organizationRetentionPeriodForm)"
+            [disabled]="isLoading || (organizationRetentionPeriodForm.pristine && !canSaveOrganizationLogConfig())">
+            <span *ngIf="!isLoading">Save Changes</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+    </div>
+</smartr-card>
+
+<bdc-walk-popup #organizationDataSettingsPopup1 name="organizationDataSettingsPopup1"
+    [mustCompleted]="{introModal:true}" [showCloseButton]="false" [showButton]="true">
+    You can control this organization's session duration, data retention period, or how long the data stays before being
+    deleted, and the logs that will be recorded for users in this organization</bdc-walk-popup>

@@ -1,0 +1,141 @@
+<div class="flex items-center justify-between my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">Create an Asset</div>
+    <div *ngIf="isFetchingData">Loading...</div>
+</div>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<form [formGroup]="videoAiAssetForm" mat-dialog-content>
+
+    <div class="grid sm:grid-cols-4 w-full gap-x-1">
+        <!-- Site -->
+        <div class="sm:col-span-4">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Select Site</mat-label>
+                <mat-select matInput placeholder="Site" [formControlName]="'SITE_ID'" autocomplete="off" name="user id"
+                    required>
+                    <mat-option>
+                        <ngx-mat-select-search #selectSiteSearch placeholderLabel="Search for a site"
+                            noEntriesFoundLabel="No Matching Sites">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let site of oSites_and_Entities.SITES | filter: selectSiteSearch.value"
+                        [value]="site.SITE_ID">
+                        {{site.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-4" *ngIf="isEntitiesVisible">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Select Entity</mat-label>
+                <mat-select matInput placeholder="Entity" [formControlName]="'ENTITY_ID'" autocomplete="off"
+                    name="entity id" required>
+                    <mat-option>
+                        <ngx-mat-select-search #selectEntitySearch placeholderLabel="Search for a entity"
+                            noEntriesFoundLabel="No Matching Entities">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let entity of oList_Entity_To_Show | filter: selectEntitySearch.value"
+                        [value]="entity.ENTITY_ID">
+                        {{entity.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-4" *ngIf="isFloorsVisible">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Select Floor</mat-label>
+                <mat-select matInput placeholder="Floor" [formControlName]="'FLOOR_ID'" autocomplete="off"
+                    name="floor id" required>
+                    <mat-option>
+                        <ngx-mat-select-search #selectFloorSearch placeholderLabel="Search for a floor"
+                            noEntriesFoundLabel="No Matching Floor">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let floor of oList_Floor | filter: selectFloorSearch.value"
+                        [value]="floor.FLOOR_ID">
+                        {{floor.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-4" *ngIf="isSpacesVisible">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Select Space</mat-label>
+                <mat-select matInput placeholder="Space" [formControlName]="'SPACE_ID'" autocomplete="off"
+                    name="space id" required>
+                    <mat-option>
+                        <ngx-mat-select-search #selectSpaceSearch placeholderLabel="Search for a space"
+                            noEntriesFoundLabel="No Matching Space">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let space of oList_Space | filter: selectSpaceSearch.value"
+                        [value]="space.SPACE_ID">
+                        {{space.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-4" *ngIf="isSpaceAssetsVisible">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Select Space Asset</mat-label>
+                <mat-select matInput placeholder="Space Asset" [formControlName]="'SPACE_ASSET_ID'" autocomplete="off"
+                    name="space asset id" required>
+                    <mat-option>
+                        <ngx-mat-select-search #selectSpaceAssetSearch placeholderLabel="Search for a space asset"
+                            noEntriesFoundLabel="No Matching Space Asset">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let space_asset of oList_Space_Asset | filter: selectSpaceAssetSearch.value"
+                        [value]="space_asset.SPACE_ASSET_ID">
+                        {{space_asset.CUSTOM_NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-2" *ngIf="videoAiAssetForm.controls.SPACE_ASSET_ID.value">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Select Video Ai Engine Asset</mat-label>
+                <mat-select matInput placeholder="Engine Asset" [formControlName]="'VIDEO_AI_ENGINE_ASSET'"
+                    autocomplete="off" name="engine asset id" required>
+                    <mat-option>
+                        <ngx-mat-select-search #selectEngineAssetSearch placeholderLabel="Search for an engine asset"
+                            noEntriesFoundLabel="No Matching Engine Asset">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let engine_asset of oList_Engine_Asset | filter: selectEngineAssetSearch.value"
+                        [value]="engine_asset">
+                        {{engine_asset.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="sm:col-span-2" *ngIf="videoAiAssetForm.controls.SPACE_ASSET_ID.value">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Friendly Name</mat-label>
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix></mat-icon>
+                <input [formControlName]="'FRIENDLY_NAME'" type="text" matInput placeholder="Friendly Name"
+                    autocomplete="off">
+            </mat-form-field>
+        </div>
+    </div>
+</form>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+
+    <button class="ml-4 w-20" mat-flat-button type="button" [color]="'primary'"
+        [disabled]="videoAiAssetForm.invalid || isLoading" (click)="createVideoAiAsset()">
+        <span *ngIf="!isLoading">Create</span>
+        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+</div>

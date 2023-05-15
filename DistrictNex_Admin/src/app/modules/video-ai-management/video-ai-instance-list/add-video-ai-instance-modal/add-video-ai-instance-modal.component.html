@@ -1,0 +1,145 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">Create an Instance</div>
+</div>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<form [formGroup]="videoAiInstanceForm" mat-dialog-content>
+
+    <div class="grid sm:grid-cols-4 w-full gap-x-6">
+        <!-- Instance Name -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Instance Name</mat-label>
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix></mat-icon>
+                <input [formControlName]="'INSTANCE_NAME'" type="text" matInput placeholder="Instance Name"
+                    autocomplete="off">
+                <mat-error *ngIf="videoAiInstanceForm.get('INSTANCE_NAME').hasError('required')">** Instance Name is
+                    Required</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="sm:col-span-2">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Functional Name</mat-label>
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix></mat-icon>
+                <input [formControlName]="'FUNCTIONAL_NAME'" type="text" matInput placeholder="Functional Name"
+                    autocomplete="off">
+                <mat-error *ngIf="videoAiInstanceForm.get('FUNCTIONAL_NAME').hasError('required')">** Functional Name is
+                    Required</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-4 w-full gap-x-6">
+        <div [ngClass]="isForceConnection? 'sm:col-span-2': 'sm:col-span-4'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Connection Url</mat-label>
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:link'" matPrefix></mat-icon>
+                <input [formControlName]="'CONNECTION_URL'" type="text" matInput placeholder="Connection Url"
+                    autocomplete="off">
+                <mat-error *ngIf="videoAiInstanceForm.get('CONNECTION_URL').hasError('required')">** Connection Url is
+                    Required</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-2" *ngIf="isForceConnection">
+            <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+                style="border-radius: 6px; border-width: 1px; border-color: #cbd5e1; height: 48px; margin-bottom: 16px;"
+                labelPosition="before" [formControlName]="'IS_FORCE_CONNECTION'">
+                Force Connection
+            </mat-checkbox>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-4 w-full gap-x-6">
+        <div class="sm:col-span-2">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Username</mat-label>
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+                <input [formControlName]="'USERNAME'" type="text" matInput placeholder="Username" autocomplete="off">
+                <mat-error *ngIf="videoAiInstanceForm.get('USERNAME').hasError('required')">** Username is
+                    Required</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-2">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Connection Type</mat-label>
+                <mat-select [formControlName]="'CONNECTION_TYPE_SETUP_ID'" placeholder="Connection Type">
+                    <mat-option *ngFor="let setup of oConnection_Type_Setup_category.List_Setup" [value]="setup.SETUP_ID">
+                        {{setup.VALUE}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="videoAiInstanceForm.get('CONNECTION_TYPE_SETUP_ID').hasError('required')">**
+                    Connection Type is
+                    Required</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-4 w-full gap-x-6">
+        <!-- Password -->
+        <div class="sm:col-span-2">
+            <mat-form-field [floatLabel]="'always'" class="flex-auto w-full">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" [formControlName]="'PASSWORD'" [placeholder]="'Password'"
+                    autocomplete="off" #PasswordField>
+                <button mat-icon-button type="button"
+                    (click)="PasswordField.type === 'password' ? PasswordField.type = 'text' : PasswordField.type = 'password'"
+                    matSuffix>
+                    <mat-icon class="icon-size-5" *ngIf="PasswordField.type === 'password'"
+                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                    <mat-icon class="icon-size-5" *ngIf="PasswordField.type === 'text'"
+                        [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                </button>
+                <mat-error *ngIf="videoAiInstanceForm.controls.PASSWORD.hasError('required')">
+                    ** Password is Required
+                </mat-error>
+                <mat-error *ngIf="videoAiInstanceForm.controls.PASSWORD.hasError('minlength')">
+                    ** Password must have at least 6 characters
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <!-- Confirm Password -->
+        <div class="sm:col-span-2">
+            <mat-form-field [floatLabel]="'always'" class="flex-auto w-full">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput type="password" [formControlName]="'CONFIRM_PASSWORD'"
+                    [placeholder]="'Confirm Password'" autocomplete="off" #confirmPasswordField>
+                <button mat-icon-button type="button"
+                    (click)="confirmPasswordField.type === 'password' ? confirmPasswordField.type = 'text' : confirmPasswordField.type = 'password'"
+                    matSuffix>
+                    <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'password'"
+                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                    <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'text'"
+                        [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                </button>
+                <mat-error *ngIf="videoAiInstanceForm.controls.CONFIRM_PASSWORD.hasError('required')">
+                    ** Confirm Password is Required
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-4 w-full gap-x-6">
+        <div class="sm:col-span-4">
+            <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+                style="border-radius: 6px; border-width: 1px; border-color: #cbd5e1; height: 48px; margin-bottom: 16px;"
+                labelPosition="before" [formControlName]="'IS_LPR'">
+                Enable License Plate Recognition
+            </mat-checkbox>
+        </div>
+    </div>
+</form>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+
+    <button class="ml-4 w-20" mat-flat-button type="button" [color]="'primary'" (click)="createVideoAiInstance()"
+        [disabled]="videoAiInstanceForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Create</span>
+        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+</div>

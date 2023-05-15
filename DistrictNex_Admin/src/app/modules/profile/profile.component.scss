@@ -1,0 +1,21 @@
+.cancel-btn {
+    background-color: #E3E6E8 !important;
+    color: #2C2E30 !important;
+}
+
+:host ::ng-deep .mat-checkbox {
+    .mat-checkbox-layout {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+
+        .mat-checkbox-inner-container {
+
+            .mat-checkbox-frame,
+            .mat-checkbox-background {
+                border-radius: 70% !important;
+                border-color: black;
+            }
+        }
+    }
+}

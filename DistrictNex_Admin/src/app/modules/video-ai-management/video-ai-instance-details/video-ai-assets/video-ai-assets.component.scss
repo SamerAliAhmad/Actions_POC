@@ -1,0 +1,10 @@
+:host ::ng-deep mat-form-field {
+    .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+}
+
+.search-side-button {
+    align-items: center;
+    margin-bottom: 23px;
+}

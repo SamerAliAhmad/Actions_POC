@@ -1,0 +1,33 @@
+<div class="flex flex-col flex-auto w-full overflow-hidden">
+    <div class="flex flex-col bg-white rounded-xl w-full p-6">
+        <div class="font-bold text-xl text-textMain">
+            DistrictNex Modules Access
+        </div>
+        <ng-container *ngIf="!oList_Districtnex_module?.length">
+            <div>The organization doesn't have access to any DistrictNex Modules</div>
+        </ng-container>
+        <ng-container *ngIf="oList_Districtnex_module?.length>0">
+            <div class="flex flex-col gap-2">
+                <ng-container *ngFor="let districtnex_module of oList_Districtnex_module">
+                    <mat-checkbox [checked]="isDistrictNexModuleChecked(districtnex_module)"
+                        *ngIf="districtnex_module.NAME != 'Insights' || (districtnex_module.NAME == 'Insights' && showInsightsCheck())"
+                        (change)="checkDistrictNexModule(districtnex_module)">{{districtnex_module.NAME}}
+                    </mat-checkbox>
+                </ng-container>
+            </div>
+            <div class="flex flex-row justify-end w-full sm:w-auto mt-4 text-right gap-2">
+                <button mat-stroked-button (click)="resetDistrictnexModule()"
+                    [disabled]="!canSaveUserDistrictNexModules()">
+                    Reset
+                </button>
+                <button mat-flat-button color="primary" [disabled]="!canSaveUserDistrictNexModules()"
+                    (click)="saveUserDistrictNexModules()">
+                    Save
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div>
+<progress-spinner-dialog [color]="oTheme_Palette_Color" [mode]="oProgress_Spinner_Mode" [value]="value"
+    [backdropEnabled]="true" [positionGloballyCenter]="true" [displayProgressSpinner]="isProgressSpinnerVisible">
+</progress-spinner-dialog>

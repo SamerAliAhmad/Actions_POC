@@ -1,0 +1,19 @@
+.delete-button {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:host ::ng-deep mat-form-field {
+    .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+}
+
+.search-side-button {
+    align-items: center;
+    margin-bottom: 4px;
+}

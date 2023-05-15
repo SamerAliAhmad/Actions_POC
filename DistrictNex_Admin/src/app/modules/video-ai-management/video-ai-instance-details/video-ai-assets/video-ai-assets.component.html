@@ -1,0 +1,95 @@
+<div class="inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col flex-auto h-full dark:bg-transparent">
+        <!-- Main -->
+
+        <div *ngIf="!isContentLoaded && !isConfiguredWrong" class="loader-container mt-30">
+            <div class="loader"></div>
+        </div>
+
+        <div *ngIf="isConfiguredWrong" class="flex items-center justify-center p-6 sm:p-10">
+            <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                The instance is not configured correctly, a connection could not be established</div>
+        </div>
+        <!-- instance list -->
+        <div class="relative flex flex-col flex-auto overflow-hidden">
+            <ng-container *ngIf="isContentLoaded">
+                <div class="flex items-center px-4">
+                    <div class="flex-auto mb-4">
+                        <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input matInput [formControl]="assetSearchFormControl" [autocomplete]="'off'"
+                                [placeholder]="'Search Assets'">
+                        </mat-form-field>
+                    </div>
+                    <!-- Add instance button -->
+                    <div class="hidden sm:flex search-side-button">
+                        <button class="ml-4" mat-flat-button (click)="addAsset()" [disabled]="!isContentLoaded">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex sm:hidden items-center mt-2">
+                    <!-- Add instance button -->
+                    <div class="flex search-side-button w-full">
+                        <button class="mr-2 w-full" mat-flat-button (click)="addAsset()" [disabled]="!isContentLoaded">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="oList_Video_ai_asset && oList_Video_ai_asset.length > 0; else noAssets">
+                    <div
+                        class="z-10 flex items-center sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-100">
+                        <div class="flex flex-0 items-center justify-center w-5 h-10">
+                        </div>
+                        <div class="grid grid-cols-5 w-full">
+                            <div class="min-w-0 col-span-1">
+                                <div class="font-medium leading-5 truncate">ID</div>
+                            </div>
+                            <div class="min-w-0 col-span-4 sm:col-span-1 flex">
+                                <div class="font-medium leading-5 truncate float-left">Name</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto overflow-y-auto bg-white">
+                        <ng-container *ngFor="let asset of oList_Video_ai_asset; let i = index; let first = first">
+                            <!-- assets -->
+                            <a (click)="goToAssetDetails(asset.VIDEO_AI_ASSET_ID)"
+                                [ngClass]="{'border-t': first, 'text-red-500 italic pt-5 pb-3': asset.IS_ERROR}"
+                                class="flex items-center p-5 px-6 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover">
+                                <div class="grid grid-cols-5 w-full justify-center items-center">
+                                    <div class="min-w-0 col-span-1 ml-7">
+                                        <div class="font-medium leading-5 truncate">{{asset.VIDEO_AI_ASSET_ID}}</div>
+                                    </div>
+                                    <div class="min-w-0 col-span-3 ml-4">
+                                        <div class="font-medium leading-5 truncate">{{asset.FRIENDLY_NAME}}</div>
+                                        <div class="text-sm leading-7 truncate" *ngIf="asset.IS_ERROR">Camera not found
+                                        </div>
+                                    </div>
+                                    <button mat-icon-button class="flex items-center justify-self-end col-span-1"
+                                        (click)="$event.stopPropagation(); deleteVideoAiAsset(asset.VIDEO_AI_ASSET_ID)">
+                                        <mat-icon class="icon-size-5 text-red-500" matPrefix
+                                            [svgIcon]="'heroicons_outline:trash'">
+                                        </mat-icon>
+                                    </button>
+                                </div>
+                            </a>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!-- No assets -->
+            <ng-template #noAssets>
+                <div class="flex items-center justify-center p-6 sm:p-10">
+                    <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                        No Assets</div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>

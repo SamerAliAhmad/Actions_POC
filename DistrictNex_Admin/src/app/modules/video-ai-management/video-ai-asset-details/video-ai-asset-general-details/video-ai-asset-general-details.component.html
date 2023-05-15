@@ -1,0 +1,58 @@
+<div class="flex flex-col justify-between pb-4 px-6 md:px-8" *ngIf="oVideo_ai_asset">
+
+    <!-- Title -->
+    <div class="px-6 sm:px-0 hidden sm:block">
+        <!-- Divider -->
+        <div class="mt-4 mb-4 border-t"></div>
+    </div>
+    <div class="flex flex-col min-w-0 overflow-hidden">
+        <div class="flex flex-col flex-auto items-left overflow-y-auto min-w-0 h-full" cdkScrollable>
+            <div class="flex flex-auto justify-left min-w-0 w-full sm:min-w-100 mr-auto">
+                <div class="flex-auto" style="height: fit-content;">
+
+                    <div class="grid sm:grid-cols-4 w-full gap-x-6 mb-5">
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="w-full" [floatLabel]="'always'">
+                                <mat-label>Friendly Name</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix>
+                                </mat-icon>
+                                <input readonly type="text" matInput placeholder="Friendly Name" autocomplete="off"
+                                    [value]="oVideo_ai_asset.FRIENDLY_NAME">
+                            </mat-form-field>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="w-full" [floatLabel]="'always'">
+                                <mat-label>Functional Name</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix>
+                                </mat-icon>
+                                <input readonly type="text" matInput placeholder="Functional Name" autocomplete="off"
+                                    [value]="oVideo_ai_asset.FUNCTIONAL_NAME">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-4 w-full gap-x-6">
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="w-full" [floatLabel]="'always'">
+                                <mat-label>Resolution X</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix>
+                                </mat-icon>
+                                <input readonly type="text" matInput placeholder="Resolution X" autocomplete="off"
+                                    [value]="oVideo_ai_asset.RESOLUTION_X">
+                            </mat-form-field>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="w-full" [floatLabel]="'always'">
+                                <mat-label>Resolution Y</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix>
+                                </mat-icon>
+                                <input readonly type="text" matInput placeholder="Resolution Y" autocomplete="off"
+                                    [value]="oVideo_ai_asset.RESOLUTION_Y">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

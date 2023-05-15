@@ -1,0 +1,153 @@
+<div class="w-full h-full no-scrollbar disable-select p-6" style="overflow-x: hidden;">
+    <div class="flex flex-row w-full mb-2" style="align-items: center;">
+        <mat-icon svgIcon="heroicons_outline:filter"></mat-icon>
+        <label class="text-2xl font-semibold">&nbsp;&nbsp;Filters</label>
+
+        <button class="ml-auto" mat-icon-button [mat-dialog-close]="'cancel'">
+            <mat-icon svgIcon="heroicons_outline:x"></mat-icon>
+        </button>
+    </div>
+    <mat-tab-group [animationDuration]="'0'" class="flex-auto h-full">
+        <!-- Organization Filter -->
+        <mat-tab label="Organization" *ngIf="oList_Organization.length>0">
+            <div class="flex my-2">
+                <span class="font-semibold text-textMain">Organizations</span>
+            </div>
+            <div class="grid grid-cols-2 w-full mb-2">
+                <div class="col-span-1">
+                    <mat-checkbox *ngFor="let organization of oList_Organization | slice:0:getHalf(oList_Organization)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="organization.CHECKED">
+                        {{organization.ORGANIZATION.ORGANIZATION_NAME}}
+                    </mat-checkbox>
+                </div>
+                <div class="col-span-1">
+                    <mat-checkbox
+                        *ngFor="let organization of oList_Organization | slice:getHalf(oList_Organization):(oList_Organization.length)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="organization.CHECKED">
+                        {{organization.ORGANIZATION.ORGANIZATION_NAME}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-tab>
+        <!-- Log Type Filter -->
+        <mat-tab label="Log Type" *ngIf="oList_Log_Type.length>0">
+            <div class="flex my-2">
+                <span class="font-semibold text-textMain">Log Type</span>
+            </div>
+            <div class="grid grid-cols-2 w-full mb-2 gap-2">
+                <div class="col-span-1">
+                    <mat-checkbox *ngFor="let logType of oList_Log_Type | slice:0:getHalf(oList_Log_Type)"
+                        class="mb-3 sm:mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="logType.CHECKED">
+                        {{logType.LOG_TYPE.VALUE}}
+                    </mat-checkbox>
+                </div>
+                <div class="col-span-1">
+                    <mat-checkbox
+                        *ngFor="let logType of oList_Log_Type | slice:getHalf(oList_Log_Type):(oList_Log_Type.length)"
+                        class="mb-3 sm:mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="logType.CHECKED">
+                        {{logType.LOG_TYPE.VALUE}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-tab>
+        <!-- Access Type Filter -->
+        <mat-tab label="Access Type" *ngIf="oList_Access_Type.length>0">
+            <div class="flex my-2">
+                <span class="font-semibold text-textMain">Access Type</span>
+            </div>
+            <div class="grid sm:grid-cols-3 w-full mb-2">
+                <mat-checkbox *ngFor="let accessType of oList_Access_Type" class="mb-2 flex flex-row"
+                    [color]="'primary'" [(ngModel)]="accessType.CHECKED">
+                    {{accessType.ACCESS_TYPE.VALUE}}
+                </mat-checkbox>
+            </div>
+        </mat-tab>
+        <!-- Site Filter -->
+        <mat-tab label="Site" *ngIf="oList_Site.length>0">
+            <div class="flex my-2">
+                <span class="font-semibold text-textMain">Sites</span>
+            </div>
+            <div class="grid grid-cols-2 w-full mb-2">
+                <div class="col-span-1">
+                    <mat-checkbox *ngFor="let site of oList_Site | slice:0:getHalf(oList_Site)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="site.CHECKED">
+                        {{site.SITE.NAME}}
+                    </mat-checkbox>
+                </div>
+                <div class="col-span-1">
+                    <mat-checkbox *ngFor="let site of oList_Site | slice:getHalf(oList_Site):(oList_Site.length)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="site.CHECKED">
+                        {{site.SITE.NAME}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-tab>
+        <!-- Entity Filter -->
+        <mat-tab label="Entity" *ngIf="oList_Entity.length>0">
+            <div class="flex my-2">
+                <span class="font-semibold text-textMain">Entities</span>
+            </div>
+            <div class="grid grid-cols-2 w-full mb-2">
+                <div class="col-span-1">
+                    <mat-checkbox *ngFor="let entity of oList_Entity | slice:0:getHalf(oList_Entity)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="entity.CHECKED">
+                        {{entity.ENTITY.NAME}}
+                    </mat-checkbox>
+                </div>
+                <div class="col-span-1">
+                    <mat-checkbox
+                        *ngFor="let entity of oList_Entity | slice:getHalf(oList_Entity):(oList_Entity.length)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="entity.CHECKED">
+                        {{entity.ENTITY.NAME}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-tab>
+        <!-- Video AI Asset Filter -->
+        <mat-tab label="Video AI Assets" *ngIf="oList_Video_ai_asset.length>0">
+            <div class="flex my-2">
+                <span class="font-semibold text-textMain">Video AI Assets</span>
+            </div>
+            <div class="grid grid-cols-2 w-full mb-2">
+                <div class="col-span-1">
+                    <mat-checkbox
+                        *ngFor="let video_ai_asset of oList_Video_ai_asset | slice:0:getHalf(oList_Video_ai_asset)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="video_ai_asset.CHECKED">
+                        {{video_ai_asset.VIDEO_AI_ASSET.FRIENDLY_NAME}}
+                    </mat-checkbox>
+                </div>
+                <div class="col-span-1">
+                    <mat-checkbox
+                        *ngFor="let video_ai_asset of oList_Video_ai_asset | slice:getHalf(oList_Video_ai_asset):(oList_Video_ai_asset.length)"
+                        class="mb-2 flex flex-row" [color]="'primary'" [(ngModel)]="video_ai_asset.CHECKED">
+                        {{video_ai_asset.VIDEO_AI_ASSET.FRIENDLY_NAME}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <!-- Date Filter -->
+    <div class="flex">
+        <mat-form-field class="flex-auto" [floatLabel]="'always'">
+            <mat-label class="font-semibold text-textMain">Choose Date Range</mat-label>
+            <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_outline:x'" style="cursor: pointer;"
+                (click)="clearDate()"></mat-icon>
+            <mat-date-range-input [formGroup]="dataRange" [rangePicker]="picker">
+                <input matStartDate formControlName="startDate" placeholder="Start date" (focus)="picker.open()"
+                    readonly>
+                <input matEndDate formControlName="endDate" placeholder="End date" (focus)="picker.open()" readonly>
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+    </div>
+    <!-- Actions -->
+    <div class="flex items-center justify-end">
+        <button class="w-40" mat-stroked-button type="button" (click)="clearFilter()">
+            Reset Filter
+        </button>
+        <button class="ml-2 w-40" mat-flat-button type="button" (click)="applyFilter()">
+            Apply Filter
+        </button>
+    </div>
+</div>

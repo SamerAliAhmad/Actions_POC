@@ -1,0 +1,95 @@
+<div class="flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col flex-auto h-full dark:bg-transparent">
+        <!-- Main -->
+
+        <!-- Header -->
+        <div class="flex flex-col justify-between pb-8 px-6 md:px-8 border-b">
+
+            <!-- Title -->
+            <div>
+                <div class="ml-10 font-medium text-secondary">
+                    <ng-container *ngIf="oList_Organization_data_source_kpi; else loadingOrganizationDataSourceKpis">
+                        {{oList_Organization_data_source_kpi.length>0?oList_Organization_data_source_kpi.length: ''}}
+                        {{oList_Organization_data_source_kpi.length |
+                        i18nPlural: {
+                        '=0' : 'No Organization Data Source KPIs',
+                        '=1' : 'Organization Data Source KPI',
+                        'other': 'Organization Data Source KPIs'
+                        } }}
+                    </ng-container>
+                    <ng-template #loadingOrganizationDataSourceKpis>
+                        Loading...
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center mt-4 gap-4">
+                <mat-form-field class="smartr-mat-dense smartr-mat-no-subscript smartr-mat-rounded w-3/5">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input matInput #organizationDataSourceSearchInput [autocomplete]="'off'"
+                        [placeholder]="'Search Organization Data Source KPIs'">
+                </mat-form-field>
+                <mat-form-field class="smartr-mat-no-subscript flex-auto">
+                    <mat-select matInput placeholder="Organization" autocomplete="off"
+                        (selectionChange)="Get_Organization_Data_Source_Kpi_List()" [(ngModel)]="oSelected_Organization" required>
+                        <mat-option *ngFor="let organization of oList_Organization" [value]="organization">
+                            {{organization.ORGANIZATION_NAME}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button class="w-full sm:w-auto" mat-flat-button (click)="createOrganizationDataSourceKpi()">
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1">Add</span>
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="!oList_Organization_data_source_kpi" class="loader-container">
+            <div class="loader"></div>
+        </div>
+        <div class="relative bg-card dark:bg-transparent flex flex-col flex-auto overflow-hidden">
+            <ng-container *ngIf="oList_Organization_data_source_kpi">
+                <ng-container *ngIf="oList_Organization_data_source_kpi.length>0; else noOrganizationDataSourceKpis">
+                    <div
+                        class="z-10 flex items-center sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-100">
+                        <div class="flex flex-0 items-center justify-center h-10">
+                        </div>
+                        <div class="grid grid-cols-5 w-full">
+                            <div class="min-w-0 col-span-3">
+                                <div class="font-medium leading-5 truncate">Name</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto overflow-y-auto">
+                        <ng-container
+                            *ngFor="let organization_data_source_kpi of oList_Organization_data_source_kpi | filter: organizationDataSourceSearchInput.value; let i = index; let first = first">
+                            <a [ngClass]="first?'border-t':''"
+                                class="flex items-center px-6 py-5 md:px-8 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover"
+                                (click)="Open_Organization_Data_source_kpi_details(organization_data_source_kpi)">
+                                <div class="grid grid-cols-5 w-full items-center">
+                                    <div class="min-w-0 col-span-3">
+                                        <div class="flex flex-col">
+                                            <div class="font-medium leading-5 truncate">
+                                                {{organization_data_source_kpi.Kpi.NAME}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!-- No organizations -->
+            <ng-template #noOrganizationDataSourceKpis>
+                <div class="flex items-center justify-center p-6 sm:p-10">
+                    <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                        No Data Sources</div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>

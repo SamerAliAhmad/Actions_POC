@@ -1,0 +1,133 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col flex-auto h-full bg-card dark:bg-transparent">
+        <!-- Main -->
+
+        <!-- Header -->
+        <div class="flex flex-col justify-between py-8 px-6 md:px-8 border-b">
+
+            <!-- Title -->
+            <div>
+                <div class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-none">Organizations</div>
+                <div class="ml-0.5 mt-1 font-medium text-secondary">
+                    <ng-container *ngIf="oList_Organization; else loadingOrganizations">
+                        {{oList_Organization.length}} {{oList_Organization.length | i18nPlural: {
+                        '=0' : 'No Registered Organizations',
+                        '=1' : 'Registered Organization',
+                        'other': 'Registered Organizations'
+                        } }}
+                    </ng-container>
+                    <ng-template #loadingOrganizations>
+                        Loading...
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center mt-4 gap-4">
+                <mat-form-field class="smartr-mat-dense smartr-mat-no-subscript smartr-mat-rounded w-full">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input matInput #organizationSearchInput [autocomplete]="'off'"
+                        [placeholder]="'Search Organizations'">
+                </mat-form-field>
+                <!-- Add organization button -->
+                <button class="w-full sm:w-auto" mat-flat-button (click)="createOrganization()">
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1">Add</span>
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="!oList_Organization" class="loader-container">
+            <div class="loader"></div>
+        </div>
+        <!-- organizations list -->
+        <div class="relative bg-card dark:bg-transparent flex flex-col flex-auto overflow-hidden">
+            <ng-container *ngIf="oList_Organization">
+                <ng-container *ngIf="oList_Organization.length>0; else noOrganizations">
+                    <div
+                        class="z-10 flex items-center sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-100">
+                        <div class="flex flex-0 items-center justify-center w-10 h-10">
+                        </div>
+                        <div class="grid grid-cols-5 w-full">
+                            <div class="min-w-0 ml-4 col-span-3">
+                                <div class="font-medium leading-5 truncate">Name</div>
+                            </div>
+                            <div class="hidden sm:block min-w-0 ml-4 col-span-1">
+                                <div class="font-medium leading-5 truncate">Number of Users</div>
+                            </div>
+                            <div class="min-w-0 ml-6 col-span-2 sm:col-span-1">
+                                <div class="font-medium leading-5 truncate ml-1">Status</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto overflow-y-auto">
+                        <ng-container
+                            *ngFor="let organization of oList_Organization | filter: organizationSearchInput.value; let i = index; let first = first">
+                            <!-- Organization -->
+                            <a [ngClass]="first?'border-t':''"
+                                class="flex items-center px-6 py-5 md:px-8 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover"
+                                [routerLink]="['./', organization.ORGANIZATION_ID]">
+                                <div
+                                    class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                                    <ng-container *ngIf="organization.DARK_SQUARE_LOGO_URL">
+                                        <img class="object-contain w-full h-full"
+                                            [src]="organization.DARK_SQUARE_LOGO_URL" alt="organization avatar" />
+                                    </ng-container>
+                                    <ng-container *ngIf="!organization.DARK_SQUARE_LOGO_URL">
+                                        <div
+                                            class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                            {{organization.ORGANIZATION_NAME.charAt(0)}}
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="grid grid-cols-5 w-full items-center">
+                                    <div class="min-w-0 ml-4 col-span-3">
+                                        <div class="flex flex-col">
+                                            <div class="font-medium leading-5 truncate">
+                                                {{organization.ORGANIZATION_NAME}}
+                                            </div>
+                                            <div class="leading-5 text-secondary" *ngIf="!organization.IS_ACTIVE">
+                                                Scheduled to be deleted on {{getOrgDeleteDate(organization) | date}}
+                                            </div>
+                                        </div>
+                                        <div class="sm:hidden leading-5 truncate text-secondary">
+                                            {{organization.List_User.length}}
+                                            {{organization.List_User.length |
+                                            i18nPlural: {
+                                            '=0' : 'Users',
+                                            '=1' : 'User',
+                                            'other': 'Users'
+                                            } }}</div>
+                                    </div>
+                                    <div class="hidden sm:block min-w-0 ml-5 col-span-1">
+                                        <div class="font-medium leading-5 truncate">
+                                            {{organization.List_User.length}}
+                                            {{organization.List_User.length |
+                                            i18nPlural: {
+                                            '=0' : 'Users',
+                                            '=1' : 'User',
+                                            'other': 'Users'
+                                            } }}</div>
+                                    </div>
+                                    <div class="min-w-0 ml-8 col-span-2 sm:col-span-1" style="align-self: center;">
+                                        <div class="font-medium leading-5 truncate">
+                                            {{organization.IS_ACTIVE?'Active':'Not Active'}}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!-- No organizations -->
+            <ng-template #noOrganizations>
+                <div class="flex items-center justify-center p-6 sm:p-10">
+                    <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                        No Organizations</div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>

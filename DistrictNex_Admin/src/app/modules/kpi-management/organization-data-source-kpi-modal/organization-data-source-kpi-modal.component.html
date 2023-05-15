@@ -1,0 +1,74 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">{{isCreating?'Create an':''}} Organization Data Source
+        Kpi</div>
+</div>
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+<form [formGroup]="organizationDataSourceKpiForm">
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Kpi</mat-label>
+            <mat-select [formControlName]="'KPI_ID'" placeholder="
+                Kpi">
+                <mat-option *ngFor="let kpi of oList_Kpi" [value]="kpi.KPI_ID">
+                    {{kpi.NAME}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="organizationDataSourceKpiForm.get('KPI_ID').hasError('required')">** Kpi
+                is
+                required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Data Source</mat-label>
+            <mat-select [formControlName]="'DATA_SOURCE_ID'" placeholder="
+            Data Source">
+                <mat-option *ngFor="let data_source of oList_Data_source" [value]="data_source.DATA_SOURCE_ID">
+                    {{data_source.NAME}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="organizationDataSourceKpiForm.get('DATA_SOURCE_ID').hasError('required')">** Data Source
+                is
+                required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Organization</mat-label>
+            <mat-select [formControlName]="'ORGANIZATION_ID'" placeholder="
+                Organization">
+                <mat-option *ngFor="let organization of oList_Organization" [value]="organization.ORGANIZATION_ID">
+                    {{organization.ORGANIZATION_NAME}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="organizationDataSourceKpiForm.get('ORGANIZATION_ID').hasError('required')">** Organization
+                is
+                required</mat-error>
+        </mat-form-field>
+    </div>
+</form>
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+    <button *ngIf="isCreating else editDeleteButtons" class="ml-4 w-20" mat-flat-button type="button"
+        (click)="Create_Organization_Data_Source_Kpi()"
+        [disabled]="organizationDataSourceKpiForm.invalid || isLoading ||  organizationDataSourceKpiForm.errors?.minMaxDwellTime">
+        <span *ngIf="!isLoading">Create</span>
+        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+    <ng-template #editDeleteButtons>
+        <button color="warn" class="ml-4 w-20" mat-flat-button type="button"
+            (click)="Delete_Organiztion_Data_Source_Kpi()">
+            <span *ngIf="!isLoading">Delete</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+        <button class="ml-4 w-20" mat-flat-button type="button" (click)="Edit_Organization_Data_Source_Kpi()"
+            [disabled]="organizationDataSourceKpiForm.invalid || isLoading ||  organizationDataSourceKpiForm.pristine">
+            <span *ngIf="!isLoading">Edit</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+    </ng-template>
+</div>

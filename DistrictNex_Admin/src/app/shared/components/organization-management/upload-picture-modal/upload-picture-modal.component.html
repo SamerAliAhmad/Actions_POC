@@ -1,0 +1,32 @@
+<div class="flex items-center my-4">
+    <div *ngIf="data.isIco == false" class="text-3xl font-bold tracking-tight leading-none">Upload Picture</div>
+    <div *ngIf="data.isIco == true" class="text-3xl font-bold tracking-tight leading-none">Upload Favicon (.ico)</div>
+</div>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<ngx-dropzone (change)="onFileChange($event)" [multiple]="false" [accept]="supportedExtensions">
+    <ngx-dropzone-label class="change-color">
+        <span class="fas fa-upload fa-5x"></span>
+        <div class="choose-file-text">
+            <strong>Choose a file</strong> or drag it here.
+        </div>
+    </ngx-dropzone-label>
+    <ngx-dropzone-image-preview *ngIf="file!=null" ngProjectAs="ngx-dropzone-preview" [file]="file" [removable]="true">
+        <ngx-dropzone-label>{{ file.name }} ({{ file.type }})</ngx-dropzone-label>
+    </ngx-dropzone-image-preview>
+</ngx-dropzone>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<!-- Actions -->
+<div class="flex items-center justify-center">
+    <button mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+</div>
+
+<progress-spinner-dialog [color]="color" [mode]="mode" [value]="value" [backdropEnabled]="true"
+    [positionGloballyCenter]="true" [displayProgressSpinner]="displayProgressSpinner">
+</progress-spinner-dialog>

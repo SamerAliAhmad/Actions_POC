@@ -1,0 +1,13 @@
+<router-outlet></router-outlet>
+
+<bdc-walk-dialog *ngIf="isSignedIn" #introModal name="introModal" width="200">
+    <div class="flex flex-col flex-auto justify-center items-center">
+        <img class="w-72 mb-4" [src]="popupLogoUrl" (error)="changeImage()">
+        <div class="font-bold text-2xl text-center mb-8">
+            Welcome to DistrictNex
+        </div>
+
+        <button (click)="introModal.close()" class="mb-2" mat-raised-button color="primary">Start Discovering</button>
+        <button (click)="skipTutorial()" mat-stroked-button>Skip Journey</button>
+    </div>
+</bdc-walk-dialog>

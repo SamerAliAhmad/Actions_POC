@@ -1,0 +1,23 @@
+::placeholder {
+    font-style: italic;
+}
+
+:host ::ng-deep .form-field-without-margin {
+    .mat-form-field-wrapper {
+        margin-bottom: 0px;
+    }
+}
+
+.delete-button {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-method-button {
+    color: #dc2626;
+    cursor: pointer;
+}

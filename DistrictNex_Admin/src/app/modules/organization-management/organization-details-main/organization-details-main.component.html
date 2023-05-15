@@ -1,0 +1,28 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden" *ngIf="oOrganization">
+    <div class="flex flex-col items-start p-4 sm:py-6 md:px-8 border-b bg-card dark:bg-transparent">
+        <div class="text-3xl font-extrabold tracking-tight leading-none">
+            <button mat-icon-button class="mr-0 mr-sm-16 backBig" (click)="goBack()">
+                <i class="fas fa-arrow-left fa-lg"></i>
+            </button>
+            <label style="word-break: break-all;">
+                {{oOrganization.ORGANIZATION_NAME}}
+            </label>
+        </div>
+        <div class="flex flex-wrap items-center mt-0.5 font-medium text-secondary">
+            <div class="flex items-center space-x-2">
+                <ng-container *ngFor="let path of pathObject; let last=last; let i=index">
+                    <ng-container *ngIf="!last">
+                        <a class="text-primary cursor-pointer" (click)="navigateBack(i)">{{path.Path_Name}}
+                        </a>
+                        <div>/</div>
+                    </ng-container>
+                    <div *ngIf="last">{{path.Path_Name}}</div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+</div>
+<div *ngIf="!oOrganization" class="loader-container">
+    <div class="loader"></div>
+</div>

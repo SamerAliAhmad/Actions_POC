@@ -1,0 +1,130 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">Create an Organization User</div>
+</div>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<form [formGroup]="userForm">
+
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>First Name</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input [formControlName]="'FIRST_NAME'" matInput placeholder="First Name" autocomplete="off">
+            <mat-error>** Name is Required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Last Name</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input [formControlName]="'LAST_NAME'" matInput placeholder="Last Name" autocomplete="off">
+            <mat-error>** Name is Required</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Organization User Type</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:user'" matPrefix>
+            </mat-icon>
+            <mat-select [formControlName]="'USER_TYPE_SETUP_ID'" placeholder="Organization User Type">
+                <mat-option *ngFor="let organizationUserType of oList_Organization_User_Type_Setup"
+                    [value]="organizationUserType.SETUP_ID">
+                    {{organizationUserType.VALUE}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="userForm.get('USER_TYPE_SETUP_ID').hasError('required')">** Organization User Type is
+                Required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Phone</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+            <input [formControlName]="'PHONE_NUMBER'" matInput type="tel" placeholder="Phone Number" autocomplete="off">
+            <mat-error *ngIf="userForm.get('PHONE_NUMBER').hasError('pattern')">** Invalid Phone Number
+            </mat-error>
+            <mat-error *ngIf="userForm.get('PHONE_NUMBER').hasError('required')">** Phone Number is Required
+            </mat-error>
+            <mat-error *ngIf="userForm.get('PHONE_NUMBER').hasError('minlength')">** Phone Number Should be a
+                Minimum of 5 Characters
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Email</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'" matPrefix></mat-icon>
+            <input [formControlName]="'EMAIL'" type="email" matInput placeholder="Email" autocomplete="off">
+            <mat-error *ngIf="userForm.get('EMAIL').hasError('pattern')">** Invalid Email</mat-error>
+            <mat-error *ngIf="userForm.get('EMAIL').hasError('required')">** Email is Required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Username</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input [formControlName]="'USERNAME'" type="email" matInput placeholder="Username" autocomplete="off">
+            <mat-error>** Username is Required</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field [floatLabel]="'always'" class="flex-auto w-full">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" [formControlName]="'PASSWORD'" [placeholder]="'Password'" autocomplete="off"
+                #PasswordField>
+            <button mat-icon-button type="button" (click)="autoGeneratePassword()"
+                matTooltip="Generate Random Password">
+                <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:password'"></mat-icon>
+            </button>
+            <button mat-icon-button type="button"
+                (click)="PasswordField.type === 'password' ? PasswordField.type = 'text' : PasswordField.type = 'password'"
+                matSuffix>
+                <mat-icon class="icon-size-5" *ngIf="PasswordField.type === 'password'"
+                    [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                <mat-icon class="icon-size-5" *ngIf="PasswordField.type === 'text'"
+                    [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+            </button>
+            <mat-error *ngIf="userForm.controls.PASSWORD.hasError('required')">
+                ** Password is Required
+            </mat-error>
+            <mat-error *ngIf="userForm.controls.PASSWORD.hasError('minlength')">
+                ** Password must have at least 6 characters
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field [floatLabel]="'always'" class="flex-auto w-full">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" [formControlName]="'CONFIRM_PASSWORD'" [placeholder]="'Confirm Password'"
+                autocomplete="off" #confirmPasswordField>
+            <button mat-icon-button type="button"
+                (click)="confirmPasswordField.type === 'password' ? confirmPasswordField.type = 'text' : confirmPasswordField.type = 'password'"
+                matSuffix>
+                <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'password'"
+                    [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'text'"
+                    [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+            </button>
+            <mat-error *ngIf="userForm.controls.CONFIRM_PASSWORD.hasError('required')">
+                ** Confirm Password is Required
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <password-strength-meter [password]="userForm.value.PASSWORD" [enableFeedback]="true"
+        (strengthChange)="passwordStrength = $event">
+    </password-strength-meter>
+</form>
+
+
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+    <button class="ml-4 w-20" mat-flat-button type="button" (click)="createUser()"
+        [disabled]="userForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Create</span>
+        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+</div>

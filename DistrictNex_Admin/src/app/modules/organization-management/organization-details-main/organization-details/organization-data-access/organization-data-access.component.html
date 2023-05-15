@@ -1,0 +1,132 @@
+<div class="flex flex-col flex-auto w-full overflow-hidden">
+    <ng-container>
+        <div class="flex flex-col sm:flex-row gap-2 sm:items-center mb-4 px-6">
+            <mat-form-field class="smartr-mat-no-subscript flex-auto">
+                <input type="text" placeholder="Search Existing Levels" matInput [(ngModel)]="searchInputValue"
+                    (input)="detectChanges()" autocomplete="off">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_outline:search'">
+                </mat-icon>
+                <button mat-icon-button matSuffix (click)="searchInputValue=''" matTooltip="Clear Search">
+                    <mat-icon class="icon-size-7" [svgIcon]="'mat_solid:clear_all'">
+                    </mat-icon>
+                </button>
+            </mat-form-field>
+            <mat-form-field class="smartr-mat-no-subscript flex-auto">
+                <mat-select matInput placeholder="Data Level" autocomplete="off" (selectionChange)="getLevels()"
+                    [(ngModel)]="oSelected_Data_access_level_Setup" required>
+                    <mat-option *ngFor="let data_access_level_setup of oList_Data_access_level_setup"
+                        [value]="data_access_level_setup">
+                        {{data_access_level_setup.VALUE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="flex flex-row flex-wrap gap-2 items-center">
+                <button class="flex-auto min-w-26" mat-flat-button (click)="createOrganizationDataAccess()"
+                    [disabled]="disableAddButton()">Add</button>
+            </div>
+        </div>
+        <!-- #region Empty Data -->
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'District' && isDataLoaded() && (!oList_District_With_Kpi || oList_District_With_Kpi.length == 0)"
+            class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent px-6">
+            <div class="text-2xl font-semibold tracking-tight text-secondary">No District KPI has been assigned yet
+            </div>
+        </div>
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Area' && isDataLoaded() && (!oList_Area_With_Kpi || oList_Area_With_Kpi.length == 0)"
+            class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent px-6">
+            <div class="text-2xl font-semibold tracking-tight text-secondary">No Area KPI has been assigned yet</div>
+        </div>
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Site' && isDataLoaded() && (!oList_Site_With_Kpi || oList_Site_With_Kpi.length == 0)"
+            class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent px-6">
+            <div class="text-2xl font-semibold tracking-tight text-secondary">No Site KPI has been assigned yet</div>
+        </div>
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Entity' && isDataLoaded() && (!oList_Entity_With_Kpi || oList_Entity_With_Kpi.length == 0)"
+            class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent px-6">
+            <div class="text-2xl font-semibold tracking-tight text-secondary">No Entity KPI has been assigned yet</div>
+        </div>
+        <!-- #endregion -->
+        <!-- #region List Data -->
+        <div *ngIf="oList_District && oList_District_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'District'"
+            class="grid grid-cols-2 gap-2 scrollbar overflow-auto
+            px-6">
+            <mat-card class="flex flex-row mb-2"
+                *ngFor="let oDistrict of oList_District_With_Kpi | filter: searchInputValue | pagination: pageIndex : pageSize; let first = first; let i = index;">
+                <mat-card-content>
+                    {{oDistrict.NAME}}
+                </mat-card-content>
+                <button mat-icon-button class="ml-auto" (click)="openDialog(oDistrict)">
+                    <mat-icon svgIcon="heroicons_outline:pencil-alt"></mat-icon>
+                </button>
+            </mat-card>
+        </div>
+        <div *ngIf="oList_Area && oList_Area_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'Area'" class="grid grid-cols-2 gap-2 scrollbar overflow-auto
+            px-6">
+            <mat-card class="flex flex-row mb-2"
+                *ngFor="let oArea of oList_Area_With_Kpi | filter: searchInputValue | pagination: pageIndex : pageSize; let first = first; let i = index;">
+                <mat-card-content>
+                    {{oArea.NAME}}
+                </mat-card-content>
+                <button mat-icon-button class="ml-auto" (click)="openDialog(oArea)">
+                    <mat-icon svgIcon="heroicons_outline:pencil-alt"></mat-icon>
+                </button>
+            </mat-card>
+        </div>
+        <div *ngIf="oList_Site && oList_Site_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'Site'" class="grid grid-cols-2 gap-2 scrollbar overflow-auto
+            px-6">
+            <mat-card class="flex flex-row mb-2"
+                *ngFor="let oSite of oList_Site_With_Kpi | filter: searchInputValue | pagination: pageIndex : pageSize; let first = first; let i = index;">
+                <mat-card-content>
+                    {{oSite.NAME}}
+                </mat-card-content>
+                <button mat-icon-button class="ml-auto" (click)="openDialog(oSite)">
+                    <mat-icon svgIcon="heroicons_outline:pencil-alt"></mat-icon>
+                </button>
+            </mat-card>
+        </div>
+        <div *ngIf="oList_Entity && oList_Entity_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'Entity'" class="grid grid-cols-2 gap-2 scrollbar overflow-auto
+            px-6">
+            <mat-card class="flex flex-row mb-2"
+                *ngFor="let oEntity of oList_Entity_With_Kpi | filter: searchInputValue | pagination: pageIndex : pageSize; let first = first; let i = index;">
+                <mat-card-content>
+                    {{oEntity.NAME}}
+                </mat-card-content>
+                <button mat-icon-button class="ml-auto" (click)="openDialog(oEntity)">
+                    <mat-icon svgIcon="heroicons_outline:pencil-alt"></mat-icon>
+                </button>
+            </mat-card>
+        </div>
+        <!-- #endregion -->
+    </ng-container>
+    <div *ngIf="!isDataLoaded()" class="loader-container">
+        <div class="loader"></div>
+    </div>
+</div>
+<!-- #region Pagination -->
+<mat-paginator *ngIf="oList_District_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'District'"
+    [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]"
+    [length]="(oList_District_With_Kpi | filter: searchInputValue).length" [pageIndex]="pageIndex"
+    (page)="changePage($event)" showFirstLastButtons class="mat-paginator-sticky border">
+</mat-paginator>
+<mat-paginator *ngIf="oList_Area_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'Area'" [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20, 50, 100]" [length]="(oList_Area_With_Kpi | filter: searchInputValue).length"
+    [pageIndex]="pageIndex" (page)="changePage($event)" showFirstLastButtons class="mat-paginator-sticky border">
+</mat-paginator>
+<mat-paginator *ngIf="oList_Site_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'Site'" [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20, 50, 100]" [length]="(oList_Site_With_Kpi | filter: searchInputValue).length"
+    [pageIndex]="pageIndex" (page)="changePage($event)" showFirstLastButtons class="mat-paginator-sticky border">
+</mat-paginator>
+<mat-paginator *ngIf="oList_Entity_With_Kpi && oSelected_Data_access_level_Setup.VALUE == 'Entity'"
+    [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]"
+    [length]="(oList_Entity_With_Kpi | filter: searchInputValue).length" [pageIndex]="pageIndex"
+    (page)="changePage($event)" showFirstLastButtons class="mat-paginator-sticky border">
+</mat-paginator>
+<!-- #endregion -->
+
+<progress-spinner-dialog [color]="color" [mode]="mode" [value]="value" [backdropEnabled]="true"
+    [positionGloballyCenter]="true" [displayProgressSpinner]="isProgressSpinnerVisible">
+</progress-spinner-dialog>
+
+
+<bdc-walk-popup #organizationDataAccessPopup1 name="organizationDataAccessPopup1" [mustCompleted]="{introModal:true}"
+    [showCloseButton]="false" [showButton]="true">
+    You can control this organization's access, from modules to sites and entities and their respective dimensions
+</bdc-walk-popup>

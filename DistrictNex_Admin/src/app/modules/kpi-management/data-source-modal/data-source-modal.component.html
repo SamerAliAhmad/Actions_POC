@@ -1,0 +1,65 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">{{isCreating?'Create a':''}} Data Source</div>
+</div>
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+<form [formGroup]="dataSourceForm">
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Data Source Name</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input [formControlName]="'NAME'" matInput placeholder="Data Source Name" autocomplete="off">
+            <mat-error>** Name is Required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Api URL</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input [formControlName]="'API_URL'" matInput placeholder="Api URL" autocomplete="off">
+            <mat-error>** Api URL is Required</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Minimum Dwell Time (in minutes)</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input type="number" [formControlName]="'MIN_DWELL_TIME_IN_MINUTES'" matInput placeholder="Min Dwell Time"
+                autocomplete="off">
+            <mat-error>** Minimum Dwell Time is Required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Maximum Dwell Time (in minutes)</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input type="number" [formControlName]="'MAX_DWELL_TIME_IN_MINUTES'" matInput placeholder="Max Dwell Time"
+                autocomplete="off">
+            <mat-error>** Maximum Dwell Time is Required</mat-error>
+        </mat-form-field>
+    </div>
+</form>
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+    <button *ngIf="isCreating else editDeleteButtons" class="ml-4 w-20" mat-flat-button type="button"
+        (click)="Create_Data_Source()"
+        [disabled]="dataSourceForm.invalid || isLoading ||  dataSourceForm.errors?.minMaxDwellTime">
+        <span *ngIf="!isLoading">Create</span>
+        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+    <ng-template #editDeleteButtons>
+        <button color="warn" class="ml-4 w-20" mat-flat-button type="button" (click)="Delete_Data_Source()">
+            <span *ngIf="!isLoading">Delete</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+        <button class="ml-4 w-20" mat-flat-button type="button" (click)="Edit_Data_Source()"
+            [disabled]="dataSourceForm.invalid || isLoading ||  dataSourceForm.errors?.minMaxDwellTime || dataSourceForm.pristine">
+            <span *ngIf="!isLoading">Edit</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+    </ng-template>
+</div>

@@ -1,0 +1,585 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col bg-gray-100">
+        <div class="flex flex-col flex-auto">
+            <div
+                class="flex flex-row items-start sm:items-center sm:justify-between p-4 sm:py-6 md:px-8 border-b bg-card dark:bg-transparent">
+                <div>
+                    <div [bdcWalkTriggerFor]="settingsPopup1"
+                        class="text-3xl font-extrabold tracking-tight leading-none">
+                        <label style="word-break: break-all;">
+                            Default Settings
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto overflow-auto">
+        <div class="flex flex-col flex-auto p-8">
+            <form [formGroup]="themeForm" class="flex flex-col flex-auto">
+                <div>
+                    <mat-button-toggle-group (valueChange)="goToTab($event)" class="flex flex-row flex-wrap gap-1">
+                        <mat-button-toggle [bdcWalkTriggerFor]="settingsPopup2" class="m-0" [value]="0"
+                            [checked]="matTabIndex==0">Main Theme
+                        </mat-button-toggle>
+                        <mat-button-toggle [bdcWalkTriggerFor]="settingsPopup3" class="m-0" [value]="1"
+                            [checked]="matTabIndex==1">Chart Theme
+                        </mat-button-toggle>
+                        <mat-button-toggle [bdcWalkTriggerFor]="settingsPopup4" class="m-0" [value]="2"
+                            [checked]="matTabIndex==2">Data Settings
+                        </mat-button-toggle>
+                        <mat-button-toggle [bdcWalkTriggerFor]="settingsPopup5" class="m-0" [value]="3"
+                            [checked]="matTabIndex==3">Organization Images
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div class="flex flex-col flex-auto" *ngIf="matTabIndex==0" [formGroupName]="'mainColors'">
+                    <div class="grid sm:grid-cols-2 w-full mt-2 gap-0 sm:gap-4">
+                        <div>
+                            <label class="mt-2">Primary Color</label>
+                            <div class="flex flex-row">
+                                <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                                    [style.background]="themeForm.get('mainColors').get('PRIMARY_COLOR').value"
+                                    [colorPicker]="themeForm.get('mainColors').get('PRIMARY_COLOR').value"
+                                    [cpEyeDropper]="true"
+                                    (colorPickerChange)="themeForm.get('mainColors').get('PRIMARY_COLOR').setValue($event)"
+                                    cpPosition="bottom-right" [(cpToggle)]="openPrimaryColorPicker"
+                                    [cpCancelButton]="true" [cpCancelButtonClass]="'btn btn-primary btn-xs'"
+                                    autocomplete="off">
+                                </div>
+                                <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                                    <div (click)="openPrimaryColorPicker=!openPrimaryColorPicker"
+                                        class="w-full cursor-pointer">
+                                        <input [value]="themeForm.get('mainColors').get('PRIMARY_COLOR').value" matInput
+                                            [readonly]="true" autocomplete="off" class="cursor-pointer pl-2">
+                                    </div>
+                                    <mat-error
+                                        *ngIf="themeForm.get('mainColors').get('PRIMARY_COLOR').hasError('required')">
+                                        ** Primary Color is Required</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <label class="mt-2">Secondary Color</label>
+                            <div class="flex flex-row">
+                                <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                                    [style.background]="themeForm.get('mainColors').get('SECONDARY_COLOR').value"
+                                    [colorPicker]="themeForm.get('mainColors').get('SECONDARY_COLOR').value"
+                                    [cpEyeDropper]="true"
+                                    (colorPickerChange)="themeForm.get('mainColors').get('SECONDARY_COLOR').setValue($event)"
+                                    [cpPosition]="'right'" [(cpToggle)]="openSecondaryColorPicker"
+                                    [cpCancelButton]="true" [cpCancelButtonClass]="'btn btn-primary btn-xs'"
+                                    autocomplete="off">
+                                </div>
+                                <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                                    <div (click)="openSecondaryColorPicker=!openSecondaryColorPicker"
+                                        class="w-full cursor-pointer">
+                                        <input [value]="themeForm.get('mainColors').get('SECONDARY_COLOR').value"
+                                            matInput [readonly]="true" autocomplete="off" class="cursor-pointer pl-2">
+                                    </div>
+                                    <mat-error
+                                        *ngIf="themeForm.get('mainColors').get('SECONDARY_COLOR').hasError('required')">
+                                        **
+                                        Secondary Color is Required</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="flex flex-col cursor-pointer w-full sm:w-4/5 justify-self-center sm:justify-self-end"
+                            *ngIf="!themeForm.get('mainColors').get('IS_SHOW_ADMIN').value">
+                            <div class="flex screen-height rounded-md overflow-hidden border-2">
+                                <div class="admin-tab-width"
+                                    [style.background]="themeForm.get('mainColors').get('PRIMARY_COLOR').value">
+                                    <div class="flex items-center mt-1 mx-1">
+                                        <div class="w-1 h-1 rounded-full"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="w-1 h-1 ml-auto rounded-full"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="w-1 h-1 ml-0.5 rounded-full"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                    </div>
+                                    <div class="admin-tab-circle mt-2.5 mx-auto rounded-full"
+                                        [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                    </div>
+                                    <div class="mt-2 mx-1 space-y-2">
+                                        <div class="h-1 rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="h-1 rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="h-1 rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="h-1 rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col flex-auto border-l bg-white">
+                                    <div class="h-3">
+                                        <div class="flex items-center justify-end h-full mr-2">
+                                            <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                            <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                            <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-auto border-t bg-white">
+                                        <div class="flex flex-col h-full space-y-1 p-2 ml-auto">
+                                            <div class="admin-window mx-auto rounded-sm bg-gray-100 border"></div>
+                                            <div class="admin-window-button mx-auto rounded-full"
+                                                [style.background]="themeForm.get('mainColors').get('SECONDARY_COLOR').value">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col cursor-pointer w-full sm:w-4/5 justify-self-center sm:justify-self-end"
+                            *ngIf="themeForm.get('mainColors').get('IS_SHOW_ADMIN').value">
+                            <div class="flex screen-height rounded-md overflow-hidden border-2">
+                                <div class="site-tab-width"
+                                    [style.background]="themeForm.get('mainColors').get('PRIMARY_COLOR').value">
+                                    <div class="site-tab-tile mt-2 mx-auto rounded-sm"
+                                        [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                    </div>
+                                    <div class="flex flex-col items-center w-full mt-2 space-y-2">
+                                        <div class="site-tab-tile rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="site-tab-tile rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="site-tab-tile rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                        <div class="site-tab-tile rounded-sm"
+                                            [style.background]="LightenColor(themeForm.get('mainColors').get('PRIMARY_COLOR').value,20)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col flex-auto border-l bg-white">
+                                    <div class="h-3">
+                                        <div class="flex items-center justify-end h-full mr-2">
+                                            <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                            <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                            <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col h-full border-t bg-white">
+                                        <div class="flex flex-auto border-t bg-white">
+                                            <div class="flex flex-col h-full space-y-1 p-2 ml-auto">
+                                                <div class="admin-window mx-auto rounded-sm bg-gray-100 border">
+                                                </div>
+                                                <div class="admin-window-button mx-auto rounded-full"
+                                                    [style.background]="themeForm.get('mainColors').get('SECONDARY_COLOR').value">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-row mb-auto border-t bg-white site-bottom-bar">
+                                            <div
+                                                class="flex flex-row w-full gap-2 px-2 items-center justify-center mx-auto">
+                                                <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                                </div>
+                                                <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                                </div>
+                                                <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                                </div>
+                                                <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                                </div>
+                                                <div class="site-bottom-bar-tile rounded-sm platform-background">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div></div>
+                        <div
+                            class="flex flex-row mx-auto mt-2 sm:mt-0 w-full text-center sm:text-right justify-center sm:justify-end">
+                            <div class="w-full sm:w-4/5 text-center">
+                                <mat-label class="mr-2">DistrictNex&nbsp;</mat-label>
+                                <mat-slide-toggle formControlName="IS_SHOW_ADMIN" color="none"></mat-slide-toggle>
+                                <mat-label class="ml-2">&nbsp;Admin</mat-label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="my-4 sm:my-6 border-t"></div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button mat-stroked-button type="button" (click)="resetOrganizationTheme()"
+                            [disabled]="loading || !isThereChange">Reset
+                        </button>
+
+                        <button class="ml-4 w-40" mat-flat-button type="button" (click)="editDefaultSettings()"
+                            [disabled]="themeForm.invalid || loading || !isThereChange">
+                            <span *ngIf="!loading">Save Changes</span>
+                            <mat-progress-spinner *ngIf="loading" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-auto" *ngIf="matTabIndex==2" [formGroupName]="'dataSettings'">
+                    <div class="flex flex-col min-w-0 overflow-hidden">
+                        <div class="flex flex-col flex-auto items-left overflow-y-auto overflow-x-hidden min-w-0 h-full"
+                            cdkScrollable>
+                            <div class="flex flex-auto justify-left min-w-0 w-full sm:max-w-240 mr-auto p-6 pl-0">
+
+                                <div class="bg-card flex-auto p-8 rounded-2xl shadow" style="height: fit-content;">
+                                    <div class="grid sm:grid-cols-2 w-full gap-x-4">
+                                        <mat-form-field class="w-full col-span-2 sm:col-span-1" [floatLabel]="'always'">
+                                            <mat-label>Data Retention Period</mat-label>
+                                            <input matInput numbersOnly formControlName="dataRetention"
+                                                autocomplete="off">
+                                            <span matSuffix> days after deletion</span>
+                                            <mat-error>** Data Retention Period is Required
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full col-span-2 sm:col-span-1" [floatLabel]="'always'">
+                                            <mat-label>OTP TTL in Seconds</mat-label>
+                                            <input matInput numbersOnly formControlName="otpDurationInSeconds"
+                                                autocomplete="off">
+                                            <span matSuffix>seconds</span>
+                                            <mat-error>** OTP TTL in Seconds is Required
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <mat-form-field class="w-full smartr-mat-emphasized-affix" [floatLabel]="'always'">
+                                        <mat-label>Session Period In Minutes
+                                        </mat-label>
+                                        <input matInput type="number" numbersOnly
+                                            formControlName="ticketDurationInMinutes" autocomplete="off">
+                                        <span matSuffix>&nbsp;minutes</span>
+                                        <mat-error>** Session Period in minutes is required and cannot be less than 60
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full col-span-2 sm:col-span-1" [floatLabel]="'always'">
+                                        <mat-label>MapBox Gl Token</mat-label>
+                                        <input matInput formControlName="mapBoxGlToken" autocomplete="off">
+                                        <mat-error>** MapBox Gl Token is Required
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full col-span-2 sm:col-span-1" [floatLabel]="'always'">
+                                        <mat-label>Google Map API Token</mat-label>
+                                        <input matInput formControlName="googleMapApiToken" autocomplete="off">
+                                        <mat-error>** Google Map API Token is Required
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="w-full col-span-2 sm:col-span-1" [floatLabel]="'always'">
+                                        <mat-label>Telus Request ID</mat-label>
+                                        <input matInput formControlName="telusRequestID" autocomplete="off">
+                                        <mat-error>** Telus Request ID is Required
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <div class="flex items-center justify-end mt-4">
+                                        <button mat-stroked-button type="button" (click)="resetOrganizationTheme()"
+                                            [disabled]="loading || !isThereChange">Reset
+                                        </button>
+
+                                        <button class="ml-4 w-40" mat-flat-button type="button"
+                                            (click)="editDefaultSettings()"
+                                            [disabled]="themeForm.invalid || loading || !isThereChange">
+                                            <span *ngIf="!loading">Save Changes</span>
+                                            <mat-progress-spinner *ngIf="loading" [diameter]="24"
+                                                [mode]="'indeterminate'">
+                                            </mat-progress-spinner>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="matTabIndex==3">
+                    <div class="flex flex-col h-full w-full sm:w-auto p-6 pl-0">
+                        <div class="flex flex-col gap-3">
+                            <div class="grid sm:grid-cols-3 gap-3">
+                                <smartr-card class="flex flex-col w-full p-8">
+
+                                    <div
+                                        class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                                        <!-- On Hover Overlay -->
+                                        <div class="changePicture">
+
+                                            <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50">
+                                            </div>
+
+                                            <div
+                                                class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                                                <button mat-icon-button
+                                                    (click)="openChangePictureDialog('Dark_Square_Logo', false)">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                                    </mat-icon>
+                                                </button>
+                                                <button mat-icon-button (click)="deletePicture('Dark_Square_Logo')">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Profile Picture -->
+                                        <ng-container *ngIf="oDefault_settings.DARK_SQUARE_LOGO_URL">
+                                            <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                                                [src]="oDefault_settings.DARK_SQUARE_LOGO_URL">
+                                        </ng-container>
+                                        <ng-container *ngIf="!oDefault_settings.DARK_SQUARE_LOGO_URL">
+                                            <div
+                                                class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                                                <mat-icon class="icon-size-10" svgIcon="heroicons_outline:library">
+                                                </mat-icon>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <hr class="w-full border-t my-2">
+                                    <div class="flex flex-col mt-2">
+                                        <div class="text-lg font-semibold leading-tight text-center">
+                                            Square Logo for Light Backgounds</div>
+                                    </div>
+                                </smartr-card>
+                                <smartr-card class="flex flex-col w-full p-8">
+                                    <div
+                                        class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                                        <!-- On Hover Overlay -->
+                                        <div class="changePicture">
+                                            <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50">
+                                            </div>
+                                            <div
+                                                class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                                                <button mat-icon-button
+                                                    (click)="openChangePictureDialog('Dark_Rect_Logo', false)">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                                    </mat-icon>
+                                                </button>
+                                                <button mat-icon-button (click)="deletePicture('Dark_Rect_Logo')">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Profile Picture -->
+                                        <ng-container *ngIf="oDefault_settings.DARK_RECTANGLE_LOGO_URL">
+                                            <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                                                [src]="oDefault_settings.DARK_RECTANGLE_LOGO_URL">
+                                        </ng-container>
+                                        <ng-container *ngIf="!oDefault_settings.DARK_RECTANGLE_LOGO_URL">
+                                            <div
+                                                class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                                                <mat-icon class="icon-size-10" svgIcon="heroicons_outline:library">
+                                                </mat-icon>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <hr class="w-full border-t my-2">
+                                    <div class="flex flex-col mt-2">
+                                        <div class="text-lg font-semibold leading-tight text-center">
+                                            Rectangle Logo for Light Backgounds</div>
+                                    </div>
+                                </smartr-card>
+                                <smartr-card class="flex flex-col p-8">
+                                    <div
+                                        class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                                        <!-- On Hover Overlay -->
+                                        <div class="changePicture">
+                                            <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50">
+                                            </div>
+                                            <div
+                                                class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                                                <button mat-icon-button
+                                                    (click)="openChangePictureDialog('Favicon', true)">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                                    </mat-icon>
+                                                </button>
+                                                <button mat-icon-button (click)="deletePicture('Favicon')">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Profile Picture -->
+                                        <ng-container *ngIf="oDefault_settings.ORGANIZATION_FAVICON_URL">
+                                            <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                                                [src]="oDefault_settings.ORGANIZATION_FAVICON_URL">
+                                        </ng-container>
+                                        <ng-container *ngIf="!oDefault_settings.ORGANIZATION_FAVICON_URL">
+                                            <div
+                                                class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                                                <mat-icon class="icon-size-10" svgIcon="heroicons_outline:library">
+                                                </mat-icon>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <hr class="w-full border-t my-2">
+                                    <div class="flex flex-col mt-2">
+                                        <div class="text-lg font-semibold leading-tight text-center">
+                                            Website Favicon</div>
+                                        <div class="text-md mt-1 italic leading-tight text-center">
+                                            (.ico only accepted)</div>
+                                    </div>
+                                </smartr-card>
+                            </div>
+
+                            <div class="grid sm:grid-cols-3 gap-3">
+                                <smartr-card class="flex flex-col w-full p-8" style="background-color: black;">
+                                    <div
+                                        class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                                        <!-- On Hover Overlay -->
+                                        <div class="changePicture">
+                                            <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50">
+                                            </div>
+                                            <div
+                                                class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                                                <button mat-icon-button
+                                                    (click)="openChangePictureDialog('Light_Square_Logo', false)">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                                    </mat-icon>
+                                                </button>
+                                                <button mat-icon-button (click)="deletePicture('Light_Square_Logo')">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Profile Picture -->
+                                        <ng-container *ngIf="oDefault_settings.LIGHT_SQUARE_LOGO_URL">
+                                            <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                                                [src]="oDefault_settings.LIGHT_SQUARE_LOGO_URL">
+                                        </ng-container>
+                                        <ng-container *ngIf="!oDefault_settings.LIGHT_SQUARE_LOGO_URL">
+                                            <div
+                                                class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase">
+                                                <mat-icon class="icon-size-10 text-white"
+                                                    svgIcon="heroicons_outline:library"></mat-icon>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <hr class="w-full border-t my-2">
+                                    <div class="flex flex-col mt-2">
+                                        <div class="text-lg font-semibold leading-tight text-center text-white">
+                                            Square Logo for Dark Backgrounds</div>
+                                    </div>
+                                </smartr-card>
+                                <smartr-card class="flex flex-col w-full p-8" style="background-color: black;">
+                                    <div
+                                        class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                                        <!-- On Hover Overlay -->
+                                        <div class="changePicture">
+                                            <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50">
+                                            </div>
+                                            <div
+                                                class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                                                <button mat-icon-button
+                                                    (click)="openChangePictureDialog('Light_Rect_Logo', false)">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                                    </mat-icon>
+                                                </button>
+                                                <button mat-icon-button (click)="deletePicture('Light_Rect_Logo')">
+                                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Profile Picture -->
+                                        <ng-container *ngIf="oDefault_settings.LIGHT_RECTANGLE_LOGO_URL">
+                                            <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                                                [src]="oDefault_settings.LIGHT_RECTANGLE_LOGO_URL">
+                                        </ng-container>
+                                        <ng-container *ngIf="!oDefault_settings.LIGHT_RECTANGLE_LOGO_URL">
+                                            <div
+                                                class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase">
+                                                <mat-icon class="icon-size-10 text-white"
+                                                    svgIcon="heroicons_outline:library"></mat-icon>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <hr class="w-full border-t my-2">
+                                    <div class="flex flex-col mt-2">
+                                        <div class="text-lg font-semibold leading-tight text-center text-white">
+                                            Rectangle Logo for Dark Backgrounds</div>
+                                    </div>
+                                </smartr-card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="flex flex-col flex-auto" *ngIf="matTabIndex==1">
+                <div class="grid sm:grid-cols-2 w-full mt-2 gap-4">
+                    <div>
+                        <ng-container *ngFor="let default_chart_color of oList_Default_Chart_Color; let i = index">
+                            <label class="mt-2">{{default_chart_color.Data_level_setup.VALUE}} Chart Color</label>
+                            <div class="flex flex-row">
+                                <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                                    [style.background]="default_chart_color.COLOR"
+                                    [colorPicker]="default_chart_color.COLOR" [cpEyeDropper]="true"
+                                    (colorPickerChange)="default_chart_color.COLOR = $event; updateChartColors()"
+                                    cpPosition="right" [(cpToggle)]="oList_Color_Picker[i]" [cpCancelButton]="true"
+                                    [cpCancelButtonClass]="'btn btn-primary btn-xs'" autocomplete="off">
+                                </div>
+                                <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                                    <div (click)="oList_Color_Picker[i]=!oList_Color_Picker[i]"
+                                        class="w-full cursor-pointer">
+                                        <input [(ngModel)]="default_chart_color.COLOR"
+                                            (ngModelChange)="updateChartColors()" matInput autocomplete="off"
+                                            class="cursor-pointer pl-2">
+                                    </div>
+                                    <mat-error *ngIf="!default_chart_color.COLOR">
+                                        ** Chart Color is Required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- chart here -->
+                    <div class="flex h-full w-full">
+                        <div id="demoChart" style="width: 100%; height: 100%; display: flex;">
+                        </div>
+                    </div>
+                </div>
+                <!-- Divider -->
+                <div class="mt-6 mb-6 border-t"></div>
+
+                <!-- Actions -->
+                <div class="flex items-center justify-end">
+                    <button mat-stroked-button type="button" (click)="resetOrganizationTheme()"
+                        [disabled]="loading || !isThereChange">Reset
+                    </button>
+
+                    <button class="ml-4 w-40" mat-flat-button type="button" (click)="editDefaultSettings()"
+                        [disabled]="themeForm.invalid || loading || !isThereChange">
+                        <span *ngIf="!loading">Save Changes</span>
+                        <mat-progress-spinner *ngIf="loading" [diameter]="24" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<progress-spinner-dialog [color]="oTheme_Palette_Color" [mode]="oProgress_Spinner_Mode" [value]="value"
+    [backdropEnabled]="true" [positionGloballyCenter]="true" [displayProgressSpinner]="isProgressSpinnerVisible">
+</progress-spinner-dialog>
+
+<bdc-walk-popup #settingsPopup1 name="settingsPopup1" [mustCompleted]="{introModal:true}" [showCloseButton]="false"
+    [showButton]="true" [buttonText]="'Next'" xPosition="after" [horizontal]="true">
+    This is the settings page, you can control the default settings that apply in case of missing data in an
+    organization, or if a user hasn't logged in yet</bdc-walk-popup>
+<bdc-walk-popup #settingsPopup2 name="settingsPopup2" [mustCompleted]="{settingsPopup1:true}" [showCloseButton]="false"
+    [showButton]="true" [buttonText]="'Next'">
+    The main theme controls the main colors of the application</bdc-walk-popup>
+<bdc-walk-popup #settingsPopup3 name="settingsPopup3" [mustCompleted]="{settingsPopup2:true}" [showCloseButton]="false"
+    [showButton]="true" [buttonText]="'Next'">
+    The Chart theme controls the colors for charts</bdc-walk-popup>
+<bdc-walk-popup #settingsPopup4 name="settingsPopup4" [mustCompleted]="{settingsPopup3:true}" [showCloseButton]="false"
+    [showButton]="true" [buttonText]="'Next'">
+    Data settings include session duration, or the time before the user is kicked, OTP lasting duration before
+    expiration/deletion, data retention period, or the period before data gets deleted after being deactivated, and the
+    tokens for the maps</bdc-walk-popup>
+<bdc-walk-popup #settingsPopup5 name="settingsPopup5" [mustCompleted]="{settingsPopup4:true}" [showCloseButton]="false"
+    [showButton]="true">
+    These are the default organization images displayed in case an organization hasn't uploaded its own logos yet
+</bdc-walk-popup>

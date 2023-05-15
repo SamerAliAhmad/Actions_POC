@@ -1,0 +1,88 @@
+<div class="flex flex-col flex-auto w-full overflow-hidden">
+    <ng-container *ngIf="oList_Access_Control_Object">
+        <div class="flex flex-col sm:flex-row gap-2 sm:items-center mb-4 px-6">
+            <mat-form-field class="smartr-mat-no-subscript flex-auto">
+                <input type="text" placeholder="Search Existing Objects" matInput [(ngModel)]="searchInputValue"
+                    autocomplete="off">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_outline:search'">
+                </mat-icon>
+                <button mat-icon-button matSuffix (click)="searchInputValue=''" (input)="detectChanges()"
+                    matTooltip="Clear Search">
+                    <mat-icon class="icon-size-7" [svgIcon]="'mat_solid:clear_all'">
+                    </mat-icon>
+                </button>
+            </mat-form-field>
+            <div class="flex flex-row flex-wrap gap-2 items-center">
+                <button class="flex-auto min-w-26" mat-flat-button (click)="addAccessControlObject()"
+                    [bdcWalkTriggerFor]="userAccessControlPopup1">Add</button>
+                <button class="flex-auto min-w-26" mat-stroked-button (click)="resetUserAccess()">Reset</button>
+                <button class="flex-auto min-w-26" mat-flat-button (click)="saveUserAccess()">Save</button>
+            </div>
+        </div>
+        <div *ngIf="oList_Access_Control_Object.length == 0"
+            class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent px-6">
+            <div class="text-2xl font-semibold tracking-tight text-secondary">No access has been granted yet</div>
+        </div>
+        <mat-accordion #mainAccordion="matAccordion" class="overflow-y-auto pb-8 no-scrollbar px-6" multi>
+            <mat-card #accessControlPanel class="mb-4"
+                *ngFor="let access_control_object of oList_Access_Control_Object | filter: searchInputValue | pagination: pageIndex : pageSize; let first = first; let i = index;">
+                <mat-card-content class="flex flex-row gap-4 items-center">
+                    <mat-form-field class="w-full smartr-mat-no-subscript" [floatLabel]="'always'"
+                        (click)="$event.stopPropagation()">
+                        <mat-select matInput placeholder="Data Level" autocomplete="off"
+                            [(ngModel)]="access_control_object.DATA_LEVEL_SETUP_ID"
+                            (selectionChange)="access_control_object.LEVEL_ID = null;" required>
+                            <mat-option *ngFor="let data_access_level_setup of oList_Data_access_level_setup"
+                                [value]="data_access_level_setup.SETUP_ID">
+                                {{data_access_level_setup.VALUE}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="w-full smartr-mat-no-subscript" [floatLabel]="'always'"
+                        (click)="$event.stopPropagation()">
+                        <mat-select matInput [placeholder]="getSetupValue(access_control_object.DATA_LEVEL_SETUP_ID)"
+                            [(ngModel)]="access_control_object.LEVEL_ID" required
+                            [disabled]="!getObjects(access_control_object)?.length" autocomplete="off">
+                            <mat-option>
+                                <ngx-mat-select-search #selectObjectSearch
+                                    [placeholderLabel]="'Search for '+getSetupValue(access_control_object.DATA_LEVEL_SETUP_ID)"
+                                    noEntriesFoundLabel="No Matching Sites">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let object of getObjects(access_control_object) | filter: selectObjectSearch.value"
+                                [value]="getObjectId(access_control_object.DATA_LEVEL_SETUP_ID, object)">
+                                {{getObjectName(access_control_object.DATA_LEVEL_SETUP_ID,
+                                getObjectId(access_control_object.DATA_LEVEL_SETUP_ID, object))}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="w-fit min-w-fit" mat-flat-button color="primary"
+                        (click)="addAllChildren(access_control_object)">Add All
+                        Children</button>
+                    <button mat-icon-button class="ml-auto"
+                        (click)="removeAccessControlObject(access_control_object); $event.stopPropagation()">
+                        <mat-icon class="text-red-600" svgIcon="heroicons_outline:trash"></mat-icon>
+                    </button>
+                </mat-card-content>
+            </mat-card>
+        </mat-accordion>
+    </ng-container>
+    <div *ngIf="!oList_Access_Control_Object" class="loader-container">
+        <div class="loader"></div>
+    </div>
+</div>
+<mat-paginator *ngIf="oList_Access_Control_Object" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]"
+    [length]="(oList_Access_Control_Object | filter: searchInputValue).length" [pageIndex]="pageIndex"
+    (page)="changePage($event)" showFirstLastButtons class="mat-paginator-sticky border">
+</mat-paginator>
+
+<progress-spinner-dialog [color]="oTheme_Palette_Color" [mode]="oProgress_Spinner_Mode" [value]="value"
+    [backdropEnabled]="true" [positionGloballyCenter]="true" [displayProgressSpinner]="isProgressSpinnerVisible">
+</progress-spinner-dialog>
+
+
+<bdc-walk-popup #userAccessControlPopup1 name="userAccessControlPopup1" [mustCompleted]="{introModal:true}"
+    [showCloseButton]="false" [showButton]="true">
+    You can control this organization's access, from modules to sites and entities and their respective dimensions
+</bdc-walk-popup>

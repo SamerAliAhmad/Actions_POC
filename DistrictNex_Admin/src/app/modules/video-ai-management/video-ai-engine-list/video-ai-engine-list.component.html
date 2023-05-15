@@ -1,0 +1,96 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col flex-auto h-full dark:bg-transparent">
+        <!-- Main -->
+
+        <!-- Header -->
+        <div class="flex flex-col bg-card justify-between pt-8 pb-4 px-6 md:px-8 border-b">
+
+            <!-- Title -->
+            <div>
+                <div class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-none">Video AI Engines</div>
+                <div class="ml-0.5 mt-1 font-medium text-secondary">
+                    <ng-container *ngIf="isContentLoaded && oList_Video_ai_engine; else loadingEngines">
+                        {{oList_Video_ai_engine.length}} {{oList_Video_ai_engine.length | i18nPlural: {
+                        '=0' : 'Video Ai Engines',
+                        '=1' : 'Video Ai Engine',
+                        'other': 'Video Ai Engines'
+                        } }}
+                    </ng-container>
+                    <ng-template #loadingEngines>
+                        Loading...
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="flex items-center mt-4">
+                <div class="flex-auto">
+                    <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                        <input matInput [formControl]="engineSearchFormControl" [autocomplete]="'off'"
+                            [placeholder]="'Search Engines'">
+                    </mat-form-field>
+                </div>
+                <!-- Add engine button -->
+                <ng-container *ngIf="!isMobileView">
+                    <div class="flex search-side-button">
+                        <button class="ml-4" mat-flat-button (click)="createVideoAiEngine()"
+                            [disabled]="!isContentLoaded">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+            <ng-container *ngIf="isMobileView">
+                <div class="flex items-center mt-2">
+                    <!-- Add engine button -->
+                    <div class="flex search-side-button w-full">
+                        <button class="mr-2 w-full" mat-flat-button (click)="createVideoAiEngine()"
+                            [disabled]="!isContentLoaded">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div *ngIf="!isContentLoaded" class="loader-container">
+            <div class="loader"></div>
+        </div>
+        <!-- engines list -->
+        <div class="relative dark:bg-transparent flex flex-col flex-auto overflow-hidden">
+            <ng-container *ngIf="isContentLoaded">
+                <ng-container *ngIf="oList_Video_ai_engine && oList_Video_ai_engine.length > 0; else noEngines">
+                    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-2 md:mt-4">
+                            <ng-container *ngFor="let engine of oList_Video_ai_engine">
+                                <div class="flex flex-col h-full flex-auto p-10 bg-card shadow rounded-2xl cursor-pointer text-center overflow-hidden hover:shadow-xl transition-shadow duration-150 ease-in-out"
+                                    [routerLink]="[engine.VIDEO_AI_ENGINE_ID]">
+                                    <div class="flex flex-col items-center px-6">
+                                        <div
+                                            class="flex mt-2 items-center justify-center p-5 rounded-full bg-gray-200 text-primary-700 dark:bg-primary dark:text-on-primary">
+                                            <mat-icon svgIcon="heroicons_outline:video-camera"></mat-icon>
+                                        </div>
+                                        <div class="mt-5 text-xl font-medium leading-5">{{engine.ENGINE_NAME}}</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!-- No organizations -->
+            <ng-template #noEngines>
+                <div class="flex items-center justify-center p-6 sm:p-10">
+                    <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                        No Engines</div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>

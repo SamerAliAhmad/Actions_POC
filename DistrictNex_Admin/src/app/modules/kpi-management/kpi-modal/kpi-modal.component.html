@@ -1,0 +1,160 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">{{isCreating?'Create a':'Edit'}} KPI</div>
+</div>
+
+<div class="mt-4 mb-4 border-t"></div>
+<form [formGroup]="kpiForm">
+    <div class="grid sm:grid-cols-2 w-full gap-x-6">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Kpi Name</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input [formControlName]="'NAME'" matInput placeholder="Kpi Name" autocomplete="off">
+            <mat-error>** Name is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Unit</mat-label>
+            <input [formControlName]="'UNIT'" matInput placeholder="Unit" autocomplete="off">
+            <mat-error>** Unit is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Dimension</mat-label>
+            <mat-select [formControlName]="'DIMENSION_ID'" placeholder="
+                Dimension">
+                <mat-option *ngFor="let dimension of oList_Dimension" [value]="dimension.DIMENSION_ID">
+                    {{dimension.NAME}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="kpiForm.get('DIMENSION_ID').hasError('required')">** Dimension is
+                required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Kpi Type</mat-label>
+            <mat-select [formControlName]="'KPI_TYPE_SETUP_ID'" placeholder="
+                Kpi Type">
+                <mat-option *ngFor="let setup of oList_Kpi_Setup" [value]="setup.SETUP_ID">
+                    {{setup.VALUE}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="kpiForm.get('KPI_TYPE_SETUP_ID').hasError('required')">** Kpi type is
+                required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Minimum Value</mat-label>
+            <input type="number" [formControlName]="'MINIMUM_VALUE'" matInput placeholder="Min Value"
+                autocomplete="off">
+            <mat-error>** Minimum Value is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Maximum Value</mat-label>
+            <input type="number" [formControlName]="'MAXIMUM_VALUE'" matInput placeholder="Max Value"
+                autocomplete="off">
+            <mat-error>** Maximum Value is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Minimum data level</mat-label>
+            <mat-select [formControlName]="'MIN_DATA_LEVEL_SETUP_ID'" placeholder="Minimum
+                Kpi Type">
+                <mat-option *ngFor="let setup of oList_Data_level_Setup" [value]="setup.SETUP_ID">
+                    {{setup.VALUE}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="kpiForm.get('MIN_DATA_LEVEL_SETUP_ID').hasError('required')">** Minimum data level is
+                required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Maximum data level</mat-label>
+            <mat-select [formControlName]="'MAX_DATA_LEVEL_SETUP_ID'" placeholder="
+             Maximum Kpi Type">
+                <mat-option *ngFor="let setup of oList_Data_level_Setup" [value]="setup.SETUP_ID">
+                    {{setup.VALUE}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="kpiForm.get('MAX_DATA_LEVEL_SETUP_ID').hasError('required')">** Maximum data level is
+                required</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="flex flex-row w-full ">
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'HAS_CORRELATION'">
+            Has Correlation
+        </mat-checkbox>
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'IS_TRENDLINE'">
+            Is Trendline
+        </mat-checkbox>
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'IS_DECIMAL_VALUE'">
+            Is Decimal Value
+        </mat-checkbox>
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'HAS_SQM'">
+            Has Sqm
+        </mat-checkbox>
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'IS_BY_SEVERITY'">
+            Is By Severity
+        </mat-checkbox>
+        <!-- <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Maximum Dwell Time (in minutes)</mat-label>
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+            <input type="number" [formControlName]="'MAX_DWELL_TIME_IN_MINUTES'" matInput placeholder="Max Dwell Time"
+                autocomplete="off">
+            <mat-error>** Maximum Dwell Time is required</mat-error>
+        </mat-form-field> -->
+    </div>
+    <div class="flex flex-row w-full ">
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'IS_ADDITIVE_DATA'">
+            Is Additive Data
+        </mat-checkbox>
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'IS_AUTO_GENERATE'">
+            Is Auto-Generate
+        </mat-checkbox>
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'IS_EXTERNAL'">
+            Is External
+        </mat-checkbox>
+        <mat-checkbox class="gt-xs:pr-3 px-2 flex align-center w-full"
+            style="border-radius: 6px; height: 48px; margin-bottom: 16px;" labelPosition="after"
+            [formControlName]="'HAS_ALERTS'">
+            Has Alerts
+        </mat-checkbox>
+
+    </div>
+</form>
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+    <button *ngIf="isCreating else editDeleteButtons" class="ml-4 w-20" mat-flat-button type="button"
+        (click)="Create_Kpi()" [disabled]="kpiForm.invalid || isLoading ||  kpiForm.errors?.minMaxValueTimeValidator">
+        <span *ngIf="!isLoading">Create</span>
+        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+    <ng-template #editDeleteButtons>
+        <button color="warn" class="ml-4 w-20" mat-flat-button type="button" (click)="Delete_Kpi()">
+            <span *ngIf="!isLoading">Delete</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+        <button class="ml-4 w-20" mat-flat-button type="button" (click)="Edit_Kpi()"
+            [disabled]="kpiForm.invalid || isLoading ||  kpiForm.errors?.minMaxDwellTime || kpiForm.pristine">
+            <span *ngIf="!isLoading">Edit</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+    </ng-template>
+</div>

@@ -1,0 +1,16 @@
+:host ::ng-deep .mat-checkbox {
+    background-color: white;
+    .mat-checkbox-layout {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+
+        .mat-checkbox-inner-container {
+            .mat-checkbox-frame,
+            .mat-checkbox-background {
+                border-radius: 70% !important;
+                border-color: black;
+            }
+        }
+    }
+}

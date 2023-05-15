@@ -1,0 +1,33 @@
+:host ::ng-deep .color-picker-form-field .mat-form-field-wrapper .mat-form-field-flex {
+    padding: 0;
+    border-radius: 0;
+}
+
+:host ::ng-deep .mat-slide-toggle-bar {
+    background-color: #94a3b8 !important;
+}
+
+:host ::ng-deep .mat-slide-toggle-thumb {
+    background-color: #fafafa !important;
+}
+
+:host ::ng-deep .mat-horizontal-content-container {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.w-70 {
+    width: 18rem !important;
+}
+
+:host ::ng-deep .mat-checkbox-inner-container {
+    margin: 0 !important;
+}
+
+.platform-background{
+    background-color: #e3e6e8;
+}
+
+.button-height {
+    height: 5px;
+}

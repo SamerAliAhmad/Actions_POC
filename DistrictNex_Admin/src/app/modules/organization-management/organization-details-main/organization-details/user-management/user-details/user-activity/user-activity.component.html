@@ -1,0 +1,63 @@
+<div class="flex flex-col flex-auto h-full dark:bg-transparent -mx-6">
+    <!-- Main -->
+
+    <div *ngIf="!isContentLoaded" class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <div *ngIf="isContentLoaded" class="flex-auto overflow-auto medium-scrollbar">
+        <div *ngIf="dataSource.data && dataSource.data.length > 0; else noLogs" class="mat-elevation-z3 w-full">
+            <table mat-table matSort matTableResponsive [dataSource]="dataSource">
+
+                <ng-container matColumnDef="logTime">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white"> Log Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ENTRY_DATE | date: "hh:mm:ss a"}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="message">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white"> Message </th>
+                    <td mat-cell *matCellDef="let element"> {{element.MESSAGE}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="logDate">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white"> Log Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ENTRY_DATE | date}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="logType">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white"> Log Type </th>
+                    <td mat-cell *matCellDef="let element"> {{getLogTypeValue(element)}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="logAccess">
+                    <th mat-header-cell *matHeaderCellDef class="bg-white"> Access Type </th>
+                    <td mat-cell *matCellDef="let element"><span
+                            class="inline-flex max-w-fit justify-self-end items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                            [ngClass]="{'bg-red-200 text-red-800': getAccessTypeValue(element) === 'Exit',
+                                    'bg-green-200 text-green-800': getAccessTypeValue(element) === 'Access',
+                                    'bg-yellow-200 text-yellow-800': getAccessTypeValue(element) === 'Change'}">
+                            <span class="leading-relaxed whitespace-nowrap">{{getAccessTypeValue(element)}}</span>
+                        </span></td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]" [length]="totalCount"
+                [pageIndex]="pageIndex" (page)="changePage($event)" showFirstLastButtons
+                class="mat-paginator-sticky border">
+            </mat-paginator>
+        </div>
+        <ng-template #noLogs>
+            <div class="flex h-full items-center justify-center p-6 sm:p-10">
+                <div
+                    class="h-full flex items-center mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                    No Logs</div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<button mat-fab matTooltip="Open Filter" class="report-button back-button" color="primary" (click)="openFiltersModal()">
+    <mat-icon [svgIcon]="'heroicons_outline:filter'" class="text-iconColor"></mat-icon>
+</button>

@@ -1,0 +1,47 @@
+<mat-drawer-container class="absolute inset-0 flex-auto sm:h-full">
+    <mat-drawer id="custom-scrollbar" class="sm:w-80 dark:bg-gray-900 w-100" [autoFocus]="false" [mode]="drawerMode"
+        [opened]="isDrawerOpened" #drawer>
+        <div class="flex items-center justify-between m-8">
+            <div class="font-extrabold text-3xl tracking-tight leading-none">KPI Management
+            </div>
+            <div class="lg:hidden">
+                <button mat-icon-button (click)="drawer.close()">
+                    <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="flex flex-col divide-y border-t border-b">
+            <ng-container *ngFor="let panel of panelList;">
+                <div class="flex px-8 py-5 cursor-pointer" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel.id !== panel.id,
+                                'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel.id === panel.id}"
+                    (click)="goToPanelfromLoc(panel.id)">
+                    <div class="ml-3">
+                        <div class="font-medium leading-6"
+                            [ngClass]="{'text-primary dark:text-primary-500': selectedPanel && selectedPanel.id === panel.id}">
+                            {{panel.name}}
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content class="flex flex-col flex-auto overflow-hidden">
+        <div class="flex items-center mb-2 pt-2 sm:pt-6 px-6">
+            <button mat-icon-button (click)="drawer.toggle()">
+                <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+            </button>
+            <div class="ml-2 text-2xl font-bold tracking-tight leading-none">
+                {{selectedPanel.name}}
+            </div>
+        </div>
+        <ng-container *ngIf="selectedPanel.name == 'Data Source'">
+            <data-source-list class="flex flex-col flex-auto overflow-hidden"></data-source-list>
+        </ng-container>
+        <ng-container *ngIf="selectedPanel.name == 'Organization Data Source Kpi'">
+            <organization-data-source-kpi-list class="flex flex-col flex-auto overflow-hidden"></organization-data-source-kpi-list>
+        </ng-container>
+        <ng-container *ngIf="selectedPanel.name == 'Kpi'">
+            <kpi-list class="flex flex-col flex-auto overflow-hidden"></kpi-list>
+        </ng-container>
+    </mat-drawer-content>
+</mat-drawer-container>

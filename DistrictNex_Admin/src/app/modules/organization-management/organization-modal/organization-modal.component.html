@@ -1,0 +1,354 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">Create an Organization</div>
+</div>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<mat-horizontal-stepper [linear]="true" #horizontalStepper (selectionChange)="loadChart($event)" class="px-4"
+    mat-dialog-content>
+    <form class="overflow-hidden" [formGroup]="organizationForm">
+        <ng-template matStepperIcon="edit">
+            <mat-icon>check</mat-icon>
+        </ng-template>
+        <mat-step [formGroupName]="'step1'" [stepControl]="organizationForm.get('step1')" #horizontalStepperStep1>
+            <ng-template matStepLabel><span *ngIf="!isMobileView">Basic Information</span></ng-template>
+            <div class="grid sm:grid-cols-4 w-full mt-2 sm:gap-4">
+                <div class="sm:col-span-2">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Organization Name</mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:library'" matPrefix></mat-icon>
+                        <input formControlName="ORGANIZATION_NAME" matInput placeholder="Name" autocomplete="off">
+                        <mat-error *ngIf="organizationForm.get('step1').get('ORGANIZATION_NAME').hasError('pattern')">
+                            ** Invalid Organization Name</mat-error>
+                        <mat-error *ngIf="organizationForm.get('step1').get('ORGANIZATION_NAME').hasError('required')">
+                            ** Organization Name is Required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="sm:col-span-2">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Email</mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'" matPrefix></mat-icon>
+                        <input formControlName="ORGANIZATION_EMAIL" type="email" matInput placeholder="Email"
+                            autocomplete="off">
+                        <mat-error *ngIf="organizationForm.get('step1').get('ORGANIZATION_EMAIL').hasError('pattern')">
+                            **Invalid Email</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="grid sm:grid-cols-2 w-full sm:gap-4">
+                <div>
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Phone Number</mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+                        <input formControlName="ORGANIZATION_PHONE_NUMBER" matInput type="tel"
+                            placeholder="Phone Number" autocomplete="off">
+                        <mat-error
+                            *ngIf="organizationForm.get('step1').get('ORGANIZATION_PHONE_NUMBER').hasError('pattern')">
+                            ** Invalid Organization Phone Number</mat-error>
+                        <mat-error
+                            *ngIf="organizationForm.get('step1').get('ORGANIZATION_PHONE_NUMBER').hasError('minlength')">
+                            ** Phone Number Should be a Minimum of 5 Characters
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Creation Date</mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:clock'" matPrefix></mat-icon>
+                        <input readonly [value]="oDate_Now | date" matInput placeholder="Creation Date"
+                            autocomplete="off">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex">
+                <mat-form-field class="smartr-mat-textarea flex-auto" [floatLabel]="'always'">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput formControlName="ORGANIZATION_ADDRESS" [placeholder]="'Address'"
+                        [rows]="3"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="flex justify-end">
+                <button class="px-6 mr-2" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+                </button>
+                <button class="px-8" mat-flat-button
+                    [disabled]="horizontalStepperStep1.stepControl.pristine || horizontalStepperStep1.stepControl.invalid"
+                    type="button" matStepperNext>
+                    Next
+                </button>
+            </div>
+        </mat-step>
+
+        <mat-step [formGroupName]="'step2'" [stepControl]="organizationForm.get('step2')" #horizontalStepperStep2>
+            <ng-template matStepLabel><span *ngIf="!isMobileView">Organization Quota</span></ng-template>
+            <div class="grid sm:grid-cols-4 w-full mt-2 sm:gap-4">
+                <div class="sm:col-span-2">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Maximum Number of Admins</mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'mat_solid:admin_panel_settings'" matPrefix></mat-icon>
+                        <input formControlName="MAX_NUMBER_OF_ADMINS" min="0" type="number" numbersOnly matInput
+                            placeholder="Maximum Number of Admins" autocomplete="off">
+                        <mat-error
+                            *ngIf="organizationForm.get('step2').get('MAX_NUMBER_OF_ADMINS').hasError('required')">
+                            ** Maximum Number of Admins is Required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="sm:col-span-2">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Maximum Number of Users</mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user-group'" matPrefix></mat-icon>
+                        <input formControlName="MAX_NUMBER_OF_USERS" type="number" numbersOnly matInput
+                            placeholder="Max Number of Users" min="0" autocomplete="off">
+                        <mat-error
+                            *ngIf="organizationForm.get('step2').get('MAX_NUMBER_OF_USERS').hasError('required')">
+                            ** Maximum Number of Users is Required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <button class="px-6 mr-2" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+                </button>
+                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" matStepperPrevious>
+                    Back
+                </button>
+                <button class="px-8" mat-flat-button
+                    [disabled]="horizontalStepperStep2.stepControl.pristine || horizontalStepperStep2.stepControl.invalid"
+                    type="button" matStepperNext>
+                    Next
+                </button>
+            </div>
+        </mat-step>
+
+        <mat-step [formGroupName]="'step3'" [stepControl]="organizationForm.get('step3')" #horizontalStepperStep3>
+            <ng-template matStepLabel><span *ngIf="!isMobileView">Color Scheme</span></ng-template>
+            <div class="flex my-2">
+                <mat-checkbox class="ml-auto" labelPosition="before" [formControlName]="'IS_USE_DEFAULT_COLOR_SCHEME'"
+                    (change)="checkStep3DefaultTheme($event)">
+                    Use Default Color Scheme&nbsp;
+                </mat-checkbox>
+            </div>
+            <div class="grid sm:grid-cols-2 w-full mt-2 gap-4">
+                <div>
+                    <label class="mt-2">Primary Color</label>
+                    <div class="flex flex-row">
+                        <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                            [style.background]="organizationForm.get('step3').get('PRIMARY_COLOR').value"
+                            [colorPicker]="organizationForm.get('step3').get('PRIMARY_COLOR').value"
+                            [cpEyeDropper]="true" [cpOutputFormat]="'hex'"
+                            [cpDisabled]="organizationForm.get('step3').get('IS_USE_DEFAULT_COLOR_SCHEME').value"
+                            (colorPickerChange)="organizationForm.get('step3').get('PRIMARY_COLOR').setValue($event)"
+                            cpPosition="auto" [(cpToggle)]="openPrimaryColorPicker" [cpCancelButton]="true"
+                            [cpCancelButtonClass]="'btn btn-primary btn-xs'" autocomplete="off">
+                        </div>
+                        <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                            <div (click)="organizationForm.get('step3').get('IS_USE_DEFAULT_COLOR_SCHEME').value?'':openPrimaryColorPicker=!openPrimaryColorPicker"
+                                class="w-full cursor-pointer">
+                                <input [value]="organizationForm.get('step3').get('PRIMARY_COLOR').value" matInput
+                                    [readonly]="true" autocomplete="off" class="cursor-pointer pl-2">
+                            </div>
+                            <mat-error *ngIf="organizationForm.get('step3').get('PRIMARY_COLOR').hasError('required')">
+                                **
+                                Primary Color is Required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <label class="mt-2">Secondary Color</label>
+                    <div class="flex flex-row">
+                        <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                            [style.background]="organizationForm.get('step3').get('SECONDARY_COLOR').value"
+                            [colorPicker]="organizationForm.get('step3').get('SECONDARY_COLOR').value"
+                            [cpEyeDropper]="true" [cpOutputFormat]="'hex'"
+                            [cpDisabled]="organizationForm.get('step3').get('IS_USE_DEFAULT_COLOR_SCHEME').value"
+                            (colorPickerChange)="organizationForm.get('step3').get('SECONDARY_COLOR').setValue($event)"
+                            cpPosition="auto" [(cpToggle)]="openSecondaryColorPicker" [cpCancelButton]="true"
+                            [cpCancelButtonClass]="'btn btn-primary btn-xs'" autocomplete="off">
+                        </div>
+                        <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                            <div (click)="organizationForm.get('step3').get('IS_USE_DEFAULT_COLOR_SCHEME').value?'':openSecondaryColorPicker=!openSecondaryColorPicker"
+                                class="w-full cursor-pointer">
+                                <input [value]="organizationForm.get('step3').get('SECONDARY_COLOR').value" matInput
+                                    [readonly]="true" autocomplete="off" class="cursor-pointer pl-2">
+                            </div>
+                            <mat-error
+                                *ngIf="organizationForm.get('step3').get('SECONDARY_COLOR').hasError('required')">**
+                                Secondary Color is Required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex flex-col cursor-pointer w-70" style="justify-self: right;"
+                    *ngIf="organizationForm.get('step3').get('IS_SHOW_ADMIN').value">
+                    <div class="flex h-40 rounded-md overflow-hidden border-2">
+                        <div class="w-8" [style.background]="organizationForm.get('step3').get('PRIMARY_COLOR').value">
+                            <div class="flex items-center mt-1 mx-1">
+                                <div class="w-1 h-1 rounded-full"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="w-1 h-1 ml-auto rounded-full"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="w-1 h-1 ml-0.5 rounded-full"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                            </div>
+                            <div class="w-4 h-4 mt-2.5 mx-auto rounded-full"
+                                [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                            </div>
+                            <div class="mt-2 mx-1 space-y-2">
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="h-1 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-auto border-l">
+                            <div class="h-3">
+                                <div class="flex items-center justify-end h-full mr-2">
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-auto border-t">
+                                <div class="flex flex-col h-full space-y-1 p-2 ml-auto">
+                                    <div class="w-8 h-8 mx-auto rounded-sm bg-gray-100 border"></div>
+                                    <div class="w-6 button-height mx-auto rounded-sm"
+                                        [style.background]="organizationForm.get('step3').get('SECONDARY_COLOR').value">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col cursor-pointer w-70" style="justify-self: right;"
+                    *ngIf="!organizationForm.get('step3').get('IS_SHOW_ADMIN').value">
+                    <div class="flex h-40 rounded-md overflow-hidden border-2">
+                        <div class="w-3" [style.background]="organizationForm.get('step3').get('PRIMARY_COLOR').value">
+                            <div class="w-1.5 h-1.5 mt-2 mx-auto rounded-sm"
+                                [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                            </div>
+                            <div class="flex flex-col items-center w-full mt-2 space-y-2">
+                                <div class="w-1.5 h-1.5 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="w-1.5 h-1.5 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="w-1.5 h-1.5 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                                <div class="w-1.5 h-1.5 rounded-sm"
+                                    [style.background]="LightenColor(organizationForm.get('step3').get('PRIMARY_COLOR').value,20)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-auto border-l">
+                            <div class="h-3">
+                                <div class="flex items-center justify-end h-full mr-2">
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                    <div class="w-1 h-1 ml-1 rounded-sm bg-gray-300"></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col h-full border-t">
+                                <div class="flex flex-col h-full space-y-1 p-2 ml-auto">
+                                    <div class="w-8 h-8 mx-auto rounded-sm bg-gray-100 border"></div>
+                                    <div class="w-6 button-height mx-auto rounded-sm"
+                                        [style.background]="organizationForm.get('step3').get('SECONDARY_COLOR').value">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col flex-auto mb-auto border-t">
+                                    <div class="h-6">
+                                        <div class="flex items-center justify-center h-full mx-auto">
+                                            <div class="w-12 h-5 rounded-sm platform-background"></div>
+                                            <div class="w-12 h-5 ml-1 rounded-sm platform-background"></div>
+                                            <div class="w-12 h-5 ml-1 rounded-sm platform-background"></div>
+                                            <div class="w-12 h-5 ml-1 rounded-sm platform-background"></div>
+                                            <div class="w-12 h-5 ml-1 rounded-sm platform-background"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row">
+                <mat-label class="ml-auto mr-2">DistrictNex&nbsp;</mat-label>
+                <mat-slide-toggle formControlName="IS_SHOW_ADMIN" color="none"></mat-slide-toggle>
+                <mat-label class="mr-14 ml-2">&nbsp;Admin</mat-label>
+            </div>
+            <div class="flex justify-end mt-8">
+                <button class="px-6 mr-2" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+                </button>
+                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" matStepperPrevious>
+                    Back
+                </button>
+                <button class="px-8" mat-flat-button [disabled]="horizontalStepperStep3.stepControl.invalid"
+                    type="button" matStepperNext>
+                    Next
+                </button>
+            </div>
+        </mat-step>
+    </form>
+    <mat-step>
+        <ng-template matStepLabel><span *ngIf="!isMobileView">Chart Colors</span></ng-template>
+        <div class="grid sm:grid-cols-2 w-full mt-2 gap-4">
+            <div>
+                <div>
+                    <ng-container
+                        *ngFor="let organization_chart_color of oList_Organization_chart_color; let i = index">
+                        <label class="mt-2">{{organization_chart_color.Data_level_setup.VALUE}} Chart Color</label>
+                        <div class="flex flex-row">
+                            <div class="border mr-2" style="width: 48px; height: 48px; cursor: pointer;"
+                                [style.background]="organization_chart_color.COLOR"
+                                [colorPicker]="organization_chart_color.COLOR" [cpEyeDropper]="true"
+                                (colorPickerChange)="organization_chart_color.COLOR = $event; updateChartColors();organizationForm.markAsDirty()"
+                                cpPosition="right" [(cpToggle)]="oList_Color_Picker[i]" [cpCancelButton]="true"
+                                [cpCancelButtonClass]="'btn btn-primary btn-xs'" autocomplete="off">
+                            </div>
+                            <mat-form-field class="w-full color-picker-form-field" [floatLabel]="'always'">
+                                <div (click)="oList_Color_Picker[i]=!oList_Color_Picker[i]"
+                                    class="w-full cursor-pointer">
+                                    <input [(ngModel)]="organization_chart_color.COLOR"
+                                        (ngModelChange)="updateChartColors();organizationForm.markAsDirty();" matInput
+                                        autocomplete="off" class="cursor-pointer pl-2">
+                                </div>
+                                <mat-error *ngIf="!organization_chart_color.COLOR">
+                                    ** Chart Color is Required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                </div>
+            </div>
+            <!-- chart here -->
+            <div class="flex h-full w-full px-1">
+                <div id="demoChart" style="width: 100%; height: 100%; display: flex;">
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end mt-8">
+            <button class="px-6 mr-2" mat-stroked-button type="button" [matDialogClose]="'cancel'"
+                [disabled]="isLoading">Cancel
+            </button>
+            <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" matStepperPrevious
+                [disabled]="isLoading">
+                Back
+            </button>
+            <button class="px-6" mat-flat-button type="button" (click)="CreateOgranization()"
+                [disabled]="organizationForm.invalid || isLoading">
+                <span *ngIf="!isLoading">Create</span>
+                <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+            </button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>

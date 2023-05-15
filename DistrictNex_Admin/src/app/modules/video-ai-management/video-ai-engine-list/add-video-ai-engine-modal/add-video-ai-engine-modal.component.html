@@ -1,0 +1,39 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">Create a Site</div>
+</div>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<form [formGroup]="videoAiEngineForm" mat-dialog-content>
+
+    <div class="grid sm:grid-cols-2 w-full" [ngClass]="{'gap-6': !isMobileView}">
+        <!-- Engine Name -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Engine Name</mat-label>
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix></mat-icon>
+                <input [formControlName]="'ENGINE_NAME'" type="text" matInput placeholder="Engine Name"
+                    autocomplete="off">
+                <mat-error *ngIf="videoAiEngineForm.get('ENGINE_NAME').hasError('required')">** Engine Name is
+                    Required</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+</form>
+
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" [matDialogClose]="'cancel'">Cancel
+    </button>
+
+    <button class="ml-4 w-20" mat-flat-button type="button" [color]="'primary'" (click)="createVideoAiEngine()"
+        [disabled]="videoAiEngineForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Create</span>
+        <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+</div>

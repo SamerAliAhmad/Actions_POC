@@ -1,0 +1,122 @@
+<div class="flex flex-col justify-between pb-4 px-6 md:px-8" *ngIf="oVideo_ai_instance">
+
+    <!-- Title -->
+    <div class="px-6 sm:px-0 hidden sm:block">
+        <!-- Divider -->
+        <div class="mt-4 mb-4 border-t"></div>
+    </div>
+    <div class="flex flex-col min-w-0 overflow-hidden">
+        <div class="flex flex-col flex-auto items-left overflow-y-auto min-w-0 h-full" cdkScrollable>
+            <div class="flex flex-auto justify-left min-w-0 w-full sm:min-w-100 mr-auto">
+                <div class="flex-auto" style="height: fit-content;">
+                    <form [formGroup]="videoAiInstanceDetailsForm">
+
+                        <div class="grid sm:grid-cols-2 w-full" [ngClass]="{'gap-6': !isMobileView}">
+                            <!-- Instance Name -->
+                            <div class="sm:col-span-1">
+                                <mat-form-field class="w-full" [floatLabel]="'always'">
+                                    <mat-label>Instance Name</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'FRIENDLY_NAME'" type="text" matInput
+                                        placeholder="Friendly Name" autocomplete="off">
+                                    <mat-error
+                                        *ngIf="videoAiInstanceDetailsForm.get('FRIENDLY_NAME').hasError('required')">**
+                                        Friendly Name is Required</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="sm:col-span-1">
+                                <mat-form-field class="w-full" [floatLabel]="'always'">
+                                    <mat-label>Functional Name</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'FUNCTIONAL_NAME'" type="text" matInput
+                                        placeholder="Functional Name" autocomplete="off">
+                                    <mat-error
+                                        *ngIf="videoAiInstanceDetailsForm.get('FUNCTIONAL_NAME').hasError('required')">
+                                        **
+                                        Functional Name is Required</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="sm:col-span-1">
+                                <mat-form-field class="w-full" [floatLabel]="'always'">
+                                    <mat-label>Username</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'USERNAME'" type="text" matInput placeholder="Username"
+                                        autocomplete="off">
+                                    <mat-error
+                                        *ngIf="videoAiInstanceDetailsForm.get('USERNAME').hasError('required')">**
+                                        Username is Required</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="sm:col-span-1">
+                                <mat-form-field class="w-full" [floatLabel]="'always'">
+                                    <mat-label>Connection Type</mat-label>
+                                    <mat-select [formControlName]="'CONNECTION_TYPE_SETUP_ID'"
+                                        placeholder="Connection Type">
+                                        <mat-option *ngFor="let setup of oConnection_Type_Setup_category.List_Setup"
+                                            [value]="setup.SETUP_ID">
+                                            {{setup.VALUE}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="videoAiInstanceDetailsForm.get('CONNECTION_TYPE_SETUP_ID').hasError('required')">
+                                        ** Connection Type is
+                                        Required</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <mat-form-field class="w-full" [floatLabel]="'always'">
+                                    <mat-label>Connection Url</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:link'" matPrefix>
+                                    </mat-icon>
+                                    <input [formControlName]="'CONNECTION_URL'" type="text" matInput
+                                        placeholder="Connection Url" autocomplete="off">
+                                    <mat-error
+                                        *ngIf="videoAiInstanceDetailsForm.get('CONNECTION_URL').hasError('required')">**
+                                        Connection Url is Required</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="sm:col-span-2 flex mt-2" *ngIf="isForceConnection">
+                                <mat-checkbox class="gt-xs:pr-3 px-4 flex align-center w-full"
+                                    style="border-radius: 6px; border-width: 1px; border-color: #cbd5e1; height: 48px; margin-bottom: 16px;"
+                                    labelPosition="before" [formControlName]="'IS_FORCE_CONNECTION'">
+                                    Force Connection
+                                </mat-checkbox>
+                            </div>
+                            <div class="sm:col-span-2 flex mt-2">
+                                <mat-checkbox class="gt-xs:pr-3 px-4 flex align-center w-full"
+                                    style="border-radius: 6px; border-width: 1px; border-color: #cbd5e1; height: 48px; margin-bottom: 16px;"
+                                    labelPosition="before" [formControlName]="'IS_LPR'">
+                                    Enable License Plate Recognition
+                                </mat-checkbox>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="mt-2 mb-6 border-t"></div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button class="ml-4" mat-flat-button type="button" [color]="'primary'" [disabled]="isLoading"
+                            (click)="changePassword()">
+                            <span>Change Password</span>
+                        </button>
+                        <button class="ml-4" mat-stroked-button type="button" (click)="cancelChanges()">Reset
+                        </button>
+                        <button class="ml-4 w-20" mat-flat-button type="button" [color]="'primary'"
+                            [disabled]="videoAiInstanceDetailsForm.invalid || isLoading || !isThereChange"
+                            (click)="editVideoAiInstance()">
+                            <span *ngIf="!isLoading">Save</span>
+                            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

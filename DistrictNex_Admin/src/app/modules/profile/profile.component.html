@@ -1,0 +1,261 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto">
+    <div (click)="Go_To_Build_History()"
+        class="select-none cursor-pointer absolute bottom-3 right-3 inline-flex bg-gray-200 rounded-full px-3 py-1 text-secondary font-bold">
+        {{Build_Number}}</div>
+    <div class="flex flex-col w-full">
+
+        <div class="relative w-full h-50 sm:h-50">
+            <div class="absolute w-full h-full"
+                style="z-index: 2; opacity: 70%; background-color: var(--smartr-primary);">
+            </div>
+            <img class="absolute inset-0 object-cover w-full h-full" src="assets/images/backgrounds/bckgd.png">
+        </div>
+
+        <!-- View mode -->
+        <ng-container *ngIf="!isEditMode">
+            <div class="relative flex flex-col flex-auto items-center p-6 pt-0 pb-3 sm:p-12 sm:pt-0 sm:pb-3">
+                <div class="w-full">
+
+                    <div class="flex flex-row mt-6" style="align-items: center;">
+                        <div>
+                            <div class="text-4xl font-bold truncate">{{oUser_Details.FIRST_NAME}}
+                                {{oUser_Details.LAST_NAME}}</div>
+                            <div class="text-lg truncate">{{oUser_Details.USERNAME}}</div>
+                        </div>
+                        <div class="ml-auto" *ngIf="!isMobileView">
+                            <button mat-stroked-button (click)="openChangePasswordDialog()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:lock'"></mat-icon>
+                                <span class="ml-2">Change Password</span>
+                            </button>
+                            <button mat-stroked-button (click)="toggleEditMode(true)" class="ml-2">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                <span class="ml-2">Edit</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col mt-6 pt-6 border-t space-y-8">
+
+                        <ng-container *ngIf="oUser_Details.User_type_setup.VALUE">
+                            <div class="flex sm:items-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:briefcase'"></mat-icon>
+                                <div class="ml-6 leading-6">{{oUser_Details.User_type_setup.VALUE}}</div>
+                            </div>
+                        </ng-container>
+
+                        <!-- Email -->
+                        <ng-container *ngIf="oUser_Details.EMAIL">
+                            <div class="flex sm:items-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:mail'"></mat-icon>
+                                <div class="ml-6 leading-6">{{oUser_Details.EMAIL.toLowerCase()}}</div>
+                            </div>
+                        </ng-container>
+
+                        <!-- Phone -->
+                        <ng-container *ngIf="oUser_Details.PHONE_NUMBER">
+                            <div class="flex sm:items-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:phone'"></mat-icon>
+                                <div class="ml-6 leading-6">{{oUser_Details.PHONE_NUMBER}}</div>
+                            </div>
+                        </ng-container>
+
+                        <!-- Phone -->
+                        <ng-container *ngIf="oUser_Details.IS_RECEIVE_EMAIL">
+                            <div class="flex sm:items-center">
+                                <mat-icon [svgIcon]="'mat_outline:check_circle'"></mat-icon>
+                                <div class="ml-6 leading-6">Receive Email Alert Notifications</div>
+                            </div>
+                        </ng-container>
+
+                        <!-- Phone -->
+                        <ng-container *ngIf="!oUser_Details.IS_RECEIVE_EMAIL">
+                            <div class="flex sm:items-center">
+                                <mat-icon [svgIcon]="'mat_outline:remove_circle_outline'"></mat-icon>
+                                <div class="ml-6 leading-6">Do Not Receive Email Alert Notifications</div>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class="text-center" *ngIf="isMobileView">
+                        <!-- Divider -->
+                        <div class="mt-6 mb-6 border-t"></div>
+
+                        <button mat-stroked-button (click)="openChangePasswordDialog()">
+                            <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:lock'"></mat-icon>
+                            <span class="ml-2">Change Password</span>
+                        </button>
+                        <button mat-stroked-button (click)="toggleEditMode(true)" class="ml-2">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                            <span class="ml-2">Edit</span>
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Edit mode -->
+        <ng-container *ngIf="isEditMode">
+            <div class="relative flex flex-col flex-auto items-center px-6 pb-3 sm:px-12">
+                <div class="w-full">
+                    <div class="flex flex-row mt-6" style="align-items: center;">
+                        <div>
+                            <div class="text-4xl font-bold truncate">{{oUser_Details.FIRST_NAME}}
+                                {{oUser_Details.LAST_NAME}}</div>
+                            <div class="text-lg truncate">{{oUser_Details.USERNAME}}</div>
+                        </div>
+                        <div class="ml-auto" *ngIf="!isMobileView">
+                            <button mat-stroked-button (click)="toggleEditMode(false)">
+                                <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:cancel'"></mat-icon>
+                                <span class="ml-2">Cancel</span>
+                            </button>
+                            <button mat-flat-button (click)="saveForm()" class="ml-2"
+                                [disabled]="profileForm.invalid || isLoading || !isThereChange">
+                                <mat-icon *ngIf="!isLoading" class="icon-size-5" [svgIcon]="'feather:save'"></mat-icon>
+                                <span *ngIf="!isLoading" class="ml-2">Save</span>
+                                <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+                                </mat-progress-spinner>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col mt-6 pt-6 pb-2 border-t space-y-8">
+
+                        <!-- Title -->
+                        <ng-container *ngIf="oUser_Details.User_type_setup.VALUE">
+                            <div class="flex sm:items-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:briefcase'"></mat-icon>
+                                <div class="ml-6 leading-6">{{oUser_Details.User_type_setup.VALUE}}</div>
+                            </div>
+                        </ng-container>
+
+                        <!-- Email -->
+                        <ng-container *ngIf="oUser_Details.EMAIL">
+                            <div class="flex sm:items-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:mail'"></mat-icon>
+                                <div class="ml-6 leading-6">{{oUser_Details.EMAIL.toLowerCase()}}</div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <form [formGroup]="profileForm" class="mt-4">
+                        <!-- Phone Number -->
+                        <div class="mt-2">
+                            <mat-form-field [floatLabel]="'always'" class="smartr-mat-no-subscript w-full">
+                                <mat-label>Phone Number</mat-label>
+                                <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+                                <input type="text" matInput [formControlName]="'PHONE_NUMBER'" autocomplete="off"
+                                    [placeholder]="'Phone Number'">
+                                <mat-error *ngIf="profileForm.get('PHONE_NUMBER').hasError('required')">**
+                                    Phone Number is Required</mat-error>
+                                <mat-error *ngIf="profileForm.get('PHONE_NUMBER').hasError('pattern')">**
+                                    Invalid Phone Number</mat-error>
+                                <mat-error *ngIf="profileForm.get('PHONE_NUMBER').hasError('minlength')">**
+                                    Phone Number Should be a Minimum of 5 Characters</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="sm:col-span-1 flex mt-2" style="align-items: center;">
+                            <mat-checkbox class="pr-2 pl-5 flex align-center w-full bg-white"
+                                style="border-radius: 6px; border-width: 1px; border-color: #cbd5e1; height: 48px; margin-top: 8px !important;"
+                                labelPosition="before" [formControlName]="'IS_RECEIVE_EMAIL'">
+                                Receive Email Alert Notifications
+                            </mat-checkbox>
+                        </div>
+                    </form>
+                    <div class="text-center" *ngIf="isMobileView">
+                        <!-- Divider -->
+                        <div class="mt-6 mb-6 border-t"></div>
+
+                        <button mat-stroked-button (click)="toggleEditMode(false)">
+                            <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:cancel'"></mat-icon>
+                            <span class="ml-2">Cancel</span>
+                        </button>
+                        <button mat-flat-button (click)="saveForm()" class="ml-2"
+                            [disabled]="profileForm.invalid || isLoading || !isThereChange">
+                            <mat-icon class="icon-size-5" [svgIcon]="'feather:save'"></mat-icon>
+                            <span class="ml-2">Save</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #changePasswordDialog>
+    <h2 matDialogTitle>Change Password</h2>
+    <mat-dialog-content>
+        <form [formGroup]="changePasswordForm">
+            <mat-form-field [floatLabel]="'always'" class="flex-auto w-full">
+                <mat-label>Old Password</mat-label>
+                <input matInput type="password" name="oldPassword" [formControlName]="'oldPassword'"
+                    [placeholder]="'Old Password'" autocomplete="off" #oldPasswordField>
+                <button mat-icon-button type="button"
+                    (click)="oldPasswordField.type === 'password' ? oldPasswordField.type = 'text' : oldPasswordField.type = 'password'"
+                    matSuffix>
+                    <mat-icon class="icon-size-5" *ngIf="oldPasswordField.type === 'password'"
+                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                    <mat-icon class="icon-size-5" *ngIf="oldPasswordField.type === 'text'"
+                        [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                </button>
+                <mat-error *ngIf="changePasswordForm.controls.oldPassword.hasError('required')">
+                    <strong>* </strong>This field is required.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="'always'" class="flex-auto w-full">
+                <mat-label>New Password</mat-label>
+                <input matInput type="password" name="newPassword" [formControlName]="'newPassword'"
+                    [placeholder]="'New Password'" autocomplete="off" #newPasswordField>
+                <button mat-icon-button type="button" (click)="autoGeneratePassword()"
+                    matTooltip="Generate Random Password">
+                    <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:password'"></mat-icon>
+                </button>
+                <button mat-icon-button type="button"
+                    (click)="newPasswordField.type === 'password' ? newPasswordField.type = 'text' : newPasswordField.type = 'password'"
+                    matSuffix>
+                    <mat-icon class="icon-size-5" *ngIf="newPasswordField.type === 'password'"
+                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                    <mat-icon class="icon-size-5" *ngIf="newPasswordField.type === 'text'"
+                        [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                </button>
+                <mat-error *ngIf="changePasswordForm.controls.newPassword.hasError('required')">
+                    <strong>* </strong>This field is required.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="'always'" class="flex-auto w-full">
+                <mat-label>Confirm New Password</mat-label>
+                <input matInput type="password" name="confirmNewPassword" [formControlName]="'confirmPassword'"
+                    [placeholder]="'Confirm New Password'" autocomplete="off" #confirmPasswordField>
+                <button mat-icon-button type="button"
+                    (click)="confirmPasswordField.type === 'password' ? confirmPasswordField.type = 'text' : confirmPasswordField.type = 'password'"
+                    matSuffix>
+                    <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'password'"
+                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                    <mat-icon class="icon-size-5" *ngIf="confirmPasswordField.type === 'text'"
+                        [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                </button>
+                <mat-error *ngIf="changePasswordForm.controls.confirmPassword.hasError('required')">
+                    <strong>* </strong>This field is required.
+                </mat-error>
+            </mat-form-field>
+            <password-strength-meter [password]="changePasswordForm.value.newPassword" [enableFeedback]="true"
+                (strengthChange)="passwordStrength = $event">
+            </password-strength-meter>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions class="justify-end m-0 p-0">
+        <button mat-flat-button matDialogClose class="cancel-btn" (click)="cancelPasswordChange()"
+            [disabled]="isLoading">
+            <span *ngIf="!isLoading">Cancel</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+        <button mat-flat-button (click)="changePassword()" [disabled]="changePasswordForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Change</span>
+            <mat-progress-spinner *ngIf="isLoading" [diameter]="24" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+        </button>
+    </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,185 @@
+<div class="flex flex-col h-full w-full sm:w-auto">
+    <div class="flex flex-col gap-3">
+        <div class="grid sm:grid-cols-3 gap-3">
+            <smartr-card class="flex flex-col w-full p-8">
+                <div class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                    <!-- On Hover Overlay -->
+                    <div class="changePicture">
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50"></div>
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                            <button mat-icon-button (click)="openChangePictureDialog('Dark_Square_Logo', false)">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deletePicture('Dark_Square_Logo')">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Profile Picture -->
+                    <ng-container *ngIf="oOrganization.DARK_SQUARE_LOGO_URL">
+                        <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                            [src]="oOrganization.DARK_SQUARE_LOGO_URL">
+                    </ng-container>
+                    <ng-container *ngIf="!oOrganization.DARK_SQUARE_LOGO_URL">
+                        <div
+                            class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                            <mat-icon class="icon-size-10" svgIcon="heroicons_outline:library"></mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+                <hr class="w-full border-t my-2">
+                <div class="flex flex-col mt-2">
+                    <div class="text-lg font-semibold leading-tight text-center">
+                        Square Logo for Light Backgounds</div>
+                </div>
+            </smartr-card>
+            <smartr-card class="flex flex-col w-full p-8">
+                <div class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                    <!-- On Hover Overlay -->
+                    <div class="changePicture">
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50"></div>
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                            <button mat-icon-button (click)="openChangePictureDialog('Dark_Rect_Logo', false)">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deletePicture('Dark_Rect_Logo')">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Profile Picture -->
+                    <ng-container *ngIf="oOrganization.DARK_RECTANGLE_LOGO_URL">
+                        <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                            [src]="oOrganization.DARK_RECTANGLE_LOGO_URL">
+                    </ng-container>
+                    <ng-container *ngIf="!oOrganization.DARK_RECTANGLE_LOGO_URL">
+                        <div
+                            class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                            <mat-icon class="icon-size-10" svgIcon="heroicons_outline:library"></mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+                <hr class="w-full border-t my-2">
+                <div class="flex flex-col mt-2">
+                    <div class="text-lg font-semibold leading-tight text-center">
+                        Rectangle Logo for Light Backgounds</div>
+                </div>
+            </smartr-card>
+            <smartr-card class="flex flex-col p-8">
+                <div class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                    <!-- On Hover Overlay -->
+                    <div class="changePicture">
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50"></div>
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                            <button mat-icon-button (click)="openChangePictureDialog('Favicon', true)">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deletePicture('Favicon')">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Profile Picture -->
+                    <ng-container *ngIf="oOrganization.ORGANIZATION_FAVICON_URL">
+                        <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                            [src]="oOrganization.ORGANIZATION_FAVICON_URL">
+                    </ng-container>
+                    <ng-container *ngIf="!oOrganization.ORGANIZATION_FAVICON_URL">
+                        <div
+                            class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase bg-gray-200 text-gray-600">
+                            <mat-icon class="icon-size-10" svgIcon="heroicons_outline:library"></mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+                <hr class="w-full border-t my-2">
+                <div class="flex flex-col mt-2">
+                    <div class="text-lg font-semibold leading-tight text-center">
+                        Website Favicon</div>
+                    <div class="text-md mt-1 italic leading-tight text-center">
+                        (.ico only accepted)</div>
+                </div>
+            </smartr-card>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3">
+            <smartr-card class="flex flex-col w-full p-8" style="background-color: black;">
+                <div class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                    <!-- On Hover Overlay -->
+                    <div class="changePicture">
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50"></div>
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                            <button mat-icon-button (click)="openChangePictureDialog('Light_Square_Logo', false)">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deletePicture('Light_Square_Logo')">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Profile Picture -->
+                    <ng-container *ngIf="oOrganization.LIGHT_SQUARE_LOGO_URL">
+                        <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                            [src]="oOrganization.LIGHT_SQUARE_LOGO_URL">
+                    </ng-container>
+                    <ng-container *ngIf="!oOrganization.LIGHT_SQUARE_LOGO_URL">
+                        <div
+                            class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase">
+                            <mat-icon class="icon-size-10 text-white" svgIcon="heroicons_outline:library"></mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+                <hr class="w-full border-t my-2">
+                <div class="flex flex-col mt-2">
+                    <div class="text-lg font-semibold leading-tight text-center text-white">
+                        Square Logo for Dark Backgrounds</div>
+                </div>
+            </smartr-card>
+            <smartr-card class="flex flex-col w-full p-8" style="background-color: black;">
+                <div class="rounded-2xl relative flex overflow-hidden justify-center place-self-center mb-3">
+                    <!-- On Hover Overlay -->
+                    <div class="changePicture">
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl bg-black bg-opacity-50"></div>
+                        <div class="absolute inset-0 w-36 h-36 rounded-2xl flex items-center justify-center">
+                            <button mat-icon-button (click)="openChangePictureDialog('Light_Rect_Logo', false)">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deletePicture('Light_Rect_Logo')">
+                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Profile Picture -->
+                    <ng-container *ngIf="oOrganization.LIGHT_RECTANGLE_LOGO_URL">
+                        <img class="w-36 h-36 object-contain rounded-2xl ring-4 ring-bg-card"
+                            [src]="oOrganization.LIGHT_RECTANGLE_LOGO_URL">
+                    </ng-container>
+                    <ng-container *ngIf="!oOrganization.LIGHT_RECTANGLE_LOGO_URL">
+                        <div
+                            class="flex items-center justify-center w-36 h-36 rounded-2xl text-7xl uppercase">
+                            <mat-icon class="icon-size-10 text-white" svgIcon="heroicons_outline:library"></mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+                <hr class="w-full border-t my-2">
+                <div class="flex flex-col mt-2">
+                    <div class="text-lg font-semibold leading-tight text-center text-white">
+                        Rectangle Logo for Dark Backgrounds</div>
+                </div>
+            </smartr-card>
+        </div>
+    </div>
+</div>
+
+<progress-spinner-dialog [color]="color" [mode]="mode" [value]="value" [backdropEnabled]="true"
+    [positionGloballyCenter]="true" [displayProgressSpinner]="isProgressSpinnerVisible">
+</progress-spinner-dialog>

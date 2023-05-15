@@ -1,0 +1,88 @@
+<div class="flex flex-col min-w-0 overflow-hidden">
+    <div class="flex flex-col flex-auto h-full dark:bg-transparent">
+        <!-- Main -->
+
+        <!-- Header -->
+        <div class="flex flex-col justify-between pb-8 px-6 md:px-8 border-b">
+
+            <!-- Title -->
+            <div>
+                <div class="ml-10 font-medium text-secondary">
+                    <ng-container *ngIf="oList_Kpi; else loadingDataSources">
+                        {{oList_Kpi.length}} {{oList_Kpi.length | i18nPlural: {
+                        '=0' : 'No Kpis ',
+                        '=1' : 'Kpi',
+                        'other': 'Kpis'
+                        } }}
+                    </ng-container>
+                    <ng-template #loadingDataSources>
+                        Loading...
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center mt-4 gap-4">
+                <mat-form-field class="smartr-mat-dense smartr-mat-no-subscript smartr-mat-rounded w-full">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input matInput #kpiSearchInput [autocomplete]="'off'"
+                        [placeholder]="'Search Kpis'">
+                </mat-form-field>
+                <!-- Add kpi button -->
+                <button class="w-full sm:w-auto" mat-flat-button (click)="createKpi()">
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1">Add</span>
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="!oList_Kpi" class="loader-container">
+            <div class="loader"></div>
+        </div>
+        <!-- organizations list -->
+        <div class="relative bg-card dark:bg-transparent flex flex-col flex-auto overflow-hidden">
+            <ng-container *ngIf="oList_Kpi">
+                <ng-container *ngIf="oList_Kpi.length>0; else noDataSources">
+                    <div
+                        class="z-10 flex items-center sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-100">
+                        <div class="flex flex-0 items-center justify-center h-10">
+                        </div>
+                        <div class="grid grid-cols-5 w-full">
+                            <div class="min-w-0 ml-4 col-span-3">
+                                <div class="font-medium leading-5 truncate">Name</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto overflow-y-auto">
+                        <ng-container
+                            *ngFor="let kpi of oList_Kpi | filter: kpiSearchInput.value; let i = index; let first = first">
+                            <!-- Organization -->
+                            <a [ngClass]="first?'border-t':''"
+                                class="flex items-center px-6 py-5 md:px-8 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover"
+                                (click)="Open_Kpi_Details(kpi)">
+                                <div class="grid grid-cols-5 w-full items-center">
+                                    <div class="min-w-0 ml-4 col-span-3">
+                                        <div class="flex flex-col">
+                                            <div class="font-medium leading-5 truncate">
+                                                {{kpi.NAME}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!-- No organizations -->
+            <ng-template #noDataSources>
+                <div class="flex items-center justify-center p-6 sm:p-10">
+                    <div class="mt-2 text-lg md:text-xl font-medium tracking-tight text-center text-secondary">
+                        No Data Sources</div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>

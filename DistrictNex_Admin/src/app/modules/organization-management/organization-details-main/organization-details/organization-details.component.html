@@ -1,0 +1,78 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <ng-container *ngIf="oOrganization">
+        <mat-drawer-container class="flex-auto sm:h-full">
+            <mat-drawer id="custom-scrollbar" class="sm:w-80 dark:bg-gray-900 w-100" [autoFocus]="false"
+                [mode]="drawerMode" [opened]="isDrawerOpened" #drawer>
+                <div class="flex items-center justify-between m-8">
+                    <div class="font-extrabold text-3xl tracking-tight leading-none">Organization Details
+                    </div>
+                    <div class="lg:hidden">
+                        <button mat-icon-button (click)="drawer.close()">
+                            <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-col divide-y border-t border-b">
+                    <ng-container *ngFor="let panel of panelList;">
+                        <div class="flex px-8 py-5 cursor-pointer" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel.id !== panel.id,
+                                        'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel.id === panel.id}"
+                            (click)="goToPanelfromLoc(panel.id)">
+                            <div class="ml-3">
+                                <div class="font-medium leading-6"
+                                    [ngClass]="{'text-primary dark:text-primary-500': selectedPanel && selectedPanel.id === panel.id}">
+                                    {{panel.name}}
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </mat-drawer>
+            <mat-drawer-content class="flex flex-col flex-auto"
+                [ngClass]="selectedPanel.name == 'Organization Level Access'?'overflow-hidden':''">
+                <div class="flex items-center mb-2 pt-2 sm:pt-6 px-6">
+                    <button mat-icon-button (click)="drawer.toggle()">
+                        <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+                    </button>
+                    <div class="ml-2 text-2xl font-bold tracking-tight leading-none">
+                        {{selectedPanel.name}}
+                    </div>
+                </div>
+                <ng-container *ngIf="selectedPanel.name == 'General Details'">
+                    <general-details class="flex flex-col flex-auto px-6 pb-6"></general-details>
+                </ng-container>
+                <ng-container
+                    *ngIf="selectedPanel.name == 'Organization Level Access' && oOrganization.ORGANIZATION_TYPE_SETUP_ID != Super_Organization_Setup_ID">
+                    <organization-access-control
+                        class="flex flex-col flex-auto overflow-hidden"></organization-access-control>
+                </ng-container>
+                <ng-container
+                    *ngIf="selectedPanel.name == 'Organization Data Access' && oOrganization.ORGANIZATION_TYPE_SETUP_ID != Super_Organization_Setup_ID">
+                    <organization-data-access
+                        class="flex flex-col flex-auto overflow-hidden"></organization-data-access>
+                </ng-container>
+                <ng-container
+                    *ngIf="selectedPanel.name == 'Organization Module Access' && oOrganization.ORGANIZATION_TYPE_SETUP_ID != Super_Organization_Setup_ID">
+                    <organization-module-access class="flex flex-col flex-auto px-6 pb-6"></organization-module-access>
+                </ng-container>
+                <ng-container *ngIf="selectedPanel.name == 'User Management'">
+                    <user-management class="flex flex-col flex-auto px-6 pb-6"></user-management>
+                </ng-container>
+                <ng-container *ngIf="selectedPanel.name == 'User Quota'">
+                    <user-quota class="flex flex-col flex-auto px-6 pb-6"></user-quota>
+                </ng-container>
+                <ng-container *ngIf="selectedPanel.name == 'Theme Settings'">
+                    <theme-settings [oOrganization]="oOrganization" class="flex flex-col flex-auto px-6 pb-6"></theme-settings>
+                </ng-container>
+                <ng-container *ngIf="selectedPanel.name == 'Organization Images'">
+                    <organization-images class="flex flex-col flex-auto px-6 pb-6"></organization-images>
+                </ng-container>
+                <ng-container *ngIf="selectedPanel.name == 'Data Settings'">
+                    <data-settings class="flex flex-col flex-auto px-6 pb-6"></data-settings>
+                </ng-container>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </ng-container>
+    <div *ngIf="!oOrganization" class="loader-container">
+        <div class="loader"></div>
+    </div>
+</div>

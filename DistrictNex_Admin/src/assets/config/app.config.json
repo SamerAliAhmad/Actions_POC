@@ -1,0 +1,5 @@
+{
+    "Environment": "Development",
+    "APIUrl": "https://dev.api.picacity.ai",
+    "SignalR_Realtime_Server_Endpoint": "https://dev.websockets.picacity.ai"
+}

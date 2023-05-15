@@ -1,0 +1,261 @@
+<div class="flex items-center my-4">
+    <div class="text-3xl font-bold tracking-tight leading-none">{{isCreating?'Create':'Edit'}} User KPI Access
+    </div>
+</div>
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+<mat-dialog-content class="flex flex-col overflow-hidden">
+    <form #dataAccessForm="ngForm" class="grid sm:grid-cols-2 items-center w-full gap-x-6">
+        <!-- #region Selected Level -->
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'District'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>District</mat-label>
+                <mat-select *ngIf="oList_District" [(ngModel)]="LEVEL_ID" [disabled]="!isCreating"
+                    (selectionChange)="Update_Level_kpi_List()" name="district_level_id" matInput placeholder="District"
+                    autocomplete="off" required>
+                    <mat-option *ngFor="let oDistrict of oList_District" [value]="oDistrict.DISTRICT_ID">
+                        {{oDistrict.NAME}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>** District is Required</mat-error>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Area'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Area</mat-label>
+                <mat-select *ngIf="oList_Area" [(ngModel)]="LEVEL_ID" [disabled]="!isCreating"
+                    (selectionChange)="Update_Level_kpi_List()" name="area_level_id" matInput placeholder="Area"
+                    autocomplete="off" required>
+                    <mat-option *ngFor="let oArea of oList_Area" [value]="oArea.AREA_ID">
+                        {{oArea.NAME}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>** Area is Required</mat-error>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Site'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Site</mat-label>
+                <mat-select *ngIf="oList_Site" [(ngModel)]="LEVEL_ID" [disabled]="!isCreating"
+                    (selectionChange)="Update_Level_kpi_List()" name="site_level_id" matInput placeholder="Site"
+                    autocomplete="off" required>
+                    <mat-option *ngFor="let oSite of oList_Site" [value]="oSite.SITE_ID">
+                        {{oSite.NAME}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>** Site is Required</mat-error>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Entity'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Entity</mat-label>
+                <mat-select *ngIf="oList_Entity" [(ngModel)]="LEVEL_ID" [disabled]="!isCreating"
+                    (selectionChange)="Update_Level_kpi_List()" name="entity_level_id" matInput placeholder="Entity"
+                    autocomplete="off" required>
+                    <mat-option *ngFor="let oEntity of oList_Entity" [value]="oEntity.ENTITY_ID">
+                        {{oEntity.NAME}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>** Entity is Required</mat-error>
+            </mat-form-field>
+        </div>
+        <!-- #endregion -->
+        <div class="gap-x-6">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>Dimension</mat-label>
+                <mat-select *ngIf="oList_Dimension" [(ngModel)]="oDimension" name="oDimension" matInput
+                    placeholder="Dimension" autocomplete="off" required>
+                    <mat-option *ngFor="let oDimension of oList_Dimension_filtered" [value]="oDimension">
+                        {{oDimension.NAME}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>** Dimension is Required</mat-error>
+            </mat-form-field>
+        </div>
+        <!-- #region List LeveL_kpi -->
+        <div *ngIf="oDimension && LEVEL_ID && oSelected_Data_access_level_Setup.VALUE == 'District'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>KPI</mat-label>
+                <mat-select [(ngModel)]="oSelected_District_kpi_user_access" name="oSelected_District_kpi_user_access"
+                    matInput placeholder="KPI" autocomplete="on">
+                    <mat-option *ngFor="let oDistrict_kpi of oList_Available_District_kpi_user_access"
+                        [value]="oDistrict_kpi"
+                        [ngClass]="{'mat-option-hidden': oDistrict_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID != oDimension.DIMENSION_ID}">
+                        {{oDistrict_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oDimension && LEVEL_ID && oSelected_Data_access_level_Setup.VALUE == 'Area'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>KPI</mat-label>
+                <mat-select [(ngModel)]="oSelected_Area_kpi_user_access" name="oSelected_Area_kpi_user_access" matInput
+                    placeholder="KPI" autocomplete="on">
+                    <mat-option *ngFor="let oArea_kpi of oList_Available_Area_kpi_user_access" [value]="oArea_kpi"
+                        [ngClass]="{'mat-option-hidden': oArea_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID != oDimension.DIMENSION_ID}">
+                        {{oArea_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oDimension && LEVEL_ID && oSelected_Data_access_level_Setup.VALUE == 'Site'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>KPI</mat-label>
+                <mat-select [(ngModel)]="oSelected_Site_kpi_user_access" name="oSelected_Site_kpi_user_access" matInput
+                    placeholder="KPI" autocomplete="on">
+                    <mat-option *ngFor="let oSite_kpi of oList_Available_Site_kpi_user_access" [value]="oSite_kpi"
+                        [ngClass]="{'mat-option-hidden': oSite_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID != oDimension.DIMENSION_ID}">
+                        {{oSite_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngIf="oDimension && LEVEL_ID && oSelected_Data_access_level_Setup.VALUE == 'Entity'">
+            <mat-form-field class="w-full" [floatLabel]="'always'">
+                <mat-label>KPI</mat-label>
+                <mat-select [(ngModel)]="oSelected_Entity_kpi_user_access" name="oSelected_Entity_kpi_user_access"
+                    matInput placeholder="KPI" autocomplete="on">
+                    <mat-option *ngFor="let oEntity_kpi of oList_Available_Entity_kpi_user_access" [value]="oEntity_kpi"
+                        [ngClass]="{'mat-option-hidden': oEntity_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID != oDimension.DIMENSION_ID}">
+                        {{oEntity_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- #endregion -->
+        <!-- #region Add Level Button -->
+        <div *ngIf="oDimension && LEVEL_ID">
+            <!-- #region Add Button -->
+            <button *ngIf="oSelected_Data_access_level_Setup.VALUE == 'District'" class="mt-2 w-22" mat-flat-button
+                type="button" (click)="Add_Level_kpi()" [disabled]="!oSelected_District_kpi_user_access">Add
+            </button>
+            <button *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Area'" class="mt-2 w-22" mat-flat-button
+                type="button" (click)="Add_Level_kpi()" [disabled]="!oSelected_Area_kpi_user_access">Add
+            </button>
+            <button *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Site'" class="mt-2 w-22" mat-flat-button
+                type="button" (click)="Add_Level_kpi()" [disabled]="!oSelected_Site_kpi_user_access">Add
+            </button>
+            <button *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Entity'" class="mt-2 w-22" mat-flat-button
+                type="button" (click)="Add_Level_kpi()" [disabled]="!oSelected_Entity_kpi_user_access">Add
+            </button>
+            <!-- #endregion -->
+            <button class="mt-2 ml-2 w-22" mat-flat-button type="button" (click)="Add_Add_Level_kpi_Per_Dimension()"
+                [disabled]="disableAddAllButton()">Add All
+            </button>
+            <mat-checkbox class="ml-4 w-40" name="AddToChildren" [(ngModel)]="AddToChildren">Apply to
+                Children</mat-checkbox>
+        </div>
+        <!-- #endregion -->
+    </form>
+    <!-- #region LIST_LEVEL_KPI  -->
+    <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'District' && oUser_data_access && oDimension && LEVEL_ID"
+        class="overflow-auto">
+        <div class="flex flex-col gap-4 mr-1">
+            <ng-container *ngFor="let oDistrict_kpi of oList_Selected_District_kpi_user_access; let i = index">
+                <ng-container
+                    *ngIf="i === 0 || getDimensionName(oDistrict_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID) !== getDimensionName(oList_Selected_District_kpi_user_access[i - 1].Organization_data_source_kpi.Kpi.DIMENSION_ID)">
+                    <div
+                        class="z-10 top-0 px-4 py-1 border-t border-b font-semibold uppercase text-primary bg-gray-50 dark:bg-gray-900">
+                        {{getDimensionName(oDistrict_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID)}}
+                    </div>
+                </ng-container>
+                <div
+                    class="flex flex-row flex-auto rounded-md items-center justify-between cursor-pointer bg-gray-200 p-1">
+                    <div class="ml-3">
+                        {{oDistrict_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </div>
+                    <button mat-icon-button class="ml-auto" (click)="Remove_Level_kpi(i)">
+                        <mat-icon class="text-red-600" svgIcon="heroicons_outline:trash"></mat-icon>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Area' && oUser_data_access && oDimension && LEVEL_ID"
+        class="overflow-auto">
+        <div class="flex flex-col gap-4 mr-1">
+            <ng-container *ngFor="let oArea_kpi of oList_Selected_Area_kpi_user_access; let i = index">
+                <ng-container
+                    *ngIf="i === 0 || getDimensionName(oArea_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID) !== getDimensionName(oList_Selected_Area_kpi_user_access[i - 1].Organization_data_source_kpi.Kpi.DIMENSION_ID)">
+                    <div
+                        class="z-10 top-0 px-4 py-1 border-t border-b font-semibold uppercase text-primary bg-gray-50 dark:bg-gray-900">
+                        {{getDimensionName(oArea_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID)}}
+                    </div>
+                </ng-container>
+                <div
+                    class="flex flex-row flex-auto rounded-md items-center justify-between cursor-pointer bg-gray-200 p-1">
+                    <div class="ml-3">
+                        {{oArea_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </div>
+                    <button mat-icon-button class="ml-auto" (click)="Remove_Level_kpi(i)">
+                        <mat-icon class="text-red-600" svgIcon="heroicons_outline:trash"></mat-icon>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Site' && oUser_data_access && oDimension && LEVEL_ID"
+        class="overflow-auto">
+        <div class="flex flex-col gap-4 mr-1">
+            <ng-container *ngFor="let oSite_kpi of oList_Selected_Site_kpi_user_access; let i = index">
+                <ng-container
+                    *ngIf="i === 0 || getDimensionName(oSite_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID) !== getDimensionName(oList_Selected_Site_kpi_user_access[i - 1].Organization_data_source_kpi.Kpi.DIMENSION_ID)">
+                    <div
+                        class="z-10 top-0 px-4 py-1 border-t border-b font-semibold uppercase text-primary bg-gray-50 dark:bg-gray-900">
+                        {{getDimensionName(oSite_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID)}}
+                    </div>
+                </ng-container>
+                <div
+                    class="flex flex-row flex-auto rounded-md items-center justify-between cursor-pointer bg-gray-200 p-1">
+                    <div class="ml-3">
+                        {{oSite_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </div>
+                    <button mat-icon-button class="ml-auto" (click)="Remove_Level_kpi(i)">
+                        <mat-icon class="text-red-600" svgIcon="heroicons_outline:trash"></mat-icon>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div *ngIf="oSelected_Data_access_level_Setup.VALUE == 'Entity' && oUser_data_access && oDimension && LEVEL_ID"
+        class="overflow-auto">
+        <div class="flex flex-col gap-4 mr-1">
+            <ng-container *ngFor="let oEntity_kpi of oList_Selected_Entity_kpi_user_access; let i = index">
+                <ng-container
+                    *ngIf="i === 0 || getDimensionName(oEntity_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID) !== getDimensionName(oList_Selected_Entity_kpi_user_access[i - 1].Organization_data_source_kpi.Kpi.DIMENSION_ID)">
+                    <div
+                        class="z-10 top-0 px-4 py-1 border-t border-b font-semibold uppercase text-primary bg-gray-50 dark:bg-gray-900">
+                        {{getDimensionName(oEntity_kpi.Organization_data_source_kpi.Kpi.DIMENSION_ID)}}
+                    </div>
+                </ng-container>
+                <div
+                    class="flex flex-row flex-auto rounded-md items-center justify-between cursor-pointer bg-gray-200 p-1">
+                    <div class="ml-3">
+                        {{oEntity_kpi.Organization_data_source_kpi.Kpi.NAME}}
+                    </div>
+                    <button mat-icon-button class="ml-auto" (click)="Remove_Level_kpi(i)">
+                        <mat-icon class="text-red-600" svgIcon="heroicons_outline:trash"></mat-icon>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <!-- #endregion -->
+</mat-dialog-content>
+<!-- Divider -->
+<div class="mt-4 mb-4 border-t"></div>
+<!-- Actions -->
+<div class="flex items-center justify-end">
+    <button class="ml-4" mat-stroked-button type="button" matDialogClose>Cancel
+    </button>
+    <button class="ml-4 w-20" mat-flat-button type="button" (click)="Reset_Organization_Data_Access()"
+        [disabled]="loading">
+        <span>Reset</span>
+    </button>
+    <button class="ml-4 w-20" mat-flat-button type="button" (click)="Edit_Organization_Data_Access()"
+        [disabled]="!isListChanged || loading">
+        <span *ngIf="!loading">Update</span>
+        <mat-progress-spinner *ngIf="loading" [diameter]="24" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+    </button>
+</div>

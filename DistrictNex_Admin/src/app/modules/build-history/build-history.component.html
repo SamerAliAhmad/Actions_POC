@@ -1,0 +1,49 @@
+<div class="absolute inset-0 flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="mt-2 flex flex-row items-center gap-4">
+                <button mat-icon-button matTooltip="Go Back" (click)="Go_Back()">
+                    <mat-icon [svgIcon]="'heroicons_outline:arrow-left'" class="text-iconColor"></mat-icon>
+                </button>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Build History
+                </h2>
+            </div>
+        </div>
+    </div>
+    <ng-container *ngIf="oList_Build_Version_With_Log_List.length>0 else noBuildHistory">
+        <div class="p-6 sm:p-10 grid sm:grid-cols-1 gap-6 sm:gap-10 overflow-y-auto">
+            <div *ngFor="let oBuild_Version_With_Log_List of oList_Build_Version_With_Log_List"
+                class="p-8 rounded-2xl shadow bg-card flex-1 prose prose-sm max-w-full">
+                <div>
+                    <h2 class="select-none my-0">v{{oBuild_Version_With_Log_List.BUILD_VERSION}}</h2>
+                    <div *ngIf="oBuild_Version_With_Log_List.BUILD_DATE"
+                        class="font-semibold text-md select-none text-secondary">
+                        {{oBuild_Version_With_Log_List.BUILD_DATE | date: 'mediumDate'}}</div>
+                </div>
+                <hr *ngIf="Add_Divider(oBuild_Version_With_Log_List)" class="mt-6">
+                <ng-container *ngFor="let log of oBuild_Version_With_Log_List.LOG_LIST">
+                    <ng-container *ngIf="log.Description.length>0">
+                        <div class="mt-8">
+                            <span
+                                class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold select-none">{{log.Type}}</span>
+                            <ul>
+                                <ng-container *ngFor="let listItem of log.Description">
+                                    <li>{{listItem}}</li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noBuildHistory>
+        <div class="text-4xl self-center m-auto select-none">
+            No Build History
+        </div>
+    </ng-template>
+</div>

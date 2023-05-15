@@ -1,0 +1,47 @@
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 2em;
+}
+
+.mat-table {
+    background-color: transparent !important;
+}
+
+:host ::ng-deep mat-form-field {
+    .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+}
+
+.search-side-button {
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+@media (min-width: 768px) {
+    .mat-row .mat-cell {
+        border-bottom: 1px solid transparent;
+        border-top: 1px solid transparent;
+    }
+
+    .mat-row:hover .mat-cell {
+        border-color: currentColor;
+    }
+}
+
+@media (max-width: 768px) {
+    .mat-row .mat-cell:first-child {
+        font-weight: bold;
+    }
+}
+
+.mat-paginator-sticky {
+    bottom: 0px;
+    position: sticky;
+    z-index: 10;
+}
+
+:host ::ng-deep .mat-paginator-container {
+    justify-content: space-between;
+}
