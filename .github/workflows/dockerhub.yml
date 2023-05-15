@@ -3,7 +3,7 @@ name: Build and Push Docker Images
 on:
   push:
     tags:
-      - "districtnex-v-*"
+      - "districtnex-v*"
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
