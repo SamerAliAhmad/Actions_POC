@@ -1,0 +1,719 @@
+{
+    "Routes": [
+        {
+            "DownstreamPathTemplate": "/Api/CorrelationCalculation/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5100
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/CorrelationCalculation/{everything}",
+            "UpstreamHttpMethod": [
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "CorrelationCalculation_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/AssetManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5004
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/AssetManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "AssetManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/SmartLivingDimension/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5024
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/SmartLivingDimension/{everything}",
+            "UpstreamHttpMethod": [],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "SmartLivingDimension_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/KPIExtractionEngine/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5012
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/KPIExtractionEngine/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "KPIExtractionEngine_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/MobilityDimension/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5014
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/MobilityDimension/{everything}",
+            "UpstreamHttpMethod": [],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "MobilityDimension_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/ShareView/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5022
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/ShareView/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "ShareView_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/SpaceManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5025
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/SpaceManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "SpaceManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/Reporting/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5019
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/Reporting/{everything}",
+            "UpstreamHttpMethod": [
+                "POST",
+                "GET"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "Reporting_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/DistrictManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5006
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/DistrictManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "DELETE",
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "DistrictManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/KPIManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5013
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/KPIManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "KPIManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/TopLevelManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5027
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/TopLevelManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "TopLevelManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/SustainabilityDimension/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5026
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/SustainabilityDimension/{everything}",
+            "UpstreamHttpMethod": [],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "SustainabilityDimension_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/EntityManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5007
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/EntityManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "EntityManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/RegionManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5018
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/RegionManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "RegionManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/FloorManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5009
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/FloorManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "FloorManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/PlatformLogging/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5017
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/PlatformLogging/{everything}",
+            "UpstreamHttpMethod": [
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "PlatformLogging_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/DimensionManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5005
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/DimensionManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "DimensionManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/SiteManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5023
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/SiteManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "DELETE",
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "SiteManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/OrganizationManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5016
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/OrganizationManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "OrganizationManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/SettingsManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5021
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/SettingsManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "DELETE",
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "SettingsManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/InsightsManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5011
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/InsightsManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "InsightsManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/VideoAIEngineManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5030
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/VideoAIEngineManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "DELETE",
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "VideoAIEngineManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/FileManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5008
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/FileManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "DELETE",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "FileManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/AreaManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5003
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/AreaManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "DELETE",
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "AreaManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/CloudInterface/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5010
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/CloudInterface/{everything}",
+            "UpstreamHttpMethod": [
+                "GET"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "CloudInterface_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/UserAuthentication/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5028
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/UserAuthentication/{everything}",
+            "UpstreamHttpMethod": [
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "UserAuthentication_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/UserManagement/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5029
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/UserManagement/{everything}",
+            "UpstreamHttpMethod": [
+                "GET",
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "UserManagement_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/SecurityDimension/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5020
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/SecurityDimension/{everything}",
+            "UpstreamHttpMethod": [
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "SecurityDimension_caching"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/Api/MethodMonitoring/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5001
+                }
+            ],
+            "UpstreamPathTemplate": "/Api/MethodMonitoring/{everything}",
+            "UpstreamHttpMethod": [
+                "POST"
+            ],
+            "QoSOptions": {
+                "RetryCount": 2,
+                "TimeoutValue": 3600000,
+                "DurationOfBreak": 60000,
+                "ExceptionsAllowedBeforeBreaking": 3
+            },
+            "FileCacheOptions": {
+                "TtlSeconds": 15,
+                "Region": "MethodMonitoring_caching"
+            }
+        }
+    ]
+}

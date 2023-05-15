@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
+COPY ["Video_AI_Engine_Management_Cron/", "Video_AI_Engine_Management_Cron/"]
+COPY ["Assets/", "./Assets"]
+COPY ["Service_Mesh/", "./Service_Mesh"]
+
+WORKDIR "/Video_AI_Engine_Management_Cron"
+
+RUN dotnet build "Video_AI_Engine_Management_Cron.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Video_AI_Engine_Management_Cron.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+ENTRYPOINT ["dotnet", "Video_AI_Engine_Management_Cron.dll"]

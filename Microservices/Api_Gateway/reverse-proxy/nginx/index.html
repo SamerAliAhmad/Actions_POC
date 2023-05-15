@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DistrictNex | API</title>
+    <link rel="icon" type="image/png" href="https://dev.districtnex.picacity.ai/favicon.ico">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        html {
+            display: table;
+            margin: auto;
+        }
+
+        body {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 150px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #dd1010a1;
+            user-select: none;
+            /* Standard */
+        }
+
+        h3 {
+            font-size: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 30px;
+            color: #2C2E30;
+            user-select: none;
+            /* Standard */
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 50px;
+            color: #9d9191;
+            user-select: none;
+            text-align: center;
+
+        }
+
+        button {
+            padding: 15px 30px;
+            background-color: #8F3293;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            font-size: 20px;
+            border: 0;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img style="width: 40%; min-width: 300px;"
+            src="https://dev.districtnex.picacity.ai/assets/images/logo/picacity/logo-black-rect.png">
+        <h3>Welcome to the DistrictNex API</h3>
+        <button id="redirectButton">Go to Homepage</button>
+    </div>
+</body>
+
+<script>
+    var button = document.getElementById('redirectButton');
+    button.onclick = function () {
+        location.assign("https://dev.districtnex.picacity.ai/");
+    }
+</script>
+
+</html>

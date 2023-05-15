@@ -1,0 +1,375 @@
+using System;
+using System.Linq;
+using SmartrTools;
+using System.Xml.Linq;
+using System.Configuration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace BLC
+{
+    #region BLC
+    public partial class BLC : IDisposable
+    {
+        #region Init
+        public void Init(BLC_Initializer i_BLC_Initializer)
+        {
+            #region Body Section.
+            // ---------------------
+            this.oBLC_Initializer = i_BLC_Initializer;
+            var get_sqlserver_connection_string = Task.Run(() =>
+            {
+                this.oBLC_Initializer.Connection_String = this._service_mesh.Get_Secret(new Service_Mesh.Params_Get_Secret()
+                {
+                    Secret_Id = ConfigurationManager.AppSettings["CONN_STR"]
+                }).i_Result;
+                this._AppContext = new DALC.MSSQL_DALC(this.oBLC_Initializer.Connection_String);
+            });
+            var get_mongodb_connection_string = Task.Run(() =>
+            {
+                this._MongoDb = new DALC.DALC_MONGODB(this._service_mesh.Get_Secret(new Service_Mesh.Params_Get_Secret()
+                {
+                    Secret_Id = ConfigurationManager.AppSettings["MONGODB_CONN_STR"]
+                }).i_Result, ConfigurationManager.AppSettings["MONGODB_DATABASE_NAME"]);
+            });
+            Task.WaitAll(get_sqlserver_connection_string, get_mongodb_connection_string);
+            // ---------------------
+            Load_Messages();
+            // Initialize_Cache_Dropper();
+            Initialize_Reset_Mechanism();
+            // Initialize_Audit_Mechanism();
+            Initialize_Monitoring_Mechanism();
+            Initialize_Eager_Loading_Mechanism();
+            // Initialize_File_Uploading_Mechanism();
+            Subscribe_To_Events();
+            #endregion
+        }
+        #endregion
+        #region Constructor
+        public BLC(string i_Ticket)
+        {
+            Init(Prepare_BLC_Initializer(i_Ticket));
+        }
+        public BLC(BLC_Initializer i_BLC_Initializer)
+        {
+            Init(i_BLC_Initializer);
+        }
+        #endregion
+        #region Subscribe To Events
+        public void Subscribe_To_Events()
+        {
+            #region Body Section.
+            OnPostEvent_Edit_User += new PostEvent_Handler_Edit_User(BLC_OnPostEvent_Edit_User);
+            OnPostEvent_Get_Area_By_AREA_ID_List += new PostEvent_Handler_Get_Area_By_AREA_ID_List(BLC_OnPostEvent_Get_Area_By_AREA_ID_List);
+            OnPostEvent_Get_District_By_DISTRICT_ID_List += new PostEvent_Handler_Get_District_By_DISTRICT_ID_List(BLC_OnPostEvent_Get_District_By_DISTRICT_ID_List);
+            OnPostEvent_Get_Entity_By_ENTITY_ID_List += new PostEvent_Handler_Get_Entity_By_ENTITY_ID_List(BLC_OnPostEvent_Get_Entity_By_ENTITY_ID_List);
+            OnPostEvent_Get_Site_By_SITE_ID_List += new PostEvent_Handler_Get_Site_By_SITE_ID_List(BLC_OnPostEvent_Get_Site_By_SITE_ID_List);
+            OnPostEvent_Get_Top_level_By_TOP_LEVEL_ID_List += new PostEvent_Handler_Get_Top_level_By_TOP_LEVEL_ID_List(BLC_OnPostEvent_Get_Top_level_By_TOP_LEVEL_ID_List);
+            OnPostEvent_Get_Top_level_By_TOP_LEVEL_ID += new PostEvent_Handler_Get_Top_level_By_TOP_LEVEL_ID(BLC_OnPostEvent_Get_Top_Level_By_TOP_LEVEL_ID);
+            OnPostEvent_Get_District_By_DISTRICT_ID += new PostEvent_Handler_Get_District_By_DISTRICT_ID(BLC_OnPostEvent_Get_District_By_DISTRICT_ID);
+            OnPostEvent_Get_Area_By_AREA_ID += new PostEvent_Handler_Get_Area_By_AREA_ID(BLC_OnPostEvent_Get_Area_By_AREA_ID);
+            OnPostEvent_Get_Site_By_SITE_ID += new PostEvent_Handler_Get_Site_By_SITE_ID(BLC_OnPostEvent_Get_Site_By_SITE_ID);
+            #endregion
+        }
+        #endregion
+        #region IDisposable Members
+        public void Dispose()
+        {
+            #region Body Section.
+            #endregion
+        }
+        #endregion
+        #region Load_Messages
+        public void Load_Messages()
+        {
+            #region Declaration And Initialization Section.
+            XElement oRoot = null;
+            XElement oLanguage = null;
+            #endregion
+            #region Body Section.
+            this.oList_Message = new List<Message>();
+
+            if (this.oBLC_Initializer.Messages_File_Path != null)
+            {
+                oRoot = XElement.Load(this.oBLC_Initializer.Messages_File_Path);
+                if (oRoot != null)
+                {
+                    switch (this.oBLC_Initializer.Language)
+                    {
+                        case Enum_Language.English:
+                            oLanguage = oRoot.Element("ENGLISH");
+                            break;
+                        case Enum_Language.Arabic:
+                            oLanguage = oRoot.Element("ARABIC");
+                            break;
+                        default:
+                            oLanguage = oRoot.Element("ENGLISH");
+                            break;
+                    }
+                    if (oLanguage != null)
+                    {
+                        foreach (var oMessage in oLanguage.Elements("MESSAGE").Where(oMessage => oMessage.Attribute("CODE") != null && oMessage.Attribute("CONTENT") != null))
+                        {
+                            this.oList_Message.Add(new Message()
+                            {
+                                Code = oMessage.Attribute("CODE").Value,
+                                Content = oMessage.Attribute("CONTENT").Value
+                            });
+                        }
+                    }
+                }
+            }
+            #endregion
+        }
+        #endregion
+        #region Get_Message_Content
+        public string Get_Message_Content(Enum_BR_Codes i_BR_Code)
+        {
+            if (this.oList_Message == null || this.oList_Message == default || this.oList_Message.Count == 0)
+            {
+                Load_Messages();
+            }
+            if (this.oList_Message != null && this.oList_Message != default && this.oList_Message.Count > 0)
+            {
+                var oMessage = this.oList_Message.FirstOrDefault(oMessage => oMessage.Code == i_BR_Code.ToString());
+                if (oMessage != null && oMessage != default && oMessage.Content != default)
+                {
+                    return oMessage.Content;
+                }
+                else
+                {
+                    return "Cannot Load Desired Message";
+                }
+            }
+            else
+            {
+                return "Cannot Load Desired Message";
+            }
+        }
+        public string Get_Message_Content(Enum_BR_Codes i_BR_Code, Dictionary<string, string> i_PlaceHolders)
+        {
+            string oReturnValue = string.Empty;
+            if (this.oList_Message == null || this.oList_Message == default || this.oList_Message.Count == 0)
+            {
+                Load_Messages();
+            }
+            if (this.oList_Message != null && this.oList_Message != default && this.oList_Message.Count > 0)
+            {
+                var oMessage = this.oList_Message.FirstOrDefault(oMessage => oMessage.Code == i_BR_Code.ToString());
+                if (oMessage != null && oMessage != default && oMessage.Content != default)
+                {
+                    oReturnValue = oMessage.Content;
+                    foreach (var oPlaceHolder in i_PlaceHolders)
+                    {
+                        oReturnValue = oReturnValue.Replace(oPlaceHolder.Key, oPlaceHolder.Value);
+                    }
+                    return oReturnValue;
+                }
+                else
+                {
+                    return "Cannot Load Desired Message";
+                }
+            }
+            else
+            {
+                return "Cannot Load Desired Message";
+            }
+        }
+        #endregion
+        #region Events Implementation
+        #region BLC_OnPostEvent_Edit_User
+        public void BLC_OnPostEvent_Edit_User(ref User i_User, Enum_Edit_Mode i_Enum_Edit_Mode)
+        {
+            if (i_Enum_Edit_Mode == Enum_Edit_Mode.Add)
+            {
+                string salt = Crypto.Encrypt(string.Format(Global.Salt, i_User.USER_ID, i_User.OWNER_ID));
+                string hash = Crypto.EncryptPassword(i_User.PASSWORD, salt);
+                if (hash != i_User.PASSWORD)
+                {
+                    i_User.PASSWORD = hash;
+                }
+                i_User.IS_ACTIVE = true;
+                Edit_User(i_User);
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_Area_By_AREA_ID_List
+        public void BLC_OnPostEvent_Get_Area_By_AREA_ID_List(List<Area> i_Result, Params_Get_Area_By_AREA_ID_List i_Params_Get_Area_By_AREA_ID_List)
+        {
+            if (i_Result != null && i_Result.Count > 0)
+            {
+                i_Result = i_Result.Select(area =>
+                {
+                    if (area.LOGO_URL != null && !area.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        area.LOGO_URL = $"{Global.Assets_Endpoint}/{area.LOGO_URL}";
+                    }
+                    if (area.IMAGE_URL != null && !area.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        area.IMAGE_URL = $"{Global.Assets_Endpoint}/{area.IMAGE_URL}";
+                    }
+                    if (area.SOLID_GLTF_URL != null && !area.SOLID_GLTF_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        area.SOLID_GLTF_URL = $"{Global.Assets_Endpoint}/{area.SOLID_GLTF_URL}";
+                    }
+                    return area;
+                }).ToList();
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_District_By_DISTRICT_ID_List
+        public void BLC_OnPostEvent_Get_District_By_DISTRICT_ID_List(List<District> i_Result, Params_Get_District_By_DISTRICT_ID_List i_Params_Get_District_By_DISTRICT_ID_List)
+        {
+            if (i_Result != null && i_Result.Count > 0)
+            {
+                i_Result = i_Result.Select(district =>
+                {
+                    if (district.LOGO_URL != null && !district.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        district.LOGO_URL = $"{Global.Assets_Endpoint}/{district.LOGO_URL}";
+                    }
+                    if (district.IMAGE_URL != null && !district.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        district.IMAGE_URL = $"{Global.Assets_Endpoint}/{district.IMAGE_URL}";
+                    }
+                    if (district.SOLID_GLTF_URL != null && !district.SOLID_GLTF_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        district.SOLID_GLTF_URL = $"{Global.Assets_Endpoint}/{district.SOLID_GLTF_URL}";
+                    }
+                    return district;
+                }).ToList();
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_Entity_By_ENTITY_ID_List
+        public void BLC_OnPostEvent_Get_Entity_By_ENTITY_ID_List(List<Entity> i_Result, Params_Get_Entity_By_ENTITY_ID_List i_Params_Get_Entity_By_ENTITY_ID_List)
+        {
+            if (i_Result != null && i_Result.Count > 0)
+            {
+                i_Result = i_Result.Select(entity =>
+                {
+                    if (!entity.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        entity.IMAGE_URL = $"{Global.Assets_Endpoint}/{entity.IMAGE_URL}";
+                    }
+                    if (!entity.SOLID_GLTF_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        entity.SOLID_GLTF_URL = $"{Global.Assets_Endpoint}/{entity.SOLID_GLTF_URL}";
+                    }
+                    return entity;
+                }).ToList();
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_Site_By_SITE_ID_List
+        public void BLC_OnPostEvent_Get_Site_By_SITE_ID_List(ref List<Site> i_Result, Params_Get_Site_By_SITE_ID_List i_Params_Get_Site_By_SITE_ID_List)
+        {
+            if (i_Result != null && i_Result.Count > 0)
+            {
+                i_Result = i_Result.Select(site =>
+                {
+                    if (site.LOGO_URL != null && !site.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        site.LOGO_URL = $"{Global.Assets_Endpoint}/{site.LOGO_URL}";
+                    }
+                    if (site.IMAGE_URL != null && !site.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        site.IMAGE_URL = $"{Global.Assets_Endpoint}/{site.IMAGE_URL}";
+                    }
+                    if (site.SOLID_GLTF_URL != null && !site.SOLID_GLTF_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        site.SOLID_GLTF_URL = $"{Global.Assets_Endpoint}/{site.SOLID_GLTF_URL}";
+                    }
+                    return site;
+                }).ToList();
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_Top_level_By_TOP_LEVEL_ID_List
+        public void BLC_OnPostEvent_Get_Top_level_By_TOP_LEVEL_ID_List(List<Top_level> i_Result, Params_Get_Top_level_By_TOP_LEVEL_ID_List i_Params_Get_Top_level_By_TOP_LEVEL_ID_List)
+        {
+            if (i_Result != null && i_Result.Count > 0)
+            {
+                i_Result = i_Result.Select(top_level =>
+                {
+                    if (top_level.LOGO_URL != null && !top_level.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        top_level.LOGO_URL = $"{Global.Assets_Endpoint}/{top_level.LOGO_URL}";
+                    }
+                    if (top_level.IMAGE_URL != null && !top_level.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+                    {
+                        top_level.IMAGE_URL = $"{Global.Assets_Endpoint}/{top_level.IMAGE_URL}";
+                    }
+                    return top_level;
+                }).ToList();
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_Top_level_By_TOP_LEVEL_ID
+        public void BLC_OnPostEvent_Get_Top_Level_By_TOP_LEVEL_ID(Top_level i_Result, Params_Get_Top_level_By_TOP_LEVEL_ID i_Params_Get_Top_level_By_TOP_LEVEL_ID)
+        {
+            if (i_Result.LOGO_URL != null && !i_Result.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.LOGO_URL = $"{Global.Assets_Endpoint}/{i_Result.LOGO_URL}";
+            }
+            if (i_Result.IMAGE_URL != null && !i_Result.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.IMAGE_URL = $"{Global.Assets_Endpoint}/{i_Result.IMAGE_URL}";
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_District_By_DISTRICT_ID
+        public void BLC_OnPostEvent_Get_District_By_DISTRICT_ID(District i_Result, Params_Get_District_By_DISTRICT_ID i_Params_Get_District_By_DISTRICT_ID)
+        {
+            if (i_Result.LOGO_URL != null && !i_Result.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.LOGO_URL = $"{Global.Assets_Endpoint}/{i_Result.LOGO_URL}";
+            }
+            if (i_Result.IMAGE_URL != null && !i_Result.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.IMAGE_URL = $"{Global.Assets_Endpoint}/{i_Result.IMAGE_URL}";
+            }
+            if (i_Result.SOLID_GLTF_URL != null && !i_Result.SOLID_GLTF_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.SOLID_GLTF_URL = $"{Global.Assets_Endpoint}/{i_Result.SOLID_GLTF_URL}";
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_Area_By_AREA_ID
+        public void BLC_OnPostEvent_Get_Area_By_AREA_ID(Area i_Result, Params_Get_Area_By_AREA_ID i_Params_Get_Area_By_AREA_ID)
+        {
+            if (i_Result.LOGO_URL != null && !i_Result.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.LOGO_URL = $"{Global.Assets_Endpoint}/{i_Result.LOGO_URL}";
+            }
+            if (i_Result.IMAGE_URL != null && !i_Result.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.IMAGE_URL = $"{Global.Assets_Endpoint}/{i_Result.IMAGE_URL}";
+            }
+            if (i_Result.SOLID_GLTF_URL != null && !i_Result.SOLID_GLTF_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.SOLID_GLTF_URL = $"{Global.Assets_Endpoint}/{i_Result.SOLID_GLTF_URL}";
+            }
+        }
+        #endregion
+        #region BLC_OnPostEvent_Get_Site_By_SITE_ID
+        public void BLC_OnPostEvent_Get_Site_By_SITE_ID(ref Site i_Result, Params_Get_Site_By_SITE_ID i_Params_Get_Site_By_SITE_ID)
+        {
+            if (i_Result.LOGO_URL != null && !i_Result.LOGO_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.LOGO_URL = $"{Global.Assets_Endpoint}/{i_Result.LOGO_URL}";
+            }
+            if (i_Result.IMAGE_URL != null && !i_Result.IMAGE_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.IMAGE_URL = $"{Global.Assets_Endpoint}/{i_Result.IMAGE_URL}";
+            }
+            if (i_Result.SOLID_GLTF_URL != null && !i_Result.SOLID_GLTF_URL.StartsWith(Global.Assets_Endpoint))
+            {
+                i_Result.SOLID_GLTF_URL = $"{Global.Assets_Endpoint}/{i_Result.SOLID_GLTF_URL}";
+            }
+        }
+        #endregion
+        #endregion
+    }
+    #endregion
+}

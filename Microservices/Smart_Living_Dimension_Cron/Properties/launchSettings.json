@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Smart_Living_Dimension_Cron": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64161;http://localhost:64162"
+    }
+  }
+}

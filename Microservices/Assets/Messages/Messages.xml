@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MESSAGES>
+    <ENGLISH>
+        <MESSAGE CODE="ER_0001" CONTENT="ACCESS_DENIED" />
+        <MESSAGE CODE="ER_0002" CONTENT="SESSION_INVALID" />
+        <MESSAGE CODE="ER_0003" CONTENT="SESSION_EXPIRED" />
+        <MESSAGE CODE="BR_0000" CONTENT="%1 already exists!" />
+        <MESSAGE CODE="BR_0001" CONTENT="%1 With ID %2 Does not Exist!" />
+        <MESSAGE CODE="BR_0002" CONTENT="Invalid Ticket!" />
+        <MESSAGE CODE="BR_0003" CONTENT="Invalid Email" />
+        <MESSAGE CODE="BR_0004" CONTENT="Report Not Found" />
+        <MESSAGE CODE="BR_0005" CONTENT="User Not Found" />
+        <MESSAGE CODE="BR_0006" CONTENT="Invalid Password! Re-enter and Try Again" />
+        <MESSAGE CODE="BR_0007" CONTENT="User Inactive. Please contact support." />
+        <MESSAGE CODE="BR_0008" CONTENT="Email Sending Failed! Check your Email and Try Again." />
+        <MESSAGE CODE="BR_0009" CONTENT="Report Not Found!" />
+        <MESSAGE CODE="BR_0010" CONTENT="The chosen organization does not exist." />
+        <MESSAGE CODE="BR_0011" CONTENT="One of the sites chosen does not exist." />
+        <MESSAGE CODE="BR_0012" CONTENT="One of the dimensions chosen does not exist." />
+        <MESSAGE CODE="BR_0013" CONTENT="One of the entities chosen does not exist." />
+        <MESSAGE CODE="BR_0014" CONTENT="The organization does not have access to this site." />
+        <MESSAGE CODE="BR_0015" CONTENT="Invalid Input" />
+        <MESSAGE CODE="BR_0016" CONTENT="User does not belong to an organization" />
+        <MESSAGE CODE="BR_0017" CONTENT="Organization does not have access to this site." />
+        <MESSAGE CODE="BR_0018" CONTENT="Organization does not have access to this dimension in the site." />
+        <MESSAGE CODE="BR_0019" CONTENT="The organization does not have access to this entity." />
+        <MESSAGE CODE="BR_0020" CONTENT="The user does not have access to this entity." />
+        <MESSAGE CODE="BR_0021" CONTENT="Organization not found." />
+        <MESSAGE CODE="BR_0022" CONTENT="You do not have access to this content." />
+        <MESSAGE CODE="BR_0023" CONTENT="You do not belong to an active organization. Please contact support.." />
+        <MESSAGE CODE="BR_0024" CONTENT="Site already belongs to an organization." />
+        <MESSAGE CODE="BR_0025" CONTENT="Super Admins can't be deleted." />
+        <MESSAGE CODE="BR_0026" CONTENT="Upload Failed." />
+        <MESSAGE CODE="BR_0027" CONTENT="Delete Failed." />
+        <MESSAGE CODE="BR_0028" CONTENT="Invalid Credentials" />
+        <MESSAGE CODE="BR_0029" CONTENT="User ID Cannot be Null!" />
+        <MESSAGE CODE="BR_0030" CONTENT="An Error has Occured! Contact Support." />
+        <MESSAGE CODE="BR_0031" CONTENT="No OTP exists for this username. Try again." />
+        <MESSAGE CODE="BR_0032" CONTENT="Codes do not match! Try Again." />
+        <MESSAGE CODE="BR_0033" CONTENT="Only Admins Can Log In." />
+        <MESSAGE CODE="BR_0034" CONTENT="This feature is currently unavailable" />
+        <MESSAGE CODE="BR_0035" CONTENT="Max user quota reached" />
+        <MESSAGE CODE="BR_0036" CONTENT="Max admin quota reached" />
+        <MESSAGE CODE="BR_0037" CONTENT="No LPR Engine Active" />
+        <MESSAGE CODE="BR_0038" CONTENT="Invalid Credentials or Connection Url" />
+        <MESSAGE CODE="BR_0039" CONTENT="Cannot Access Video AI" />
+        <MESSAGE CODE="BR_0040" CONTENT="Video ai asset with Space asset ID %2 not found" />
+        <MESSAGE CODE="BR_0041" CONTENT="Your account is deactivated. Please contact support." />
+        <MESSAGE CODE="BR_0042" CONTENT="No FR Engine Active" />
+        <MESSAGE CODE="BR_0043" CONTENT="Request is being processed, try again later" />
+        <MESSAGE CODE="BR_0044" CONTENT="Data for %1 on date %2 already exists" />
+        <MESSAGE CODE="BR_0045" CONTENT="%1 Setup Not Found." />
+        <MESSAGE CODE="BR_0046" CONTENT="%1 Does Not Exist!" />
+        <MESSAGE CODE="BR_0047" CONTENT="The user does not have access to any level." />
+        <MESSAGE CODE="BR_0048" CONTENT="Request resulting in error, jobId has been deleted, try again" />
+        <MESSAGE CODE="BR_0049" CONTENT="Invalid Cloud Provider" />
+        <MESSAGE CODE="BR_0050" CONTENT="Couldn't Retrieve Secret" />
+        <MESSAGE CODE="BR_0051" CONTENT="Google API Token not found" />
+        <MESSAGE CODE="BR_0052" CONTENT="An error has occured, please try again later" />
+        <MESSAGE CODE="BR_0053" CONTENT="Failed to Assign Dates: %1" />
+        <MESSAGE CODE="BR_0054" CONTENT="Delete failed for Kpi_chart_configuration: %1" />
+        <MESSAGE CODE="BR_0055" CONTENT="Delete failed for Dimension_chart_configuration: %1" />
+        <MESSAGE CODE="BR_0056" CONTENT="Delete failed for Specialized_chart_configuration: %1" />
+        <MESSAGE CODE="BR_0057" CONTENT="Unable to send OTP. Please contact support." />
+        <MESSAGE CODE="BR_0058" CONTENT="Error in parsing the CSV file." />
+    </ENGLISH>
+</MESSAGES>

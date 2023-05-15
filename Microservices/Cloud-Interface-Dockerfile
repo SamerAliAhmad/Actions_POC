@@ -1,0 +1,33 @@
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 5010
+
+ENV ASPNETCORE_URLS=http://+:5010
+
+RUN adduser -u 5678 --disabled-password --gecos "" districtnex && chown -R districtnex /app
+USER districtnex
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
+COPY ["Cloud_Interface/", "Cloud_Interface/"]
+COPY ["Assets/", "./Assets"]
+COPY ["Service_Mesh/", "./Service_Mesh"]
+
+WORKDIR "/Cloud_Interface/WebApi"
+
+RUN dotnet build "WebApi.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "WebApi.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+
+USER root
+RUN apt-get update && apt-get install -y --allow-unauthenticated libc6-dev libgdiplus libx11-dev && rm -rf /var/lib/apt/lists/*
+
+USER districtnex
+
+COPY --from=publish /app/publish .
+
+ENTRYPOINT ["dotnet", "WebApi.dll"]

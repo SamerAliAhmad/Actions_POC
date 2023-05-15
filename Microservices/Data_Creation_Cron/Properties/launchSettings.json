@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "Data_Creation_Cron": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

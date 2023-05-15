@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "Video_AI_Engine_Management_Cron": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

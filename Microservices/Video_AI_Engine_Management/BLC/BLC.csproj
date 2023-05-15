@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="../DALC/DALC.csproj" />
+        <ProjectReference Include="../../Service_Mesh/Service_Mesh.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="RestSharp" Version="110.2.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Mindbox.Data.Linq" Version="10.5.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="SmartrTools">
+            <HintPath>../../Assets/DLL/SmartrTools.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+</Project>
