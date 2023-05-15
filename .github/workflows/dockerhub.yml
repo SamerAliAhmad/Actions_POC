@@ -6,8 +6,9 @@ on:
       - "districtnex-v*"
 
 env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+  DOCKERHUB_REPOSITORY: districtnex
 
 jobs:
   build-and-push-ui:
@@ -15,19 +16,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
 
       - name: Build and Push UI
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
-          tags: samerahmad01/districtnex:${{ github.ref_name }}-ui
+          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:${{ github.ref_name }}-ui
           context: DistrictNex_UI
           dockerfile: Dockerfile
 
@@ -36,18 +37,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
 
       - name: Build and Push Admin
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
-          tags: samerahmad01/districtnex:${{ github.ref_name }}-admin
+          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:${{ github.ref_name }}-admin
           context: DistrictNex_Admin
           dockerfile: Dockerfile
