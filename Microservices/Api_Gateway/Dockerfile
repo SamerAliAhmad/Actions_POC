@@ -6,9 +6,9 @@ ENV ASPNETCORE_URLS=http://+:5000
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
-COPY ["Microservices/Api_Gateway/", "Microservices/Api_Gateway/"]
+COPY ["./", "./"]
 
-WORKDIR "Microservices/Api_Gateway"
+WORKDIR "./"
 
 RUN dotnet build "Api_Gateway.csproj" -c Release -o /app/build
 
