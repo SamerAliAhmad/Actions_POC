@@ -53,6 +53,70 @@ jobs:
           context: DistrictNex_Admin
           file: DistrictNex_Admin/Dockerfile
 
+  microservices:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        name:
+          [
+            Area_Management,
+            Asset_Management,
+            Cloud_Interface,
+            Dimension_Management,
+            District_Management,
+            Entity_Management,
+            File_Management,
+            Floor_Management,
+            Insights_Management,
+            KPI_Extraction_Engine,
+            KPI_Management,
+            Method_Monitoring,
+            Mobility_Dimension,
+            Organization_Management,
+            Platform_Logging,
+            Region_Management,
+            Reporting,
+            Security_Dimension,
+            Settings_Management,
+            ShareView,
+            Site_Management,
+            Smart_Living_Dimension,
+            Space_Management,
+            Sustainability_Dimension,
+            Top_Level_Management,
+            User_Authentication,
+            User_Management,
+            Video_AI_Engine_Management,
+            Api_Gateway,
+            Data_Creation_Cron,
+            Data_Retention_Cron,
+            Mobility_Dimension_Cron,
+            Security_Dimension_Cron,
+            SignalR_Realtime_Server,
+            Smart_Living_Dimension_Cron,
+            Sustainability_Dimension_Cron,
+            Video_AI_Engine_Management_Cron,
+            Wifi_Signal_Cron,
+          ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push ${{ matrix.name }}
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPOSITORY }}:${{ matrix.name }}-${{ github.ref_name }}
+          context: Microservices
+          file: Microservices/${{ matrix.name }}-Dockerfile
+
   # api-gateway:
   #   runs-on: ubuntu-latest
 
