@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.project_name }}-{{ .Values.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    chartVersion: {{ .Chart.Version }}
+    service: {{ .Values.global.project_name }}-{{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      service: {{ .Values.global.project_name }}-{{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        redis-client: "{{ .Values.isRedisClient }}"
+        service: {{ .Values.global.project_name }}-{{ .Values.name }}
+    spec:
+      volumes:
+      - name: {{ .Values.name }}-config-volume
+        configMap:
+          name: {{ .Values.name }}-config
+      imagePullSecrets:
+      - name: {{ .Values.global.project_name }}-dockerhub-registry-key
+      containers:
+      - image: {{ .Values.global.repository }}/{{ .Values.image }}:{{ .Values.tag }}
+        name: {{ .Values.global.project_name }}-{{ .Values.name }}
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: {{ .Values.name }}-config-volume
+          mountPath: /usr/share/nginx/html/assets/config
+        {{- if .Values.resourceLimitation }}
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+        {{- end }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.containerPort }}
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.containerPort }}
+          initialDelaySeconds: 20
+          periodSeconds: 20
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+      hostname: {{ .Values.global.project_name }}-{{ .Values.name }}
+      restartPolicy: Always
+---
+{{- if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.global.project_name }}-{{ .Values.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    chartVersion: {{ .Chart.Version }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.global.project_name }}-{{ .Values.name }}
+  minReplicas: {{ .Values.hpa.min }}
+  maxReplicas: {{ .Values.hpa.max }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.cpu }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.memory }}
+---
+{{- end }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.global.project_name }}-{{ .Values.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    chartVersion: {{ .Chart.Version }}
+    service: {{ .Values.global.project_name }}-{{ .Values.name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - protocol: {{ .Values.service.protocol }}
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.containerPort }}
+  selector:
+    service: {{ .Values.global.project_name }}-{{ .Values.name }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-config
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    chartVersion: {{ .Chart.Version }}
+data:
+  app.config.json: {{ .Values.config | toYaml | indent 1 }}

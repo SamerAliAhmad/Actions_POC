@@ -1,0 +1,48 @@
+name: "kpi-extraction-engine-webapi"
+image: "districtnex-picacity-kpi-extraction-engine-webapi"
+tag: 3.1.3
+k8s_cluster_name: "districtnex-cluster"
+replicas: 1
+isRedisClient: "true"
+resourceLimitation: false
+containerPort: 5012
+resources:
+  limits:
+    cpu: "100m"
+    memory: "150Mi"
+  requests:
+    cpu: "100m"
+    memory: "150Mi"
+hpa:
+  min: 1
+  max: 6
+  cpu: 80
+  memory: 90
+  enabled: true
+service:
+  port: 80
+  protocol: "TCP"
+  type: "NodePort"
+config: |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <configuration>
+      <appSettings>
+          <add key="ENABLE_TICKET" value="1" />
+          <add key="IS_DEBUG_MODE" value="1" />
+          <add key="CACHING_ENABLED" value="0" />
+          <add key="ENABLE_MONITORING" value="0" />
+          <add key="BLC_MESSAGES" value="./Messages.xml" />
+          <add key="MONGODB_DATABASE_NAME" value="DistrictNex" />
+          <add key="LIST_DWELL_TIME" value="15-30,30-60,60-120,120-1440" />
+          <add key="API_GATEWAY_URL" value="http://districtnex-api-gateway" />
+          <add key="EDMONTON_API_KEY" value="districtnex-dev-edmonton-api-app-token" />
+          <add key="CONN_STR" value="districtnex-dev-sqlserver-instance-connection-string" />
+          <add key="MONGODB_CONN_STR" value="districtnex-dev-mongodb-instance-connection-string" />
+          <add key="ASSETS_ENDPOINT" value="https://dev.aws.api.picacity.ai/Api/FileManagement/Files" />
+          <!-- Telus API Secrets -->
+          <add key="TELUS_SCOPE" value="districtnex-dev-telus-scope" />
+          <add key="TELUS_CLIENT_ID" value="districtnex-dev-telus-client-id" />
+          <add key="TELUS_CUSTOMER_ID" value="districtnex-dev-telus-customer-id" />
+          <add key="TELUS_CLIENT_SECRET" value="districtnex-dev-telus-client-secret" />
+      </appSettings>
+  </configuration>

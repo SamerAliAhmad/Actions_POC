@@ -1,0 +1,66 @@
+image: "mgob"
+tag: 3.1.3
+containerPort: 8090
+volumeClaims:
+  mgobData:
+    requests:
+      storage: 250Gi
+      storageClassName: "gp3"
+      accessMode: "ReadWriteOnce"
+  mgobStorage:
+    requests:
+      storage: 250Gi
+      storageClassName: "gp3"
+      accessMode: "ReadWriteOnce"
+secrets:
+  smtpPassword: "UG9xNTU4OTM="
+  smtpUsername: "ZGlzdHJpY3RuZXhAcGljYWNpdHkuYWk="
+  mongodbUsername: "U2NiaDNKazdmeGZiUzhmWjREODQ="
+  mongodbPassword: "b0xuUHZIUVE4MWlMbVEyVFpUNDc="
+  awsAccessKey: "QUtJQVJCN1I3VFVJSko3V0VWTzY="
+  awsSecretKey: "MkszTkdFdzUxVm5ERHVuaXA2aWQ3ZTlrTndKK1RyZXFzck44eVBTMw=="
+  envName: "RGlzdHJpY3ROZXggQVdTIERldmVsb3BtZW50IEVudmlyb25tZW50"
+mainDatabase:
+  port: 27017
+  timeout: "60"
+  retention: "10"
+  cronSchedule: "0 0 * * *"
+  name: "DistrictNex"
+  bucket: "districtnex-backups-bucket/MongoDB/dev/DistrictNex"
+  retry:
+    attempts: 3
+    backoffFactor: 60
+  smtp:
+    port: 587
+    warnOnly: false
+    tlsEnabled: true
+    emailSendRetries: 5
+    emailSendRetryDelay: 1
+    emailSendDelayUnit: "Minute"
+    server: "smtp.office365.com"
+    encryptionType: EncryptionSTARTTLS
+    to:
+    - "dev.lead@picacity.ai"
+    - "alec.lai@picacity.ai"
+logsDatabase:
+  port: 27017
+  timeout: "60"
+  retention: "10"
+  cronSchedule: "0 0 * * *"
+  name: "DistrictNex_Logs"
+  bucket: "districtnex-backups-bucket/MongoDB/dev/DistrictNex_Logs"
+  retry:
+    attempts: 3
+    backoffFactor: 60
+  smtp:
+    port: 587
+    warnOnly: false
+    tlsEnabled: true
+    emailSendRetries: 5
+    emailSendRetryDelay: 1
+    emailSendDelayUnit: "Minute"
+    server: "smtp.office365.com"
+    encryptionType: EncryptionSTARTTLS
+    to:
+    - "dev.lead@picacity.ai"
+    - "alec.lai@picacity.ai"

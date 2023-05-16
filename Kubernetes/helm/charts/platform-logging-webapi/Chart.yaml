@@ -1,0 +1,5 @@
+apiVersion: v2
+name: platform-logging-webapi
+description: A Helm chart for platform logging webapi
+type: application
+version: 3.1.3

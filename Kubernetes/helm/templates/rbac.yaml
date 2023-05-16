@@ -1,0 +1,33 @@
+{{- $existingRole := lookup "rbac.authorization.k8s.io/v1" "Role" "goldilocks" "goldilocks-role" }}
+{{- if not $existingRole }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: goldilocks-role
+  namespace: goldilocks
+  labels:
+    chartVersion: {{ .Chart.Version }}
+rules:
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["list"]
+---
+{{- end }}
+{{- $existingRoleBinding := lookup "rbac.authorization.k8s.io/v1" "RoleBinding" "goldilocks" "goldilocks-rolebinding" }}
+{{- if not $existingRoleBinding }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: goldilocks-rolebinding
+  namespace: goldilocks
+  labels:
+    chartVersion: {{ .Chart.Version }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: goldilocks-role
+subjects:
+- kind: ServiceAccount
+  name: districtnex-goldilocks-controller
+  namespace: goldilocks
+{{- end }}

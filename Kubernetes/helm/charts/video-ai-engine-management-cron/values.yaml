@@ -1,0 +1,29 @@
+name: "video-ai-engine-management-cron"
+image: "districtnex-picacity-video-ai-engine-management-cron"
+tag: 3.1.3
+k8s_cluster_name: "districtnex-cluster"
+cron_dll: "Video_AI_Engine_Management_Cron.dll.config"
+isRedisClient: "true"
+resourceLimitation: false
+failedJobsHistoryLimit: 1
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 1
+ttlSecondsAfterFinished: 3600
+cron_schedule: "0 */12 * * *"
+resources:
+  limits:
+    cpu: "100m"
+    memory: "150Mi"
+  requests:
+    cpu: "100m"
+    memory: "150Mi"
+config: |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <configuration>
+      <appSettings>
+          <add key="SCHEDULING_METHOD" value="HostedService" />
+          <add key="API_GATEWAY_URL" value="http://districtnex-api-gateway" />
+          <add key="VIDEO_AI_ENGINE_MANAGEMENT_CRON_TIME" value="0 */12 * * *" />
+          <add key="REALTIME_SERVER_URL" value="http://districtnex-signalr-realtime-server" />
+      </appSettings>
+  </configuration>
