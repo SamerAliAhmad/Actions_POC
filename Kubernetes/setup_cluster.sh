@@ -16,3 +16,5 @@ if [ "$ENVIRONMENT" == "demo" ]; then
 else
     kubectl config set-context --current --namespace=districtnex-dev
 fi
+
+kubectl get pods
