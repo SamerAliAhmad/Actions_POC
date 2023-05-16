@@ -14,7 +14,5 @@ aws eks --region me-central-1 update-kubeconfig --name districtnex-cluster
 if [ "$ENVIRONMENT" == "demo" ]; then
     kubectl config set-context --current --namespace=districtnex-demo
 else
-    kubectl config set-context --current --namespace=districtnex-dev-picacity
+    kubectl config set-context --current --namespace=districtnex-dev
 fi
-
-kubectl get pods

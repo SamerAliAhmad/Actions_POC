@@ -133,4 +133,4 @@ jobs:
 
       - name: Run script
         run: |
-          bash Kubernetes/setup_cluster.sh dev
+          bash Kubernetes/skaffold.sh dev
