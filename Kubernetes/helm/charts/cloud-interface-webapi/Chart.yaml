@@ -1,5 +1,0 @@
-apiVersion: v2
-name: cloud-interface-webapi
-description: A Helm chart for cloud interface webapi
-type: application
-version: 3.1.3

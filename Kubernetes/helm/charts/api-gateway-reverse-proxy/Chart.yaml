@@ -1,5 +1,0 @@
-apiVersion: v2
-name: api-gateway-reverse-proxy
-description: A Helm chart for api gateway reverse proxy
-type: application
-version: 3.1.3

@@ -1,5 +1,0 @@
-apiVersion: v2
-name: site-management-webapi
-description: A Helm chart for site management webapi
-type: application
-version: 3.1.3

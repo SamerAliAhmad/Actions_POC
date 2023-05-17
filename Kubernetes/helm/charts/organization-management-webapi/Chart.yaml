@@ -1,5 +1,0 @@
-apiVersion: v2
-name: organization-management-webapi
-description: A Helm chart for organization management webapi
-type: application
-version: 3.1.3

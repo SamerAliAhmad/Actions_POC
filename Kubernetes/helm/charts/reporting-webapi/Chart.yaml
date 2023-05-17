@@ -1,5 +1,0 @@
-apiVersion: v2
-name: reporting-webapi
-description: A Helm chart for reporting webapi
-type: application
-version: 3.1.3

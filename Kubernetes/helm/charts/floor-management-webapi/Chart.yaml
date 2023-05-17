@@ -1,5 +1,0 @@
-apiVersion: v2
-name: floor-management-webapi
-description: A Helm chart for floor management webapi
-type: application
-version: 3.1.3

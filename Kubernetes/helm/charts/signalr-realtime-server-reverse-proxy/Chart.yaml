@@ -1,5 +1,0 @@
-apiVersion: v2
-name: signalr-realtime-server-reverse-proxy
-description: A Helm chart for signalr realtime server reverse proxy
-type: application
-version: 3.1.3

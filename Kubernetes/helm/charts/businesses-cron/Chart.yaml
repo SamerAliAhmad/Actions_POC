@@ -1,6 +1,0 @@
-apiVersion: v2
-name: businesses-cron
-description: A Helm chart for businesses cron
-type: application
-version: 3.1.3
-

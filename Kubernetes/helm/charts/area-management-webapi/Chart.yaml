@@ -1,5 +1,0 @@
-apiVersion: v2
-name: area-management-webapi
-description: A Helm chart for area management webapi
-type: application
-version: 3.1.3

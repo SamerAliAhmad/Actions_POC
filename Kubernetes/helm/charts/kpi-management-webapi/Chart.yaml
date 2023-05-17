@@ -1,5 +1,0 @@
-apiVersion: v2
-name: kpi-management-webapi
-description: A Helm chart for kpi management webapi
-type: application
-version: 3.1.3

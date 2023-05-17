@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.global.messages.name }}
-  namespace: {{ .Values.global.namespace }}
-  labels:
-    chartVersion: {{ .Chart.Version }}
-data:
-  Messages.xml: {{ .Values.global.messages.messagesXml | toYaml | indent 1 }}

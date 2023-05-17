@@ -1,5 +1,0 @@
-apiVersion: v2
-name: smart-living-dimension-webapi
-description: A Helm chart for smart living dimension webapi
-type: application
-version: 3.1.3

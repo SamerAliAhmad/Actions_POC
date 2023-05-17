@@ -1,5 +1,0 @@
-apiVersion: v2
-name: mgob
-description: A Helm chart for mgob
-type: application
-version: 3.1.3

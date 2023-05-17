@@ -1,5 +1,0 @@
-apiVersion: v2
-name: kpi-extraction-engine-webapi
-description: A Helm chart for kpi extraction engine webapi
-type: application
-version: 3.1.3

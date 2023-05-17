@@ -1,6 +1,0 @@
-apiVersion: v2
-name: video-ai-engine-management-cron
-description: A Helm chart for video ai engine management cron
-type: application
-version: 3.1.3
-

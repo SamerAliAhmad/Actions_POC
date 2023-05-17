@@ -1,5 +1,0 @@
-apiVersion: v2
-name: client-ui
-description: A Helm chart for client ui
-type: application
-version: 3.1.3
