@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ env.DOCKERHUB_USERNAME }}/ui:${{ github.ref_name }}
+          tags: ${{ env.DOCKERHUB_USERNAME }}/ui:4.0.3
           context: DistrictNex_UI
           file: DistrictNex_UI/Dockerfile
 
@@ -49,7 +49,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ env.DOCKERHUB_USERNAME }}/admin:${{ github.ref_name }}
+          tags: ${{ env.DOCKERHUB_USERNAME }}/admin:4.0.3
           context: DistrictNex_Admin
           file: DistrictNex_Admin/Dockerfile
 
