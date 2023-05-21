@@ -24,12 +24,12 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Admin
+      - name: Build and Push UI
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/ui:${{ github.ref_name }}
-          context: DistrictNex_Admin
+          context: DistrictNex_UI
           file: DistrictNex_UI/Dockerfile
 
   admin:
