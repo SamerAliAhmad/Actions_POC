@@ -53,66 +53,66 @@ jobs:
           context: DistrictNex_Admin
           file: DistrictNex_Admin/Dockerfile
 
-  microservices:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        name:
-          [
-            Area-Management,
-            Asset-Management,
-            Cloud-Interface,
-            Dimension-Management,
-            District-Management,
-            Entity-Management,
-            File-Management,
-            Floor-Management,
-            Insights-Management,
-            KPI-Extraction-Engine,
-            KPI-Management,
-            Method-Monitoring,
-            Mobility-Dimension,
-            Organization-Management,
-            Platform-Logging,
-            Region-Management,
-            Reporting,
-            Security-Dimension,
-            Settings-Management,
-            ShareView,
-            Site-Management,
-            Smart-Living-Dimension,
-            Space-Management,
-            Sustainability-Dimension,
-            Top-Level-Management,
-            User-Authentication,
-            User-Management,
-            Video-AI-Engine-Management,
-            Api-Gateway,
-            Data-Creation-Cron,
-            Data-Retention-Cron,
-            Mobility-Dimension-Cron,
-            Security-Dimension-Cron,
-            SignalR-Realtime-Server,
-            Smart-Living-Dimension-Cron,
-            Sustainability-Dimension-Cron,
-            Video-AI-Engine-Management-Cron,
-            Wifi-Signal-Cron,
-          ]
+  # microservices:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       name:
+  #         [
+  #           Area-Management,
+  #           Asset-Management,
+  #           Cloud-Interface,
+  #           Dimension-Management,
+  #           District-Management,
+  #           Entity-Management,
+  #           File-Management,
+  #           Floor-Management,
+  #           Insights-Management,
+  #           KPI-Extraction-Engine,
+  #           KPI-Management,
+  #           Method-Monitoring,
+  #           Mobility-Dimension,
+  #           Organization-Management,
+  #           Platform-Logging,
+  #           Region-Management,
+  #           Reporting,
+  #           Security-Dimension,
+  #           Settings-Management,
+  #           ShareView,
+  #           Site-Management,
+  #           Smart-Living-Dimension,
+  #           Space-Management,
+  #           Sustainability-Dimension,
+  #           Top-Level-Management,
+  #           User-Authentication,
+  #           User-Management,
+  #           Video-AI-Engine-Management,
+  #           Api-Gateway,
+  #           Data-Creation-Cron,
+  #           Data-Retention-Cron,
+  #           Mobility-Dimension-Cron,
+  #           Security-Dimension-Cron,
+  #           SignalR-Realtime-Server,
+  #           Smart-Living-Dimension-Cron,
+  #           Sustainability-Dimension-Cron,
+  #           Video-AI-Engine-Management-Cron,
+  #           Wifi-Signal-Cron,
+  #         ]
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ env.DOCKERHUB_TOKEN }}
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ env.DOCKERHUB_USERNAME }}
+  #         password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push ${{ matrix.name }}
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.name }}:${{ github.ref_name }}
-          context: Microservices
-          file: Microservices/${{ matrix.name }}-Dockerfile
+  #     - name: Build and Push ${{ matrix.name }}
+  #       uses: docker/build-push-action@v4
+  #       with:
+  #         push: true
+  #         tags: ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.name }}:${{ github.ref_name }}
+  #         context: Microservices
+  #         file: Microservices/${{ matrix.name }}-Dockerfile
