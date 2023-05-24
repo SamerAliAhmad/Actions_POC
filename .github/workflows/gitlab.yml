@@ -20,8 +20,8 @@ jobs:
 
       - name: Install SSH client
         run: |
-          apt-get update
-          apt-get install -y openssh-client
+          sudo apt-get update
+          sudo apt-get install -y openssh-client
 
       - name: Generate SSH key
         run: ssh-keygen -t rsa -b 4096 -C "sameraliahmad01@gmail.com" -f "$HOME/.ssh/id_rsa" -N ""
