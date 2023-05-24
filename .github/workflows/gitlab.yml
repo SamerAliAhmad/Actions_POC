@@ -33,5 +33,5 @@ jobs:
         env:
           GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -i $HOME/.ssh/id_rsa"
         run: |
-          git remote add gitlab sameraliahmad01@gmail.com:test2604520/test.git
+          git remote add gitlab git@gitlab.com:test2604520/test.git
           git push gitlab HEAD:main
