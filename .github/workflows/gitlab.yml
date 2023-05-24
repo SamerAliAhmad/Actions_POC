@@ -1,24 +1,29 @@
-name: Sync with GitLab
+name: Sync to GitLab
 
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - mai
 
 jobs:
-  sync_with_gitlab:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Fetch complete commit history
-        run: git fetch --unshallow origin
+      - name: Install Git
+        run: sudo apt-get install git -y
 
-      - name: Sync with GitLab
+      - name: Configure Git
+        run: |
+          git config user.name "samer.ahmad"
+          git config user.email "sameraliahmad01@gmail.com"
+
+      - name: Push to GitLab
         run: |
           git remote add gitlab https://gitlab.com/test2604520/test.git
-          git config --global credential.helper store
-          echo "https://oauth2:glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" >> ~/.git-credentials
+          git config credential.helper 'store --file=.git/credentials'
+          echo -e "https://oauth2:$glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" > .git/credentials
           git push gitlab HEAD:main
