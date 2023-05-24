@@ -48,16 +48,12 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Generate Docker Tag
-        id: tag
-        run: echo "DOCKER_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ env.DOCKERHUB_USERNAME }}/ui:${{ steps.tag.outputs.DOCKER_TAG }}
+          tags: ${{ env.DOCKERHUB_USERNAME }}/ui:4.0.0
 
   # microservices:
   #   runs-on: ubuntu-latest
