@@ -18,7 +18,7 @@ jobs:
 
       - name: Sync with GitLab
         run: |
-          git remote add origin https://gitlab.com/test2604520/test.git
+          git remote add gitlab https://gitlab.com/test2604520/test.git
           git config --global credential.helper store
           echo "https://oauth2:glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" >> ~/.git-credentials
           git branch -M main
