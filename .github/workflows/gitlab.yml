@@ -1,4 +1,4 @@
-name: Sync to GitLab
+name: Sync with GitLab
 
 on:
   push:
@@ -6,24 +6,16 @@ on:
       - "*"
 
 jobs:
-  sync:
+  sync_with_gitlab:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Git
-        run: sudo apt-get install git -y
-
-      # - name: Configure Git
-      #   run: |
-      #     git config user.name "samer.ahmad"
-      #     git config user.email "sameraliahmad01@gmail.com"
-
-      - name: Push to GitLab
+      - name: Sync with GitLab
         run: |
           git remote add gitlab https://gitlab.com/test2604520/test.git
-          git config credential.helper store
-          echo "https://oauth2:$glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" > .git/credentials
-          git push gitlab HEAD:main
+          git config --global credential.helper store
+          echo "https://oauth2:glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" >> ~/.git-credentials
+          git push gitlab --tags
