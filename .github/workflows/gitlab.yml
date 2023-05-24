@@ -3,7 +3,7 @@ name: Sync with GitLab
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   sync_with_gitlab:
@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Fetch complete commit history
+        run: git fetch --unshallow origin
 
       - name: Sync with GitLab
         run: |
