@@ -1,12 +1,12 @@
-name: Sync with GitLab
+name: Push to GitLab
 
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
 
 jobs:
-  sync_with_gitlab:
+  push:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,14 +15,23 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "samer.ahmad"
-          git config user.email "sameraliahmad01@gmail.com"
+          git config --global user.email "sameraliahmad01@gmail.com"
+          git config --global user.name "samer.ahmad"
 
-      - name: Sync with GitLab
+      - name: Install SSH client
         run: |
-          git remote add gitlab https://gitlab.com/test2604520/test.git
-          git config --global credential.helper store
-          echo "https://oauth2:glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" >> ~/.git-credentials
-          git add .
-          git commit -m "test"
-          git push --all gitlab
+          apt-get update
+          apt-get install -y openssh-client
+
+      - name: Generate SSH key
+        run: ssh-keygen -t rsa -b 4096 -C "sameraliahmad01@gmail.com" -f "$HOME/.ssh/id_rsa" -N ""
+
+      - name: Add GitLab to known hosts
+        run: ssh-keyscan -H gitlab.com >> "$HOME/.ssh/known_hosts"
+
+      - name: Push to GitLab
+        env:
+          GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=$HOME/.ssh/known_hosts -i $HOME/.ssh/id_rsa"
+        run: |
+          git remote add gitlab git@gitlab.com:test2604520/test.git
+          git push gitlab HEAD:main
