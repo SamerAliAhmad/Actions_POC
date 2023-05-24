@@ -22,4 +22,3 @@ jobs:
           git config --global credential.helper store
           echo "https://oauth2:glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" >> ~/.git-credentials
           git push gitlab --all
-          git push gitlab --tags
