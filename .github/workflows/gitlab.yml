@@ -16,10 +16,10 @@ jobs:
       - name: Install Git
         run: sudo apt-get install git -y
 
-      - name: Configure Git
-        run: |
-          git config user.name "samer.ahmad"
-          git config user.email "sameraliahmad01@gmail.com"
+      # - name: Configure Git
+      #   run: |
+      #     git config user.name "samer.ahmad"
+      #     git config user.email "sameraliahmad01@gmail.com"
 
       - name: Push to GitLab
         run: |
