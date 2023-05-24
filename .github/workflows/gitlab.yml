@@ -24,6 +24,6 @@ jobs:
       - name: Push to GitLab
         run: |
           git remote add gitlab https://gitlab.com/test2604520/test.git
-          git config credential.helper 'store --file=.git/credentials'
+          git config credential.helper store
           echo "https://oauth2:$glpat-VDXcyCAhdgsizgsVN_Kp@gitlab.com/test2604520/test.git" > .git/credentials
           git push gitlab HEAD:main
