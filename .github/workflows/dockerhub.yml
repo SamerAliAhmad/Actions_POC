@@ -11,6 +11,13 @@ env:
   DOCKERHUB_REPOSITORY: districtnex
 
 jobs:
+  slack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send POST request
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"${{ github.ref_name }} Deployed"}' https://hooks.slack.com/services/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
   # ui:
   #   runs-on: ubuntu-latest
 
@@ -35,25 +42,25 @@ jobs:
   #         context: DistrictNex_UI
   #         file: DistrictNex_UI/Dockerfile
 
-  admin:
-    runs-on: ubuntu-latest
+  # admin:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ env.DOCKERHUB_TOKEN }}
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ env.DOCKERHUB_USERNAME }}
+  #         password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ env.DOCKERHUB_USERNAME }}/ui:4.0.0
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v4
+  #       with:
+  #         context: .
+  #         push: true
+  #         tags: ${{ env.DOCKERHUB_USERNAME }}/ui:4.0.0
 
   # microservices:
   #   runs-on: ubuntu-latest
