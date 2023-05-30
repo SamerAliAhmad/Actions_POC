@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Send POST request
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"${{ github.ref_name }} Deployed"}' https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"${{ github.ref_name }} Deployed"}' https://hooks.slack.com/services/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
   # ui:
   #   runs-on: ubuntu-latest
 
