@@ -19,7 +19,7 @@ jobs:
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"${{ github.ref_name }} Deployed"}' https://hooks.slack.com/services/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
   # ui:
-  #   runs-on: ubuntu-latests
+  #   runs-on: ubuntu-latest
 
   #   steps:
   #     - name: Checkout code
